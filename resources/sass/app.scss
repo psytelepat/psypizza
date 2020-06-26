@@ -1,0 +1,86 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+* {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    color: #DCDCCC;
+}
+
+section.first-screen {
+    display: block;
+    width: 100%;
+    height: 200px;
+    background-color: #efefef;
+    color: #4d4d4d;
+
+    canvas.background {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    .welcome {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        top: 50%;
+        transform: translate3d(0, -50%, 0);
+    }
+}
+
+section.menu {
+    div.row.products {
+
+        div.product {
+            padding: 20px 20px 40px 20px;
+
+            div.info {
+                padding-bottom: 30px;
+
+                div.image {
+                    img {
+                        width: 100%;
+                        height: auto;
+                    }
+                    margin-bottom: 20px;
+                }
+
+                div.title {
+                    font-size: 20px;
+                }
+
+                p.description {
+                    font-size: 14px;
+                    line-height: 1.57em;
+                }
+            }
+
+            div.controls {
+                position: absolute;
+                bottom: 40px;
+                left: 0;
+                padding: 0 20px;
+            }
+        }
+
+    }
+}
+
+section.page-footer {
+    background-color: #000;
+    color: #efefef;
+    padding: 20px 0;
+}
