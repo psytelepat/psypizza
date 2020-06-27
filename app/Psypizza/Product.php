@@ -3,11 +3,14 @@
 namespace App\Psypizza;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Psypizza\ProductCategory;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
     public $table = 'products';
     protected $fillable = [
         'category_id',

@@ -27,29 +27,29 @@ class ProductRequest extends FormRequest
         switch ($this->getMethod()) {
             case 'POST':
                 return [
-                    'category_id' => 'required|integer|product_categories,id',
+                    'category_id' => 'required|integer|exists:product_categories,id',
                     'slug' => 'required|string|unique:products,slug',
                     'sku' => 'string',
                     'ean13' => 'integer',
                     'name' => 'required|string|unique:products,name',
                     'description' => 'string',
-                    'price' => 'required|numberic',
+                    'price' => 'required|numeric',
                     'in_stock' => 'boolean',
                     'is_published' => 'boolean',
                 ];
             case 'PUT':
                 return [
-                    'category_id' => 'integer|product_categories,id',
+                    'category_id' => 'integer|exists:product_categories,id',
                     'slug' => [
-                        Rule::unique('promocodes')->ignore($this->slug, 'slug'),
+                        Rule::unique('products')->ignore($this->slug, 'slug'),
                     ],
                     'sku' => 'string',
                     'ean13' => 'integer',
                     'name' => [
-                        Rule::unique('promocodes')->ignore($this->name, 'name'),
+                        Rule::unique('products')->ignore($this->name, 'name'),
                     ],
                     'description' => 'string',
-                    'price' => 'numberic',
+                    'price' => 'numeric',
                     'in_stock' => 'boolean',
                     'is_published' => 'boolean',
                 ];
