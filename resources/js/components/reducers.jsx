@@ -101,30 +101,34 @@ const defaultCartState = {
     isLoading: false,
     isLoaded: false,
     isError: null,
-    data: null,
+    connections: 0,
+    data: {
+        products: [],
+    },
 };
 
 function cart(state = defaultCartState, action) {
+    let connections = state.connections - 1;
     switch (action.type) {
         case CART_LOADING:
             return {
                 ...state,
+                connections: state.connections + 1,
                 isLoading: true,
             };
-        case CART_SET:
-        case CART_REMOVE:
-            break;
         case CART_LOADED:
             return {
                 ...state,
-                isLoading: false,
+                connections: connections,
+                isLoading: connections > 0,
                 isLoaded: true,
                 data: action.cart.data,
             };
         case CART_ERROR:
             return {
                 ...state,
-                isLoading: false,
+                connections: connections,
+                isLoading: connections > 0,
                 isError: action.error,
             };
         default:

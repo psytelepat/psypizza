@@ -15,7 +15,7 @@ import {
 } from './actions';
 
 import FirstScreen from './FirstScreen'
-import Cart from './Cart'
+import CartSummary from './CartSummary'
 import ProductCategories from './ProductCategories'
 import Products from './Products'
 import Footer from './Footer'
@@ -38,7 +38,10 @@ class PsyPizza extends React.Component {
     _loadCategories() {
         store.dispatch(categoriesLoading());
 
-        fetch('/api/product_categories')
+        fetch('/api/product_categories', {
+            method: 'GET',
+            headers: this._requestHeaders(),
+        })
         .then((response) => response.json())
         .then((json) => store.dispatch(categoriesLoaded(json)))
         .catch((err) => store.dispatch(categoriesError(err)))
@@ -47,7 +50,10 @@ class PsyPizza extends React.Component {
     _loadProducts() {
         store.dispatch(productsLoading());
 
-        fetch('/api/products')
+        fetch('/api/products', {
+            method: 'GET',
+            headers: this._requestHeaders(),
+        })
         .then((response) => response.json())
         .then((json) => store.dispatch(productsLoaded(json)))
         .catch((err) => store.dispatch(productsError(err)))
@@ -56,7 +62,10 @@ class PsyPizza extends React.Component {
     _loadCart() {
         store.dispatch(cartLoading());
 
-        fetch('/cart.json')
+        fetch('/cart.json', {
+            method: 'GET',
+            headers: this._requestHeaders(),
+        })
         .then((response) => response.json())
         .then((json) => store.dispatch(cartLoaded(json)))
         .catch((err) => store.dispatch(cartError(err)))
@@ -88,11 +97,23 @@ class PsyPizza extends React.Component {
         .catch((err) => store.dispatch(cartError(err)))
     }
 
+    flushCart() {
+        store.dispatch(cartLoading());
+
+        fetch('/cart/flush.json', {
+            method: 'GET',
+            headers: this._requestHeaders(),
+        })
+        .then((response) => response.json())
+        .then((json) => store.dispatch(cartLoaded(json)))
+        .catch((err) => store.dispatch(cartError(err)))
+    }
+
     render() {
         return (
             <div className="wrapper">
                 <FirstScreen />
-                <Cart />
+                <CartSummary flushCart={this.flushCart.bind(this)} />
                 <ProductCategories />
                 <Products setToCart={this.setToCart.bind(this)} removeFromCart={this.removeFromCart.bind(this)} />
                 <Footer />

@@ -130,7 +130,7 @@ class Cart extends Model
     public static function setProduct(int $id, int $amount): self
     {
         if ($amount < 1) {
-            throw new \InvalidArgumentException('$amount should be more than 0');
+            return removeProduct($id);
         }
 
         $cart = self::instance();

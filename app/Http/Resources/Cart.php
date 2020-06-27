@@ -19,9 +19,9 @@ class Cart extends JsonResource
             'order_id' => $this->order_id,
             'user_id' => $this->user_id,
             'promocode_id' => $this->promocode_id,
-            'original_cost' => $this->original_cost,
-            'discount' => $this->discount,
-            'cost' => $this->cost,
+            'original_cost' => number_format($this->original_cost, 2, ",", " "),
+            'discount' => number_format($this->discount, 2, ",", " "),
+            'cost' => number_format($this->cost, 2, ",", " "),
             'products' => $this->products,
         ];
     }

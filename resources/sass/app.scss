@@ -55,10 +55,12 @@ section.first-screen {
 
 .cart {
     position: fixed;
-    background-color: #000;
+    background-color: #404040;
+
     top: 0;
-    left: 0;
+    right: 0;
     z-index: 20;
+    padding: 20px 40px;
 }
 
 section.products {

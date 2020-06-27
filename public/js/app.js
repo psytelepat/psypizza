@@ -40071,6 +40071,51 @@ SafeAnchor.displayName = 'SafeAnchor';
 
 /***/ }),
 
+/***/ "./node_modules/react-bootstrap/esm/Spinner.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/Spinner.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _ThemeProvider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/esm/ThemeProvider.js");
+
+
+
+
+
+var Spinner = react__WEBPACK_IMPORTED_MODULE_3___default.a.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      variant = _ref.variant,
+      animation = _ref.animation,
+      size = _ref.size,
+      children = _ref.children,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'div' : _ref$as,
+      className = _ref.className,
+      props = Object(_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__["default"])(_ref, ["bsPrefix", "variant", "animation", "size", "children", "as", "className"]);
+
+  bsPrefix = Object(_ThemeProvider__WEBPACK_IMPORTED_MODULE_4__["useBootstrapPrefix"])(bsPrefix, 'spinner');
+  var bsSpinnerPrefix = bsPrefix + "-" + animation;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Component, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    ref: ref
+  }, props, {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, bsSpinnerPrefix, size && bsSpinnerPrefix + "-" + size, variant && "text-" + variant)
+  }), children);
+});
+Spinner.displayName = 'Spinner';
+/* harmony default export */ __webpack_exports__["default"] = (Spinner);
+
+/***/ }),
+
 /***/ "./node_modules/react-bootstrap/esm/ThemeProvider.js":
 /*!***********************************************************!*\
   !*** ./node_modules/react-bootstrap/esm/ThemeProvider.js ***!
@@ -71304,10 +71349,10 @@ __webpack_require__(/*! ./components/PsyPizza */ "./resources/js/components/PsyP
 
 /***/ }),
 
-/***/ "./resources/js/components/Cart.jsx":
-/*!******************************************!*\
-  !*** ./resources/js/components/Cart.jsx ***!
-  \******************************************/
+/***/ "./resources/js/components/CartSummary.jsx":
+/*!*************************************************!*\
+  !*** ./resources/js/components/CartSummary.jsx ***!
+  \*************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -71318,6 +71363,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var react_bootstrap_Container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap/Container */ "./node_modules/react-bootstrap/esm/Container.js");
 /* harmony import */ var react_bootstrap_Row__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-bootstrap/Row */ "./node_modules/react-bootstrap/esm/Row.js");
+/* harmony import */ var react_bootstrap_Spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-bootstrap/Spinner */ "./node_modules/react-bootstrap/esm/Spinner.js");
+/* harmony import */ var react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-bootstrap/Button */ "./node_modules/react-bootstrap/esm/Button.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71345,38 +71392,67 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var Cart = /*#__PURE__*/function (_React$Component) {
-  _inherits(Cart, _React$Component);
 
-  var _super = _createSuper(Cart);
 
-  function Cart() {
-    _classCallCheck(this, Cart);
+var CartSummary = /*#__PURE__*/function (_React$Component) {
+  _inherits(CartSummary, _React$Component);
+
+  var _super = _createSuper(CartSummary);
+
+  function CartSummary() {
+    _classCallCheck(this, CartSummary);
 
     return _super.apply(this, arguments);
   }
 
-  _createClass(Cart, [{
+  _createClass(CartSummary, [{
+    key: "renderLoading",
+    value: function renderLoading() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Spinner__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        animation: "border",
+        variant: "primary",
+        size: "sm"
+      });
+    }
+  }, {
+    key: "renderEmpty",
+    value: function renderEmpty() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, "Empty cart.");
+    }
+  }, {
+    key: "renderFilled",
+    value: function renderFilled() {
+      var itemsCount = this.props.data.products.reduce(function (x, y) {
+        return x + y.amount;
+      }, 0);
+      var statusString = itemsCount + ' items for €' + this.props.data.cost;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, statusString, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        size: "sm",
+        onClick: this.flushCart.bind(this)
+      }, "Flush cart"));
+    }
+  }, {
+    key: "flushCart",
+    value: function flushCart() {
+      if (confirm('Are you sure?')) {
+        this.props.flushCart();
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      var data = this.props.data;
-      var isVisible = data && data.products.length > 0;
-      var itemsCount = 0;
-      isVisible && data.products.reduce(function (x, y) {
-        return itemsCount += y.amount;
-      });
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Container__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        fluid: true,
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "cart"
-      }, isVisible && data.products.length + ' products (' + itemsCount + ') costs ' + data.cost);
+      }, this.props.isLoading ? this.renderLoading() : this.props.data.products.length > 0 ? this.renderFilled() : this.renderEmpty());
     }
   }]);
 
-  return Cart;
+  return CartSummary;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
+    connections: state.cart.connections,
     isLoading: state.cart.isLoading,
     isLoaded: state.cart.isLoaded,
     isError: state.cart.isError,
@@ -71388,7 +71464,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {};
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(Cart));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(CartSummary));
 
 /***/ }),
 
@@ -71548,8 +71624,12 @@ var Product = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props, context);
     _this.state = {
-      amount: props.amount
+      amount: props.amount,
+      amountFocused: false,
+      skipDerived: false
     };
+    _this.debounceTimeout = null;
+    _this.updateAmountFromState = _this.updateAmountFromState.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -71558,49 +71638,87 @@ var Product = /*#__PURE__*/function (_React$Component) {
     value: function onPlus() {
       var amount = this.state.amount + 1;
       this.setState({
-        amount: amount
+        amount: amount,
+        skipDerived: true
       });
-      this.props.setToCart(this.props.product.id, amount);
+      this.requestAdmountUpdateDebounced();
     }
   }, {
     key: "onMinus",
     value: function onMinus() {
-      var amount = this.props.amount - 1;
+      var amount = this.state.amount - 1;
 
       if (amount > 0) {
         this.setState({
-          amount: amount
+          amount: amount,
+          skipDerived: true
         });
-        this.props.setToCart(this.props.product.id, amount);
+        this.requestAdmountUpdateDebounced();
       } else if (amount == 0) {
         this.setState({
-          amount: amount
+          amount: amount,
+          skipDerived: true
         });
+        this.requestAdmountUpdateDebounced();
+      }
+    }
+  }, {
+    key: "requestAdmountUpdateDebounced",
+    value: function requestAdmountUpdateDebounced() {
+      if (this.debounceTimeout) {
+        clearTimeout(this.debounceTimeout);
+        this.debounceTimeout = null;
+      }
+
+      this.debounceTimeout = setTimeout(this.updateAmountFromState, 350);
+    }
+  }, {
+    key: "updateAmountFromState",
+    value: function updateAmountFromState() {
+      if (this.state.amount > 0) {
+        this.props.setToCart(this.props.product.id, this.state.amount);
+      } else {
         this.props.removeFromCart(this.props.product.id);
       }
     }
   }, {
     key: "onChange",
-    value: function onChange() {
+    value: function onChange(event) {
       this.setState({
-        amount: parseInt(amount)
+        amount: parseInt(event.target.value) || "",
+        skipDerived: true
+      });
+    }
+  }, {
+    key: "onFocus",
+    value: function onFocus(event) {
+      this.setState({
+        amountFocused: true
       });
     }
   }, {
     key: "onBlur",
     value: function onBlur(event) {
-      var amount = this.state;
+      var amount = parseInt(event.target.value) || 0;
 
       if (amount > 0) {
         this.setState({
-          amount: amount
+          amount: amount,
+          amountFocused: false,
+          skipDerived: true
         });
-        this.props.setToCart(this.props.product.id, amount);
+        this.requestAdmountUpdateDebounced();
       } else if (amount == 0) {
         this.setState({
-          amount: amount
+          amount: amount,
+          amountFocused: false,
+          skipDerived: true
         });
-        this.props.removeFromCart(this.props.product.id);
+        this.requestAdmountUpdateDebounced();
+      } else {
+        this.setState({
+          amountFocused: false
+        });
       }
     }
   }, {
@@ -71612,6 +71730,7 @@ var Product = /*#__PURE__*/function (_React$Component) {
           description = _this$props$product.description,
           price = _this$props$product.price;
       var image = "/images/pizza.jpg";
+      var showAmountInput = this.state.amountFocused || this.state.amount > 0;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Col__WEBPACK_IMPORTED_MODULE_5__["default"], {
         lg: 3,
         md: 4,
@@ -71626,7 +71745,7 @@ var Product = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_6__["default"].Img, {
         variant: "top",
         src: image
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_6__["default"].Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_6__["default"].Title, null, name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_6__["default"].Text, null, description)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_6__["default"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "\u20AC ", price), this.props.amount ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_InputGroup__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_6__["default"].Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_6__["default"].Title, null, name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_6__["default"].Text, null, description)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_6__["default"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "\u20AC", price), showAmountInput ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_InputGroup__WEBPACK_IMPORTED_MODULE_7__["default"], {
         size: "sm",
         style: {
           width: "100px"
@@ -71637,9 +71756,9 @@ var Product = /*#__PURE__*/function (_React$Component) {
         onClick: this.onMinus.bind(this)
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_icons__WEBPACK_IMPORTED_MODULE_4__["Dash"], null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_FormControl__WEBPACK_IMPORTED_MODULE_8__["default"], {
         type: "number",
-        ref: this.inputRef,
         value: this.state.amount,
         onChange: this.onChange.bind(this),
+        onFocus: this.onFocus.bind(this),
         onBlur: this.onBlur.bind(this)
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_InputGroup__WEBPACK_IMPORTED_MODULE_7__["default"].Append, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
         variant: "success",
@@ -71654,9 +71773,10 @@ var Product = /*#__PURE__*/function (_React$Component) {
     }
   }], [{
     key: "getDerivedStateFromProps",
-    value: function getDerivedStateFromProps(nextProps, prevState) {
+    value: function getDerivedStateFromProps(props, state) {
       return {
-        amount: nextProps.amount
+        amount: props.cartLoading || state.skipDerived ? state.amount : props.amount,
+        skipDerived: false
       };
     }
   }]);
@@ -71665,16 +71785,20 @@ var Product = /*#__PURE__*/function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 var mapStateToProps = function mapStateToProps(state, props) {
-  var cartProduct = null;
+  var amount = 0;
 
-  if (state.cart && state.cart.data && state.cart.data.products && state.cart.data.products.length > 0) {
-    cartProduct = state.cart.data.products.reduce(function (x, y) {
-      return y.product_id == props.product.id ? y : x && x.product_id == props.product.id ? x : null;
-    });
+  if (state.cart.data.products.length > 0) {
+    for (var i = 0; i < state.cart.data.products.length; i++) {
+      if (state.cart.data.products[i].product_id == props.product.id) {
+        amount = state.cart.data.products[i].amount;
+        break;
+      }
+    }
   }
 
   return {
-    amount: cartProduct ? cartProduct.amount : 0
+    cartLoading: state.cart.isLoading,
+    amount: amount
   };
 }; // const mapDispatchToProps = dispatch => {
 //     return {
@@ -71932,7 +72056,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./reducers */ "./resources/js/components/reducers.jsx");
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./actions */ "./resources/js/components/actions.jsx");
 /* harmony import */ var _FirstScreen__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./FirstScreen */ "./resources/js/components/FirstScreen.jsx");
-/* harmony import */ var _Cart__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Cart */ "./resources/js/components/Cart.jsx");
+/* harmony import */ var _CartSummary__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./CartSummary */ "./resources/js/components/CartSummary.jsx");
 /* harmony import */ var _ProductCategories__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ProductCategories */ "./resources/js/components/ProductCategories.jsx");
 /* harmony import */ var _Products__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Products */ "./resources/js/components/Products.jsx");
 /* harmony import */ var _Footer__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Footer */ "./resources/js/components/Footer.jsx");
@@ -72005,7 +72129,10 @@ var PsyPizza = /*#__PURE__*/function (_React$Component) {
     key: "_loadCategories",
     value: function _loadCategories() {
       store.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_5__["categoriesLoading"])());
-      fetch('/api/product_categories').then(function (response) {
+      fetch('/api/product_categories', {
+        method: 'GET',
+        headers: this._requestHeaders()
+      }).then(function (response) {
         return response.json();
       }).then(function (json) {
         return store.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_5__["categoriesLoaded"])(json));
@@ -72017,7 +72144,10 @@ var PsyPizza = /*#__PURE__*/function (_React$Component) {
     key: "_loadProducts",
     value: function _loadProducts() {
       store.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_5__["productsLoading"])());
-      fetch('/api/products').then(function (response) {
+      fetch('/api/products', {
+        method: 'GET',
+        headers: this._requestHeaders()
+      }).then(function (response) {
         return response.json();
       }).then(function (json) {
         return store.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_5__["productsLoaded"])(json));
@@ -72029,7 +72159,10 @@ var PsyPizza = /*#__PURE__*/function (_React$Component) {
     key: "_loadCart",
     value: function _loadCart() {
       store.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_5__["cartLoading"])());
-      fetch('/cart.json').then(function (response) {
+      fetch('/cart.json', {
+        method: 'GET',
+        headers: this._requestHeaders()
+      }).then(function (response) {
         return response.json();
       }).then(function (json) {
         return store.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_5__["cartLoaded"])(json));
@@ -72075,11 +72208,28 @@ var PsyPizza = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
+    key: "flushCart",
+    value: function flushCart() {
+      store.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_5__["cartLoading"])());
+      fetch('/cart/flush.json', {
+        method: 'GET',
+        headers: this._requestHeaders()
+      }).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        return store.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_5__["cartLoaded"])(json));
+      })["catch"](function (err) {
+        return store.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_5__["cartError"])(err));
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "wrapper"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FirstScreen__WEBPACK_IMPORTED_MODULE_6__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Cart__WEBPACK_IMPORTED_MODULE_7__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ProductCategories__WEBPACK_IMPORTED_MODULE_8__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Products__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FirstScreen__WEBPACK_IMPORTED_MODULE_6__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CartSummary__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        flushCart: this.flushCart.bind(this)
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ProductCategories__WEBPACK_IMPORTED_MODULE_8__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Products__WEBPACK_IMPORTED_MODULE_9__["default"], {
         setToCart: this.setToCart.bind(this),
         removeFromCart: this.removeFromCart.bind(this)
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Footer__WEBPACK_IMPORTED_MODULE_10__["default"], null));
@@ -72358,33 +72508,36 @@ var defaultCartState = {
   isLoading: false,
   isLoaded: false,
   isError: null,
-  data: null
+  connections: 0,
+  data: {
+    products: []
+  }
 };
 
 function cart() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultCartState;
   var action = arguments.length > 1 ? arguments[1] : undefined;
+  var connections = state.connections - 1;
 
   switch (action.type) {
     case _actions__WEBPACK_IMPORTED_MODULE_1__["CART_LOADING"]:
       return _objectSpread(_objectSpread({}, state), {}, {
+        connections: state.connections + 1,
         isLoading: true
       });
 
-    case _actions__WEBPACK_IMPORTED_MODULE_1__["CART_SET"]:
-    case _actions__WEBPACK_IMPORTED_MODULE_1__["CART_REMOVE"]:
-      break;
-
     case _actions__WEBPACK_IMPORTED_MODULE_1__["CART_LOADED"]:
       return _objectSpread(_objectSpread({}, state), {}, {
-        isLoading: false,
+        connections: connections,
+        isLoading: connections > 0,
         isLoaded: true,
         data: action.cart.data
       });
 
     case _actions__WEBPACK_IMPORTED_MODULE_1__["CART_ERROR"]:
       return _objectSpread(_objectSpread({}, state), {}, {
-        isLoading: false,
+        connections: connections,
+        isLoading: connections > 0,
         isError: action.error
       });
 
