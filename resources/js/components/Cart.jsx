@@ -1,15 +1,21 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 
 class Cart extends React.Component {
     render() {
         const data = this.props.data;
+        const isVisible = data && data.products.length > 0;
+
+        let itemsCount = 0;
+        isVisible && data.products.reduce((x,y) => itemsCount += y.amount);
 
         return (
-            <div className="cart">
-                {data && data.products.length}
-            </div>
+            <Container fluid className="cart">
+                {isVisible && data.products.length + ' products ('+itemsCount+') costs ' + data.cost }
+            </Container>
         );
     }
 }

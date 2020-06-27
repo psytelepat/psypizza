@@ -20,8 +20,6 @@ import ProductCategories from './ProductCategories'
 import Products from './Products'
 import Footer from './Footer'
 
-import AdminProducts from './admin/AdminProducts'
-
 class PsyPizza extends React.Component {
     _requestHeaders() {
         return {
@@ -93,7 +91,6 @@ class PsyPizza extends React.Component {
     render() {
         return (
             <div className="wrapper">
-                <AdminProducts />
                 <FirstScreen />
                 <Cart />
                 <ProductCategories />
