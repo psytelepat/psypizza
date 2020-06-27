@@ -1,8 +1,10 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import Product from './Product'
 
-import { connect } from 'react-redux'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 
 class Products extends React.Component {
     renderProducts() {
@@ -18,11 +20,11 @@ class Products extends React.Component {
     render() {
         const { isLoaded } = this.props;
         return (
-            <section className="container menu">
-                <div className="row products">
+            <Container as="section" className="products">
+                <Row>
                 { isLoaded ? this.renderProducts() : 'Loading...' }
-                </div>
-            </section>
+                </Row>
+            </Container>
         );
     }
 }

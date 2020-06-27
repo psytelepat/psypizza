@@ -1,6 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Button from 'react-bootstrap/Button'
 import { cartSetProduct, cartRemoveProduct } from './actions';
+
+import Col from 'react-bootstrap/Col'
+import Image from 'react-bootstrap/Image'
 
 class Product extends React.Component {
     render() {
@@ -22,22 +26,24 @@ class Product extends React.Component {
         }
 
         return (
-            <div className="col-sm-3 product">
-                <div className="info">
-                    <div className="image"><img src={image} /></div>
-                    <div className="title">{name}</div>
-                    <p className="description">{description}</p>
+            <Col lg={3} md={4} sm={6} xs={12}>
+                <div className="product">
+                    <div className="info">
+                        <div className="image"><Image src={image} /></div>
+                        <div className="title">{name}</div>
+                        <p className="description">{description}</p>
+                    </div>
                 </div>
                 <div className="controls">
                     { 
                         cartProduct
                         ?
-                        <button className="btn btn-sm btn-primary" onClick={() => this.props.removeFromCart(id)}>Remove from cart</button>
+                        <Button size="sm" variant="secondary" onClick={() => this.props.removeFromCart(id)}>Remove from cart</Button>
                         :
-                        <button className="btn btn-sm btn-primary" onClick={() => this.props.setToCart(id, 1)}>Add to cart</button>
+                        <Button size="sm" variant="primary" onClick={() => this.props.setToCart(id, 1)}>Add to cart</Button>
                     }
                 </div>
-            </div>
+            </Col>
         );
     }
 }

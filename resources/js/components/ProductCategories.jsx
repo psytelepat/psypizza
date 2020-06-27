@@ -1,23 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { categoriesSelect } from './actions'
 
-import { categoriesSelect } from './actions';
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import Button from 'react-bootstrap/Button'
 
 class ProductCategories extends React.Component {
     render() {
         const { isLoaded, isError, data, selected } = this.props;
         return (
-            <div className="container">
-            <div className="row categories">
+            <Container as="section" className="categories">
+            <Row>
+            <Col>
+                <ButtonGroup aria-label="Categories">
             { isError }
             { isLoaded &&
-                data.map(category => <div
+                data.map(category => <Button
                     key={category.id}
-                    className={"btn btn-sm btn-" + (category.id == selected ? 'primary' : 'secondary')}
-                    onClick={() => this.props.onSelect(category.id)}>{category.name}</div>)
+                    size="sm"
+                    variant={category.id == selected ? 'primary' : 'secondary'}
+                    onClick={() => this.props.onSelect(category.id)}>{category.name}</Button>)
             }
-            </div>
-            </div>
+                </ButtonGroup>
+            </Col>
+            </Row>
+            </Container>
         );
     }
 }

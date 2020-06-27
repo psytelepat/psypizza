@@ -10962,37 +10962,39 @@ section.first-screen .welcome {
   transform: translate3d(0, -50%, 0);
 }
 
-section.menu div.row.products div.product {
-  padding: 20px 20px 40px 20px;
+section.products div.row .col {
+  padding-bottom: 40px;
 }
 
-section.menu div.row.products div.product div.info {
+section.products div.row div.product {
+  padding: 0 0 40px 0;
+}
+
+section.products div.row div.product div.info {
   padding-bottom: 30px;
 }
 
-section.menu div.row.products div.product div.info div.image {
+section.products div.row div.product div.info div.image {
   margin-bottom: 20px;
 }
 
-section.menu div.row.products div.product div.info div.image img {
+section.products div.row div.product div.info div.image img {
   width: 100%;
   height: auto;
 }
 
-section.menu div.row.products div.product div.info div.title {
+section.products div.row div.product div.info div.title {
   font-size: 20px;
 }
 
-section.menu div.row.products div.product div.info p.description {
+section.products div.row div.product div.info p.description {
   font-size: 14px;
   line-height: 1.57em;
 }
 
-section.menu div.row.products div.product div.controls {
+section.products div.row div.controls {
   position: absolute;
   bottom: 40px;
-  left: 0;
-  padding: 0 20px;
 }
 
 section.page-footer {

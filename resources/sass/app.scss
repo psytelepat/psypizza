@@ -41,11 +41,13 @@ section.first-screen {
     }
 }
 
-section.menu {
-    div.row.products {
-
+section.products {
+    div.row {
+        .col {
+            padding-bottom: 40px;
+        }
         div.product {
-            padding: 20px 20px 40px 20px;
+            padding: 0 0 40px 0;
 
             div.info {
                 padding-bottom: 30px;
@@ -67,13 +69,11 @@ section.menu {
                     line-height: 1.57em;
                 }
             }
+        }
 
-            div.controls {
-                position: absolute;
-                bottom: 40px;
-                left: 0;
-                padding: 0 20px;
-            }
+        div.controls {
+            position: absolute;
+            bottom: 40px;
         }
 
     }

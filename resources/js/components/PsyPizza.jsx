@@ -20,12 +20,14 @@ import ProductCategories from './ProductCategories'
 import Products from './Products'
 import Footer from './Footer'
 
+import AdminProducts from './admin/AdminProducts'
+
 class PsyPizza extends React.Component {
     _requestHeaders() {
         return {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'X-CSRF-TOKEN': document.querySelector("meta[name='csrf-token']").getAttribute('content'),
         };
     }
     
@@ -91,6 +93,7 @@ class PsyPizza extends React.Component {
     render() {
         return (
             <div className="wrapper">
+                <AdminProducts />
                 <FirstScreen />
                 <Cart />
                 <ProductCategories />
