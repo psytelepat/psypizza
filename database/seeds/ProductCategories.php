@@ -22,17 +22,17 @@ class ProductCategories extends Seeder
             [
                 'slug' => 'pizza',
                 'name' => 'Pizza',
-                'description' => 'Our unique saucy pizzas',
+                'description' => 'Our unique tasty pizzas.',
             ],
             [
                 'slug' => 'salad',
                 'name' => 'Salads',
-                'description' => 'Fresh salads ready for order',
+                'description' => 'Fresh salads ready for order.',
             ],
             [
-                'slug' => 'bewerage',
-                'name' => 'Bewerages',
-                'description' => 'Refreshing and healthful',
+                'slug' => 'beverages',
+                'name' => 'Вeverages',
+                'description' => 'Refreshing and healthful.',
             ],
         ];
 

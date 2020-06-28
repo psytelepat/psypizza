@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use \App\Psypizza\CartProduct;
 use \App\Psypizza\Promocode;
 use \App\Psypizza\Order;
-use \App\Psypizza\DeiveryMethod;
+use \App\Psypizza\DeliveryMethod;
 
 class Cart extends Model
 {
@@ -53,7 +53,7 @@ class Cart extends Model
 
     public function deliveryMethod()
     {
-        return $this->hasOne(DeiveryMethod::class);
+        return $this->hasOne(DeliveryMethod::class);
     }
 
     public static function instance($recreate = false) : self
@@ -92,6 +92,13 @@ class Cart extends Model
     {
         $cart = new self;
 
+        $cart->delivery_method_id = DeliveryMethod::first()->id;
+        $cart->delivery_price = 0;
+
+        $cart->original_products_cost = 0;
+        $cart->products_discount = 0;
+        $cart->products_cost = 0;
+
         $cart->original_cost = 0;
         $cart->discount = 0;
         $cart->cost = 0;
@@ -107,17 +114,22 @@ class Cart extends Model
     {
         $cart = $cart ?? self::instance();
 
-        $original_cost = 0;
-        $cost = 0;
+        $original_products_cost = 0;
+        $products_cost = 0;
         foreach ($cart->products as $cartProduct) {
             static::recalcCartProduct($cartProduct, $cart);
-            $original_cost += $cartProduct->original_cost;
-            $cost += $cartProduct->cost;
+            $original_products_cost += $cartProduct->original_cost;
+            $products_cost += $cartProduct->cost;
         }
 
-        $cart->original_cost = $original_cost;
-        $cart->cost = $cost;
-        $cart->discount = $original_cost - $cost;
+        $cart->original_products_cost = $original_products_cost;
+        $cart->products_cost = $products_cost;
+        $cart->products_discount = $original_products_cost - $products_cost;
+
+        $cart->original_cost = $cart->original_products_cost + $cart->delivery_price;
+        $cart->cost = $cart->products_cost + $cart->delivery_price;
+        $cart->discount = $cart->original_cost - $cart->cost;
+
         $cart->save();
 
         return $cart;
@@ -174,6 +186,16 @@ class Cart extends Model
         $cartProduct->original_cost = $cartProduct->original_price * $amount;
 
         static::recalcCartProduct($cartProduct, $cart);
+
+        return self::recalc();
+    }
+
+    public static function setDeliveryMethod(DeliveryMethod $deliveryMethod): self
+    {
+        $cart = self::instance();
+        $cart->delivery_method_id = $deliveryMethod->id;
+        $cart->delivery_price = $deliveryMethod->price;
+        $cart->save();
 
         return self::recalc();
     }
