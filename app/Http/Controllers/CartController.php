@@ -41,10 +41,24 @@ class CartController extends Controller
         return new CartResource(Cart::removeProduct(Arr::get($validatedData, 'id')));
     }
 
-    public function setPromocode(Request $request): object
+    public function promocode(Request $request): object
+    {
+        if ($request->isMethod('DELETE')) {
+            return new CartResource(Cart::removePromocode());
+        } else {
+            $validatedData = $request->validate([
+                'code' => 'required|string|exists:promocodes,code',
+            ]);
+
+            $promocode = Promocode::where('code', Arr::get($validatedData, 'code'))->where('is_available', true)->firstOrFail();
+            return new CartResource(Cart::setPromocode($promocode));
+        }
+    }
+
+    public function deliveryMethod(Request $request): object
     {
         $validatedData = $request->validate([
-            'code' => 'required|string|exists:promocodes,code',
+            'delivery_method_id' => 'required|string|exists:promocodes,code',
         ]);
 
         $promocode = Promocode::where('code', Arr::get($validatedData, 'code'))->where('is_available', true)->firstOrFail();

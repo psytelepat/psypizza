@@ -11,10 +11,12 @@ const store = createStore(psyPizzaReducer)
 import {
     categoriesLoading, categoriesError, categoriesLoaded,
     productsLoading, productsError, productsLoaded,
+    deliveryMethodsLoading, deliveryMethodsLoaded, deliveryMethodsError, deliveryMethodsSelect,
     cartLoading, cartLoaded, cartError, cartSetProduct, cartRemoveProduct,
 } from './actions';
 
 import FirstScreen from './FirstScreen'
+import Cart from './Cart'
 import CartSummary from './CartSummary'
 import ProductCategories from './ProductCategories'
 import Products from './Products'
@@ -33,6 +35,7 @@ class PsyPizza extends React.Component {
         this._loadCategories();
         this._loadProducts();
         this._loadCart();
+        this._loadDeliveryMethods();
     }
 
     _loadCategories() {
@@ -59,12 +62,37 @@ class PsyPizza extends React.Component {
         .catch((err) => store.dispatch(productsError(err)))
     }
 
+    _loadDeliveryMethods() {
+        store.dispatch(deliveryMethodsLoading());
+
+        fetch('/api/delivery_methods', {
+            method: 'GET',
+            headers: this._requestHeaders(),
+        })
+        .then((response) => response.json())
+        .then((json) => store.dispatch(deliveryMethodsLoaded(json)))
+        .catch((err) => store.dispatch(deliveryMethodsError(err)))
+    }
+
     _loadCart() {
         store.dispatch(cartLoading());
 
         fetch('/cart.json', {
             method: 'GET',
             headers: this._requestHeaders(),
+        })
+        .then((response) => response.json())
+        .then((json) => store.dispatch(cartLoaded(json)))
+        .catch((err) => store.dispatch(cartError(err)))
+    }
+
+    setDeliveryMethod(id) {
+        store.dispatch(cartLoading());
+
+        fetch('/cart/delivery_method.json', {
+            method: 'POST',
+            headers: this._requestHeaders(),
+            body: JSON.stringify({id: id}),
         })
         .then((response) => response.json())
         .then((json) => store.dispatch(cartLoaded(json)))
@@ -109,10 +137,42 @@ class PsyPizza extends React.Component {
         .catch((err) => store.dispatch(cartError(err)))
     }
 
+    setPromocode(code) {
+        store.dispatch(cartLoading());
+
+        fetch('/cart/promocode.json', {
+            method: 'POST',
+            headers: this._requestHeaders(),
+            body: JSON.stringify({code: code}),
+        })
+        .then((response) => response.json())
+        .then((json) => store.dispatch(cartLoaded(json)))
+        .catch((err) => store.dispatch(cartError(err)))
+    }
+
+    removePromocode() {
+        store.dispatch(cartLoading());
+
+        fetch('/cart/promocode.json', {
+            method: 'DELETE',
+            headers: this._requestHeaders(),
+        })
+        .then((response) => response.json())
+        .then((json) => store.dispatch(cartLoaded(json)))
+        .catch((err) => store.dispatch(cartError(err)))
+    }
+
     render() {
         return (
             <div className="wrapper">
                 <FirstScreen />
+                <Cart
+                    setToCart={this.setToCart.bind(this)}
+                    removeFromCart={this.removeFromCart.bind(this)}
+                    setPromocode={this.setPromocode.bind(this)}
+                    removePromocode={this.removePromocode.bind(this)}
+                    setDeliveryMethod={this.setDeliveryMethod.bind(this)}
+                />
                 <CartSummary flushCart={this.flushCart.bind(this)} />
                 <ProductCategories />
                 <Products setToCart={this.setToCart.bind(this)} removeFromCart={this.removeFromCart.bind(this)} />

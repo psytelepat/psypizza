@@ -38,6 +38,11 @@ class Cart extends Model
         return $this->hasMany(CartProduct::class);
     }
 
+    public function promocode()
+    {
+        return $this->belongsTo(Promocode::class);
+    }
+
     public static function instance($recreate = false) : self
     {
         static $cart;
@@ -105,15 +110,24 @@ class Cart extends Model
         return $cart;
     }
 
-    public static function setPromocode(Promocode $promocode)
+    public static function setPromocode(Promocode $promocode): self
     {
         if (!$promocode->trashed() && $promocode->is_available) {
             $cart = self::instance();
             $cart->promocode_id = $promocode->id;
             $cart->save();
-
-            self::recalc();
         }
+
+        return self::recalc();
+    }
+
+    public static function removePromocode(): self
+    {
+        $cart = self::instance();
+        $cart->promocode_id = null;
+        $cart->save();
+
+        return self::recalc();
     }
 
     public static function recalcCartProduct(CartProduct &$cartProduct, Cart &$cart) : void

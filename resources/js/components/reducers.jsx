@@ -16,6 +16,8 @@ import {
     CART_ERROR,
     CART_SET,
     CART_REMOVE,
+    CART_SET_PROMOCODE,
+    CART_REMOVE_PROMOCODE,
 } from './actions'
 
 

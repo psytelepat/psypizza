@@ -68,14 +68,11 @@ section.products {
         .col {
             padding-bottom: 40px;
         }
-
-        div.product-card {
-            input[type=number] {
-                text-align: center; 
-            }
-        }
-
     }
+}
+
+input.amountInput[type=number] {
+    text-align: center; 
 }
 
 section.page-footer {

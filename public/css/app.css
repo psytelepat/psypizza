@@ -10989,7 +10989,7 @@ section.products div.row .col {
   padding-bottom: 40px;
 }
 
-section.products div.row div.product-card input[type=number] {
+input.amountInput[type=number] {
   text-align: center;
 }
 
