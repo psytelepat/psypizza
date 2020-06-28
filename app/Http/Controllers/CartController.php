@@ -7,6 +7,7 @@ use Illuminate\Support\Arr;
 
 use \App\Psypizza\Cart;
 use \App\Psypizza\Promocode;
+use \App\Psypizza\DeliveryMethod;
 
 use \App\Http\Resources\Cart as CartResource;
 
@@ -58,11 +59,11 @@ class CartController extends Controller
     public function deliveryMethod(Request $request): object
     {
         $validatedData = $request->validate([
-            'delivery_method_id' => 'required|string|exists:promocodes,code',
+            'id' => 'required|string|exists:delivery_methods,id',
         ]);
 
-        $promocode = Promocode::where('code', Arr::get($validatedData, 'code'))->where('is_available', true)->firstOrFail();
-        return new CartResource(Cart::setPromocode($promocode));
+        $deliveryMethod = DeliveryMethod::findOrFail(Arr::get($validatedData, 'id'));
+        return new CartResource(Cart::setDeliveryMethod($deliveryMethod));
     }
 
     public function flush(): object

@@ -6,6 +6,14 @@ import Container from 'react-bootstrap/Container'
 
 class DeliveryMethodsForm extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            activeKey: 1
+        }
+    }
+
     onSelect(key) {
         this.setState({activeKey: key})
         this.props.setDeliveryMethod(key);
