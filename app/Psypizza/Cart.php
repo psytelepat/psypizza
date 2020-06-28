@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use \App\Psypizza\CartProduct;
 use \App\Psypizza\Promocode;
 use \App\Psypizza\Order;
+use \App\Psypizza\DeiveryMethod;
 
 class Cart extends Model
 {
@@ -21,6 +22,13 @@ class Cart extends Model
         'user_id',
 
         'promocode_id',
+
+        'original_products_cost',
+        'products_discount',
+        'produducts_cost',
+
+        'delivery_method_id',
+        'delivery_price',
 
         'original_cost',
         'discount',
@@ -41,6 +49,11 @@ class Cart extends Model
     public function promocode()
     {
         return $this->belongsTo(Promocode::class);
+    }
+
+    public function deliveryMethod()
+    {
+        return $this->hasOne(DeiveryMethod::class);
     }
 
     public static function instance($recreate = false) : self
