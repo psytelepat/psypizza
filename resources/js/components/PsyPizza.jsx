@@ -100,6 +100,7 @@ class PsyPizza extends React.Component {
     }
 
     setToCart(id, amount) {
+        store.dispatch(cartSetProduct(id, amount));
         store.dispatch(cartLoading());
 
         fetch('/cart/set.json', {
@@ -113,6 +114,7 @@ class PsyPizza extends React.Component {
     }
 
     removeFromCart(id) {
+        store.dispatch(cartRemoveProduct(id));
         store.dispatch(cartLoading());
 
         fetch('/cart/remove.json', {
@@ -166,6 +168,9 @@ class PsyPizza extends React.Component {
         return (
             <div className="wrapper">
                 <FirstScreen />
+                <CartSummary flushCart={this.flushCart.bind(this)} />
+                <ProductCategories />
+                <Products setToCart={this.setToCart.bind(this)} removeFromCart={this.removeFromCart.bind(this)} />
                 <Cart
                     setToCart={this.setToCart.bind(this)}
                     removeFromCart={this.removeFromCart.bind(this)}
@@ -173,9 +178,6 @@ class PsyPizza extends React.Component {
                     removePromocode={this.removePromocode.bind(this)}
                     setDeliveryMethod={this.setDeliveryMethod.bind(this)}
                 />
-                <CartSummary flushCart={this.flushCart.bind(this)} />
-                <ProductCategories />
-                <Products setToCart={this.setToCart.bind(this)} removeFromCart={this.removeFromCart.bind(this)} />
                 <Footer />
             </div>
         );

@@ -2,28 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import { cartSetProduct, cartRemoveProduct } from './actions';
-import { Cart } from 'react-bootstrap-icons';
+import { Cart as CartIcon } from 'react-bootstrap-icons';
 
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
-// import InputGroup from 'react-bootstrap/InputGroup'
-// import FormControl from 'react-bootstrap/FormControl'
 import AmountControl from './AmountControl'
 
 class Product extends React.Component {
-    constructor(props) {
-        super(props);
-        
-        this.state = {
-            amount: props.amount,
-        };
-    }
-
-    static getDerivedStateFromProps(props, state) {
-        return {
-            amount: props.cartLoading ? state.amount : props.amount,
-        };
-    }
 
     onAmountChange(amount) {
         if (amount > 0) {
@@ -48,11 +33,11 @@ class Product extends React.Component {
                     <Card.Footer>
                         <span>€{price}</span>
                         { 
-                            this.state.amount > 0
+                            this.props.amount > 0
                             ?
-                            <AmountControl className="float-right align-middle" amount={this.state.amount} onChange={this.onAmountChange.bind(this)} />
+                            <AmountControl className="float-right align-middle" amount={this.props.amount} onChange={this.onAmountChange.bind(this)} />
                             :
-                            <Button variant="success" size="sm" title={name} onClick={() => this.onAmountChange(1)} className="float-right align-middle"><Cart /></Button>
+                            <Button variant="success" size="sm" title={name} onClick={() => this.onAmountChange(1)} className="float-right align-middle"><CartIcon /></Button>
                         }
                     </Card.Footer>
                 </Card>
@@ -74,20 +59,8 @@ const mapStateToProps = (state, props) => {
     }
 
     return {
-        cartLoading: state.cart.isLoading,
         amount: amount,
     }
 }
-
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         onSetToCart: (id, amount) => {
-//             dispatch(cartSetProduct(id, amount));
-//         },
-//         onRemoveFromCart: (id) => {
-//             dispatch(removeFromCart(id));
-//         },
-//     }
-// }
 
 export default connect(mapStateToProps, null)(Product);

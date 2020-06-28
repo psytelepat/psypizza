@@ -20,6 +20,13 @@ class AmountControl extends React.Component {
         this.updateAmountFromState = this.updateAmountFromState.bind(this);
     }
 
+    static getDerivedStateFromProps(props, state) {
+        return {
+            amount: state.skipDerived ? state.amount : props.amount,
+            skipDerived: false,
+        };
+    }
+
     onPlus() {
         let amount = this.state.amount + 1;
         this.setState({amount: amount, skipDerived: true})

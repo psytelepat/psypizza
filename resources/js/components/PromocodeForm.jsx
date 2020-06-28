@@ -2,8 +2,10 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
+import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Col'
 import Col from 'react-bootstrap/Col'
 
 class PromocodeForm extends React.Component {
@@ -38,24 +40,28 @@ class PromocodeForm extends React.Component {
 
     render() {
         return (
+            <>
+            <h3>Add promo code</h3>
+            <p>You could apply a promo code here if you have one<br/> to get a sweet discount.</p>
             <Form>
                 <Form.Row>
-                    {this.state.promocode_id ?
-                        <Form.Group as={Col}>
-                            <Button onClick={this.removePromocode.bind(this)}>Remove promocode</Button>
-                        </Form.Group>
-                        :
-                        <>
-                        <Form.Group as={Col}>
-                            <Form.Control type="text" placeholder="Promo code" value={this.state.promocode} onChange={this.onPromocodeChange.bind(this)} />
-                        </Form.Group>
-                        <Form.Group as={Col}>
-                            <Button onClick={this.setPromocode.bind(this)} disabled={this.props.isLoading}>Apply promocode</Button>
-                        </Form.Group>
-                        </>
-                    }
+                {this.state.promocode_id ?
+                    <Form.Group>
+                        <Button onClick={this.removePromocode.bind(this)}>Remove promocode</Button>
+                    </Form.Group>
+                    :
+                    <>
+                    <Form.Group>
+                        <Form.Control type="text" placeholder="Promo code" value={this.state.promocode} onChange={this.onPromocodeChange.bind(this)} />
+                    </Form.Group>
+                    <Form.Group>
+                        <Button onClick={this.setPromocode.bind(this)} disabled={this.props.isLoading}>Apply promocode</Button>
+                    </Form.Group>
+                    </>
+                }
                 </Form.Row>
             </Form>
+            </>
         );
     }
 }

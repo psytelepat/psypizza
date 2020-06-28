@@ -14,23 +14,21 @@ import {
     CART_LOADING,
     CART_LOADED,
     CART_ERROR,
-    CART_SET,
-    CART_REMOVE,
+    CART_SET_PRODUCT,
+    CART_REMOVE_PRODUCT,
     CART_SET_PROMOCODE,
     CART_REMOVE_PROMOCODE,
 } from './actions'
 
 
 
-const defaultCategoriesState = {
+function categories(state = {
     isLoading: false,
     isLoaded: false,
     isError: null,
     data: null,
     selected: null
-};
-
-function categories(state = defaultCategoriesState, action) {
+}, action) {
     switch (action.type) {
         case CATEGORIES_LOADING:
             return {
@@ -65,14 +63,12 @@ function categories(state = defaultCategoriesState, action) {
 
 
 
-const defaultProductsState = {
+function products(state = {
     isLoading: false,
     isLoaded: false,
     isError: null,
     data: null,
-};
-
-function products(state = defaultProductsState, action) {
+}, action) {
     switch (action.type) {
         case PRODUCTS_LOADING:
             return {
@@ -99,7 +95,7 @@ function products(state = defaultProductsState, action) {
 
 
 
-const defaultCartState = {
+function cart(state = {
     isLoading: false,
     isLoaded: false,
     isError: null,
@@ -107,9 +103,7 @@ const defaultCartState = {
     data: {
         products: [],
     },
-};
-
-function cart(state = defaultCartState, action) {
+}, action) {
     let connections = state.connections - 1;
     switch (action.type) {
         case CART_LOADING:
@@ -118,6 +112,36 @@ function cart(state = defaultCartState, action) {
                 connections: state.connections + 1,
                 isLoading: true,
             };
+        case CART_SET_PRODUCT:
+            let products = [...state.data.products],
+                found = -1;
+
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].product_id == action.id) {
+                    found = i;
+                    break;
+                }
+            }
+
+            if (found >= 0) {
+                products[found].amount = action.amount;
+            }
+
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    products: products,
+                }
+            }
+        case CART_REMOVE_PRODUCT:
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    products: state.data.products.filter((product) => product.product_id != action.id)
+                }
+            }
         case CART_LOADED:
             return {
                 ...state,
@@ -140,15 +164,13 @@ function cart(state = defaultCartState, action) {
 
 
 
-const defaultDeliveryMethodsState = {
+function deliveryMethods(state = {
     isLoading: false,
     isLoaded: false,
     isError: null,
     data: null,
     selected: null
-};
-
-function deliveryMethods(state = defaultDeliveryMethodsState, action) {
+}, action) {
     switch (action.type) {
         case DELIVERY_METHODS_LOADING:
             return {

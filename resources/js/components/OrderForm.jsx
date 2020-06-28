@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -26,6 +28,9 @@ class OrderForm extends React.Component {
 
     render() {
         return (
+            <Container className="mt-5">
+                <h3>Order form</h3>
+                <p>Please fill in the form below and click "Place order" button to complete your purchase.</p>
             <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
@@ -51,42 +56,45 @@ class OrderForm extends React.Component {
               }) => (
                 <Form noValidate onSubmit={handleSubmit}>
                     <Form.Row>
-                        <Form.Group controlId="name">
+                        <Form.Group as={Col} sm="6" controlId="name">
                             <Form.Control type="text" name="name" required placeholder="Name" value={values.name} onChange={handleChange} isInvalid={!!errors.name} />
                             <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group controlId="surname">
+                        <Form.Group as={Col} sm="6" controlId="surname">
                             <Form.Control type="text" name="surname" placeholder="Surname" value={values.surname} onChange={handleChange} isInvalid={!!errors.surname} />
                             <Form.Control.Feedback type="invalid">{errors.surname}</Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
-                        <Form.Group controlId="email">
+                        <Form.Group as={Col} sm="6" controlId="email">
                             <Form.Control type="email" name="email" required placeholder="E-mail" value={values.email} onChange={handleChange} isInvalid={!!errors.email} />
                             <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group controlId="phone">
+                        <Form.Group as={Col} sm="6" controlId="phone">
                             <Form.Control type="phone" name="phone" required placeholder="Phone" value={values.phone} onChange={handleChange} isInvalid={!!errors.phone} />
                             <Form.Control.Feedback type="invalid">{errors.phone}</Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
-                        <Form.Group controlId="address">
+                        <Form.Group as={Col} sm="12" controlId="address">
                             <Form.Control type="text" name="address" required placeholder="Address" value={values.address} onChange={handleChange} isInvalid={!!errors.address} />
                             <Form.Control.Feedback type="invalid">{errors.address}</Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
-                        <Form.Group controlId="agreement_check">
+                        <Form.Group as={Col} sm="12" align="center" controlId="agreement_check">
                             <Form.Check type="checkbox" label="Agree to terms and conditions" required name="agreement" onChange={handleChange} isInvalid={!!errors.agreement} feedback={errors.terms} />
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
-                        <Button variant="primary" type="submit">Submit</Button>
+                        <Form.Group as={Col} sm="12" align="center">
+                            <Button variant="primary" type="submit">Place order</Button>
+                        </Form.Group>
                     </Form.Row>
                 </Form>
               )}
             </Formik>
+            </Container>
         );
     }
 }
