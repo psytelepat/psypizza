@@ -5,8 +5,8 @@ namespace App\Psypizza;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use \App\Psypizaa\Cart;
-use \App\Psypizaa\Product;
+use \App\Psypizza\Cart;
+use \App\Psypizza\Product;
 
 class CartProduct extends Model
 {

@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Figure from 'react-bootstrap/Figure'
 
 import Spinner from 'react-bootstrap/Spinner'
 import AmountControl from './AmountControl'
@@ -38,18 +39,22 @@ class Cart extends React.Component {
         return (
             <Container>
                 <h3>Your cart</h3>
-                <p>You have a brilliant taste! Haven't you forgot something?</p>
+                <p>You have a brilliant taste! Did you forget something?</p>
                 {this.props.products.map((product) => {
                     return (
-                        <Row key={product.product_id}>
-                            <Col sm="1">{product.product_id}</Col>
-                            <Col sm="1">€{product.price}</Col>
+                        <Row key={product.product_id} className="mb-5">
                             <Col sm="3">
-                                <AmountControl amount={product.amount} onChange={(amount) => this.onAmountChange(product.product_id, amount)} />
+                                <Figure.Image src="/images/pizza.jpg" width={100} alt={product.name} className="float-left" />
                             </Col>
-                            <Col sm="1">€{product.cost}</Col>
-                            <Col sm="3">
+                            <Col sm="9">
+                                
+                                <p className="h4">{product.name}</p>
 
+                                <p className="h5">€{product.cost}</p>
+                                <p className="h6">€{product.price}</p>
+                                {product.discount > 0 && <p>Discount: €{product.discount}</p>}
+
+                                <AmountControl amount={product.amount} onChange={(amount) => this.onAmountChange(product.product_id, amount)} />
                             </Col>
                         </Row>
                     );

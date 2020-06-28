@@ -53,7 +53,7 @@ class Cart extends Model
 
     public function deliveryMethod()
     {
-        return $this->hasOne(DeliveryMethod::class);
+        return $this->belongsTo(DeliveryMethod::class);
     }
 
     public static function instance($recreate = false) : self
@@ -159,7 +159,7 @@ class Cart extends Model
     {
         $cartProduct->price = $cartProduct->original_price;
         if ($cart->promocode) {
-            $cartProduct->price = round($cartProduct->price * ($cart->promocode->discount / 100), 2, PHP_ROUND_HALF_UP);
+            $cartProduct->price = round($cartProduct->price * ((100 - $cart->promocode->discount) / 100), 2, PHP_ROUND_HALF_UP);
         }
         $cartProduct->cost = round($cartProduct->price * $cartProduct->amount, 2, PHP_ROUND_HALF_UP);
         $cartProduct->discount = $cartProduct->original_cost - $cartProduct->cost;
