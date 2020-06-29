@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Cart as CartIcon } from 'react-bootstrap-icons'
+import { Cart as CartIcon, X as RemoveIcon } from 'react-bootstrap-icons'
 
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
@@ -53,6 +53,7 @@ class Cart extends React.Component {
                                 <p className="h4">{product.name}</p>
                                 <PriceFormat as="div" className="h6" price={product.price} />
                                 <p className="mt-3">{product.description}</p>
+                                <Button variant="danger" size="sm" onClick={() => this.onAmountChange(product.product_id, 0)}><RemoveIcon size={16} /> Remove</Button>
                             </Col>
                             <Col sm="3">
                                 <PriceFormat as="div" className="h5" price={product.cost} />
