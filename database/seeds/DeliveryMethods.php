@@ -19,9 +19,14 @@ class DeliveryMethods extends Seeder
 
         $delivery_methods = [
             [
-                'name' => 'Default',
-                'description' => 'Default courier delivery',
+                'name' => 'Courier delivery',
+                'description' => 'Our courier will deliver your order in 30-40 minutes.',
                 'price' => 5,
+            ],
+            [
+                'name' => 'Pick up',
+                'description' => 'Order and pick up at the restaurant by yourself.',
+                'price' => 0,
             ],
         ];
 

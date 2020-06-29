@@ -20,6 +20,14 @@ class CreateCartsTable extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users');
 
             $table->foreignId('promocode_id')->nullable()->constrained('promocodes');
+            $table->unsignedInteger('promocode_discount')->nullable();
+
+            $table->foreignId('delivery_method_id')->nullable()->constrained('delivery_methods');
+            $table->decimal('delivery_price', 10, 2)->nullable();
+
+            $table->decimal('original_products_cost', 10, 2);
+            $table->decimal('products_discount', 10, 2);
+            $table->decimal('products_cost', 10, 2);
 
             $table->decimal('original_cost', 10, 2);
             $table->decimal('discount', 10, 2);

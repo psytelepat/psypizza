@@ -2,15 +2,18 @@
 export const CART_LOADING = 'CART_LOADING'
 export const CART_LOADED = 'CART_LOADED'
 export const CART_ERROR = 'CART_ERROR'
-export const CART_SET = 'CART_SET'
-export const CART_REMOVE = 'CART_REMOVE'
+export const CART_SET_PRODUCT = 'CART_SET_PRODUCT'
+export const CART_REMOVE_PRODUCT = 'CART_REMOVE_PRODUCT'
+export const CART_SET_PROMOCODE = 'CART_SET_PROMOCODE'
+export const CART_REMOVE_PROMOCODE = 'CART_REMOVE_PROMOCODE'
 
 export function cartLoading() {                 return { type: CART_LOADING }; }
 export function cartLoaded(cart) {              return { type: CART_LOADED, cart }; }
 export function cartError(error) {              return { type: CART_ERROR, error }; }
-export function cartSetProduct(id, amount) {    return { type: CART_SET, id, amount }; }
-export function cartRemoveProduct(id, amount) { return { type: CART_REMOVE, id }; }
-
+export function cartSetProduct(id, amount) {    return { type: CART_SET_PRODUCT, id, amount }; }
+export function cartRemoveProduct(id, amount) { return { type: CART_REMOVE_PRODUCT, id }; }
+export function cartSetPromocode(code) {        return { type: CART_SET_PROMOCODE, code }; }
+export function cartRemovePromocode() {         return { type: CART_REMOVE_PROMOCODE }; }
 
 
 // categories

@@ -10935,6 +10935,20 @@ a.text-dark:focus {
   box-sizing: border-box;
 }
 
+/* Chrome, Safari, Edge, Opera */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 body {
   color: #DCDCCC;
 }
@@ -10962,44 +10976,33 @@ section.first-screen .welcome {
   transform: translate3d(0, -50%, 0);
 }
 
+.cart {
+  position: fixed;
+  background-color: #404040;
+  top: 0;
+  right: 0;
+  z-index: 20;
+  padding: 20px 40px;
+}
+
 section.products div.row .col {
   padding-bottom: 40px;
 }
 
-section.products div.row div.product {
-  padding: 0 0 40px 0;
-}
-
-section.products div.row div.product div.info {
-  padding-bottom: 30px;
-}
-
-section.products div.row div.product div.info div.image {
-  margin-bottom: 20px;
-}
-
-section.products div.row div.product div.info div.image img {
-  width: 100%;
-  height: auto;
-}
-
-section.products div.row div.product div.info div.title {
-  font-size: 20px;
-}
-
-section.products div.row div.product div.info p.description {
-  font-size: 14px;
-  line-height: 1.57em;
-}
-
-section.products div.row div.controls {
-  position: absolute;
-  bottom: 40px;
+input.amountInput[type=number] {
+  text-align: center;
 }
 
 section.page-footer {
   background-color: #000;
   color: #efefef;
   padding: 20px 0;
+}
+
+.currency-switcher {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 

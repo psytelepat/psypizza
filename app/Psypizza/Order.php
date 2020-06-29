@@ -8,11 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use \App\User;
 use \App\Psypizza\Cart;
-use \App\Psypizza\Promocode;
-use \App\Psypizza\DeiveryMethod;
 
 class Order extends Model
 {
+    public const STATUS_CREATED = 1;
+    public const STATUS_ACCEPTED = 2;
+    public const STATUS_REJECTED = 988;
+    public const STATUS_CANCELED = 999;
+    public const STATUS_SUCCESS = 1000;
+
     use SoftDeletes;
 
     public $table = 'orders';
@@ -26,10 +30,7 @@ class Order extends Model
         'phone',
         'address',
 
-        'delivery_method_id',
-        'delivery_price',
-
-        'cost',
+        'status',
     ];
 
     public function cart(): Cart
@@ -40,15 +41,5 @@ class Order extends Model
     public function user(): User
     {
         return $this->hasOne(User::class);
-    }
-
-    public function deliveryMethod(): DeiveryMethod
-    {
-        return $this->hasOne(DeiveryMethod::class);
-    }
-
-    public function products()
-    {
-        return $this->cart->products;
     }
 }

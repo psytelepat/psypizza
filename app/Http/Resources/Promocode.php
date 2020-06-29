@@ -14,6 +14,9 @@ class Promocode extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'code' => $this->code,
+            'discount' => $this->discount,
+        ];
     }
 }

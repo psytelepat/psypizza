@@ -2,67 +2,66 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import { cartSetProduct, cartRemoveProduct } from './actions';
+import { Cart as CartIcon } from 'react-bootstrap-icons';
 
 import Col from 'react-bootstrap/Col'
-import Image from 'react-bootstrap/Image'
+import Card from 'react-bootstrap/Card'
+import AmountControl from './AmountControl'
+import PriceFormat from './PriceFormat'
 
 class Product extends React.Component {
+
+    onAmountChange(amount) {
+        if (amount > 0) {
+            this.props.setToCart(this.props.product.id, amount);
+        } else {
+            this.props.removeFromCart(this.props.product.id);
+        }
+    }
+
     render() {
-        const { id, name, description, amount } = this.props.product;
+        const { id, name, description, price } = this.props.product;
         const image = "/images/pizza.jpg";
 
-        let cartProduct = null;
-        if (
-            this.props.cart &&
-            typeof this.props.cart.data != 'undefined' && this.props.cart.data &&
-            typeof this.props.cart.data.products != 'undefined' && this.props.cart.data.products
-        ) {
-            for (var i in this.props.cart.data.products) {
-                if (this.props.cart.data.products[i].product_id == id) {
-                    cartProduct = this.props.cart.data.products[i];
-                    break;
-                }
-            }
-        }
-
         return (
-            <Col lg={3} md={4} sm={6} xs={12}>
-                <div className="product">
-                    <div className="info">
-                        <div className="image"><Image src={image} /></div>
-                        <div className="title">{name}</div>
-                        <p className="description">{description}</p>
-                    </div>
-                </div>
-                <div className="controls">
-                    { 
-                        cartProduct
-                        ?
-                        <Button size="sm" variant="secondary" onClick={() => this.props.removeFromCart(id)}>Remove from cart</Button>
-                        :
-                        <Button size="sm" variant="primary" onClick={() => this.props.setToCart(id, 1)}>Add to cart</Button>
-                    }
-                </div>
+            <Col lg={3} md={4} sm={6} xs={12} style={{paddingBottom: "30px"}}>
+                <Card className="product-card h-100" bg="dark">
+                    <Card.Img variant="top" src={image} />
+                    <Card.Body>
+                        <Card.Title>{name}</Card.Title>
+                        <Card.Text>{description}</Card.Text>
+                    </Card.Body>
+                    <Card.Footer>
+                        <PriceFormat price={price} calc />
+                        { 
+                            this.props.amount > 0
+                            ?
+                            <AmountControl className="float-right align-middle" amount={this.props.amount} onChange={this.onAmountChange.bind(this)} />
+                            :
+                            <Button variant="success" size="sm" title={name} onClick={() => this.onAmountChange(1)} className="float-right align-middle"><CartIcon /></Button>
+                        }
+                    </Card.Footer>
+                </Card>
             </Col>
         );
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
+
+    let amount = 0;
+    if(state.cart.data.products.length > 0) {
+        for (let i = 0; i < state.cart.data.products.length; i++) {
+            if (state.cart.data.products[i].product_id == props.product.id) {
+                amount = state.cart.data.products[i].amount;
+                break;
+            }
+        }
+    }
+
     return {
-        cart: state.cart,
+        amount: amount,
     }
 }
-
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         onSetToCart: (id, amount) => {
-//             dispatch(cartSetProduct(id, amount));
-//         },
-//         onRemoveFromCart: (id) => {
-//             dispatch(removeFromCart(id));
-//         },
-//     }
-// }
 
 export default connect(mapStateToProps, null)(Product);

@@ -17,16 +17,12 @@ class CreateOrdersTable extends Migration
             $table->id();
 
             $table->foreignId('user_id')->nullable()->constrained('users');
+            
             $table->string('name');
             $table->string('surname')->nullable();
             $table->string('email');
             $table->string('phone');
             $table->string('address');
-            
-            $table->foreignId('delivery_method_id')->constrained('delivery_methods');
-            $table->decimal('delivery_price', 10, 2);
-
-            $table->decimal('cost', 10, 2);
 
             $table->timestamps();
             $table->softDeletes();
