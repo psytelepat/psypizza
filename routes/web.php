@@ -17,6 +17,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::prefix('admin')->group(function () {
+    $x = 'AdminController@index';
+    Route::get('', $x);
+    Route::get('products', $x);
+    Route::get('products/{id}', $x);
+});
+
 Auth::routes();
 
 Route::get('cart.json', 'CartController@index');

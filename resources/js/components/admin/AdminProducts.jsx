@@ -1,11 +1,16 @@
 import React from 'react'
 
+import { Pencil as EditIcon, TrashFill as DeleteIcon, PlusCircleFill as AddIcon } from 'react-bootstrap-icons'
+
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
+import Figure from 'react-bootstrap/Figure'
+
+import { Link } from 'react-router-dom'
 
 import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
@@ -25,7 +30,7 @@ class AdminProducts extends React.Component {
     }
 
     _fetchProductsList() {
-        fetch('/api/products?page=1&per_page=5')
+        fetch('/api/products')
         .then((response) => response.json())
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, products: json.data});
@@ -76,19 +81,18 @@ class AdminProducts extends React.Component {
     renderProduct(product) {
         let editProduct = this.editProduct.bind(this);
         let deleteProduct = this.deleteProduct.bind(this);
-        return <Row key={product.id}> 
-                    <Col sm="1"><Image src="/images/pizza.jpg" width="100%" /></Col>
+        return <Row key={product.id} className="mb-3"> 
+                    <Col sm="1">{product.image && <Figure.Image src={'/storage/products/images/' + product.image} width="100%" />}</Col>
                     <Col sm="4"><h5>{product.name}</h5><p>{product.description}</p></Col>
                     <Col sm="2" align="right"><h4>€ {product.price}</h4></Col>
                     <Col sm="5" align="right">
-                        <Button onClick={() => editProduct(product.id)}>Edit</Button>
-                        {' '}
-                        <Button variant="danger" onClick={() => deleteProduct(product.id)}>Delete</Button>
+                        <Button as={Link} to={'/admin/products/'+product.id}><EditIcon /></Button>
+                        <Button className="ml-2" variant="danger" onClick={() => deleteProduct(product.id)}><DeleteIcon /></Button>
                     </Col>
                 </Row>
     }
 
-    renderList() {
+    render() {
         const { isLoaded, products } = this.state;
 
         if (!isLoaded||!products) {
@@ -101,153 +105,19 @@ class AdminProducts extends React.Component {
 
         return (
             <Container>
+                <Row className="mb-5">
+                    <Col align="center">
+                        <Button variant="primary" as={Link} to='/admin/products/create'><AddIcon /> Add product</Button>
+                    </Col>
+                </Row>
                 {products.map(this.renderProduct.bind(this))}
-                <Row>
-                    <Col>
-                        <Button variant="primary" onClick={() => this.setState({createProductMode: true})}>Add new product</Button>
+                <Row className="mt-5 mb-5">
+                    <Col align="center">
+                        <Button variant="primary" as={Link} to='/admin/products/create'><AddIcon /> Add product</Button>
                     </Col>
                 </Row>
             </Container>
         );
-    }
-
-    onChange(event) {
-        this.setState({
-            editingProduct: {
-                ...this.state.editingProduct,
-                [event.target.name]: event.target.value,
-            }
-        });
-    }
-
-    onCheckChange(event) {
-        this.setState({
-            editingProduct: {
-                ...this.state.editingProduct,
-                [event.target.name]: event.target.checked,
-            }
-        });
-    }
-
-    saveForm() {
-        let id = this.state.editingProduct.id,
-            body = JSON.stringify(this.state.editingProduct);
-
-        fetch('/api/products/' + id, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector("meta[name='csrf-token']").getAttribute('content'),
-            },
-            body: body
-        })
-        .then((response) => response.json())
-        .then((json) => {
-            this.setState({isLoading: false, editingProduct: null, createProductMode: false});
-        })
-        .catch((err) => {
-            this.setState({isLoading: false})
-        });
-    }
-
-    cancelForm() {
-        this.setState({editingProduct:false, editingProduct:null});
-    }
-
-    renderForm() {
-        const { editingProduct } = this.state;
-
-        const categories = [
-            {id: 1, name: 'Pizza'},
-            {id: 2, name: 'Salads'},
-            {id: 3, name: 'Beverages'},
-        ];
-
-        return (
-            <Container>
-                <Form>
-                    <h2>Product editing form</h2>
-                    <Form.Group>
-                        <Form.Label>Category</Form.Label>
-                        <Form.Control as="select" name="category_id" defaultValue={editingProduct?editingProduct.category_id:categories[0].id} onChange={this.onChange.bind(this)}>
-                            {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Col sm="6">
-                                <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" name="name" placeholder="Product name" value={editingProduct?editingProduct.name:""} onChange={this.onChange.bind(this)} />
-                            </Col>
-                            <Col sm="6">
-                                <Form.Label>URL Slug</Form.Label>
-                                <Form.Control type="text" name="slug" placeholder="Product slug" value={editingProduct?editingProduct.slug:""} onChange={this.onChange.bind(this)} />
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control as="textarea" name="description" rows="3" value={editingProduct?editingProduct.description:""} onChange={this.onChange.bind(this)} />
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Col sm="6">
-                                <Form.Label>SKU</Form.Label>
-                                <Form.Control type="text" name="sku" placeholder="Product SKU" value={editingProduct?editingProduct.sku:""} onChange={this.onChange.bind(this)} />
-                            </Col>
-                            <Col sm="6">
-                                <Form.Label>EAN13</Form.Label>
-                                <Form.Control type="text" name="ean13" placeholder="Product EAN13" value={editingProduct?editingProduct.ean13:""} onChange={this.onChange.bind(this)} />
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.File label="Upload image" />
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Col sm="4">
-                                <Form.Control type="text" name="price" placeholder="Product price" value={editingProduct?editingProduct.price:""} onChange={this.onChange.bind(this)} />
-                            </Col>
-                            <Col sm="4">
-                                <Form.Check 
-                                    type="checkbox"
-                                    id="productForm.is_published"
-                                    label="Published"
-                                    checked={editingProduct?editingProduct.is_published:false}
-                                    onChange={this.onCheckChange.bind(this)}
-                                />
-                            </Col>
-                            <Col sm="4">
-                                <Form.Check 
-                                    type="checkbox"
-                                    id="productForm.in_stock"
-                                    label="In stock"
-                                    checked={editingProduct?editingProduct.in_stock:false}
-                                    onChange={this.onCheckChange.bind(this)}
-                                />
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Col sm="6">
-                                <Button variant="primary" onClick={this.saveForm.bind(this)}>Save</Button>
-                            </Col>
-                            <Col sm="6" align="right">
-                                <Button variant="secondary" onClick={this.cancelForm.bind(this)}>Cancel</Button>
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                </Form>
-            </Container>
-        );
-    }
-
-    render() {
-        const { editingProduct, createProductMode } = this.state;
-        return editingProduct||createProductMode ? this.renderForm() : this.renderList();
     }
 }
 

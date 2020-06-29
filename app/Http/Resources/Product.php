@@ -19,11 +19,13 @@ class Product extends JsonResource
             'slug' => $this->slug,
             'category_id' => $this->category->id,
             'name' => $this->name,
-            'is_published' => $this->is_published,
-            'in_stock' => $this->in_stock,
-            'name' => $this->name,
+            'image' => $this->image,
             'description' => $this->description,
+            'sku' => $this->sku,
+            'ean13' => $this->ean13,
             'price' => $this->price,
+            'is_published' => $this->is_published ? 1 : 0,
+            'in_stock' => $this->in_stock ? 1 : 0,
         ];
     }
 }

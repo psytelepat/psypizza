@@ -29,13 +29,14 @@ class ProductRequest extends FormRequest
                 return [
                     'category_id' => 'required|integer|exists:product_categories,id',
                     'slug' => 'required|string|unique:products,slug',
-                    'sku' => 'string',
-                    'ean13' => 'integer',
+                    'sku' => '',
+                    'ean13' => '',
+                    'upload_image' => 'file|image',
                     'name' => 'required|string|unique:products,name',
-                    'description' => 'string',
+                    'description' => '',
                     'price' => 'required|numeric',
-                    'in_stock' => 'boolean',
-                    'is_published' => 'boolean',
+                    'in_stock' => 'integer',
+                    'is_published' => 'integer',
                 ];
             case 'PUT':
                 return [
@@ -43,15 +44,16 @@ class ProductRequest extends FormRequest
                     'slug' => [
                         Rule::unique('products')->ignore($this->slug, 'slug'),
                     ],
-                    'sku' => 'string',
-                    'ean13' => 'integer',
+                    'sku' => '',
+                    'ean13' => '',
                     'name' => [
                         Rule::unique('products')->ignore($this->name, 'name'),
                     ],
-                    'description' => 'string',
+                    'upload_image' => 'file|image',
+                    'description' => '',
                     'price' => 'numeric',
-                    'in_stock' => 'boolean',
-                    'is_published' => 'boolean',
+                    'in_stock' => 'integer',
+                    'is_published' => 'integer',
                 ];
         }
     }
