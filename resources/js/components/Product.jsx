@@ -7,6 +7,7 @@ import { Cart as CartIcon } from 'react-bootstrap-icons';
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import AmountControl from './AmountControl'
+import PriceFormat from './PriceFormat'
 
 class Product extends React.Component {
 
@@ -31,7 +32,7 @@ class Product extends React.Component {
                         <Card.Text>{description}</Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                        <span>€{price}</span>
+                        <PriceFormat price={price} calc />
                         { 
                             this.props.amount > 0
                             ?

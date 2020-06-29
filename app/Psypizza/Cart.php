@@ -100,8 +100,9 @@ class Cart extends Model
         $cart->currency = Currency::BASE_CURRENCY;
         $cart->exchange_rate = 1;
 
-        $cart->delivery_method_id = DeliveryMethod::first()->id;
-        $cart->delivery_price = 0;
+        $deliveryMethod = DeliveryMethod::first();
+        $cart->delivery_method_id = $deliveryMethod->id;
+        $cart->delivery_price = round($deliveryMethod->price * $cart->exchange_rate, 2);
 
         $cart->original_products_cost = 0;
         $cart->products_discount = 0;
@@ -125,8 +126,8 @@ class Cart extends Model
         $original_products_cost = 0;
         $products_cost = 0;
         foreach ($cart->products as $cartProduct) {
-            static::recalcCartProduct($cartProduct, $cart);
-            $original_products_cost += $cartProduct->original_cost;
+            self::recalcCartProduct($cartProduct, $cart);
+            $original_products_cost += round($cartProduct->original_cost * $cart->exchange_rate, 2);
             $products_cost += $cartProduct->cost;
         }
 
@@ -134,8 +135,10 @@ class Cart extends Model
         $cart->products_cost = $products_cost;
         $cart->products_discount = $original_products_cost - $products_cost;
 
+        $cart->delivery_price = round($cart->deliveryMethod->price * $cart->exchange_rate, 2);
+        
         $cart->original_cost = $cart->original_products_cost + $cart->delivery_price;
-        $cart->cost = $cart->products_cost + round($cart->delivery_price * $cart->exchange_rate, 2, PHP_ROUND_HALF_UP);
+        $cart->cost = $cart->products_cost + $cart->delivery_price;
         $cart->discount = $cart->original_cost - $cart->cost;
 
         $cart->save();
@@ -165,12 +168,12 @@ class Cart extends Model
 
     public static function recalcCartProduct(CartProduct &$cartProduct, Cart &$cart) : void
     {
-        $cartProduct->price = round($cartProduct->original_price * $cart->exchange_rate, 2, PHP_ROUND_HALF_UP);
+        $cartProduct->price = round($cartProduct->original_price * $cart->exchange_rate, 2);
         if ($cart->promocode) {
-            $cartProduct->price = round($cartProduct->price * ((100 - $cart->promocode->discount) / 100), 2, PHP_ROUND_HALF_UP);
+            $cartProduct->price = round($cartProduct->price * ((100 - $cart->promocode->discount) / 100), 2);
         }
-        $cartProduct->cost = round($cartProduct->price * $cartProduct->amount, 2, PHP_ROUND_HALF_UP);
-        $cartProduct->discount = $cartProduct->original_cost - $cartProduct->cost;
+        $cartProduct->cost = round($cartProduct->price * $cartProduct->amount, 2);
+        $cartProduct->discount = round($cartProduct->original_cost * $cart->exchange_rate, 2) - $cartProduct->cost;
         $cartProduct->save();
     }
 
@@ -193,7 +196,7 @@ class Cart extends Model
         $cartProduct->amount = $amount;
         $cartProduct->original_cost = $cartProduct->original_price * $amount;
 
-        static::recalcCartProduct($cartProduct, $cart);
+        self::recalcCartProduct($cartProduct, $cart);
 
         return self::recalc();
     }
@@ -210,6 +213,11 @@ class Cart extends Model
         } else {
             throw new \InvalidArgumentException('Invalid currency');
         }
+    }
+
+    public static function exchange(float $price): float
+    {
+        return round($price * self::instance()->exchange_rate, 2);
     }
 
     public static function setDeliveryMethod(DeliveryMethod $deliveryMethod): self
@@ -256,7 +264,7 @@ class Cart extends Model
 
     public static function hasProduct(int $id): ?CartProduct
     {
-        $cart = static::instance();
+        $cart = self::instance();
         return $cartProduct = $cart->products()->where('product_id', $id)->first();
     }
 
