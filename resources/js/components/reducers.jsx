@@ -151,6 +151,7 @@ function cart(state = {
                 data: action.cart.data,
             };
         case CART_ERROR:
+            console.log(action.error);
             return {
                 ...state,
                 connections: connections,

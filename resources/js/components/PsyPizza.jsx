@@ -38,6 +38,18 @@ class PsyPizza extends React.Component {
         this._loadDeliveryMethods();
     }
 
+    _processResponse(response){
+        if (response.ok) {
+            return response.json();
+        } else {
+            return new Promise((resolve, reject) => {
+                response.json()
+                .then((json) => {reject(json.message)})
+                .catch(() => {reject(response.statusText)});
+            });
+        }
+    }
+
     _loadCategories() {
         store.dispatch(categoriesLoading());
 
@@ -45,9 +57,9 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(categoriesLoaded(json)))
-        .catch((err) => store.dispatch(categoriesError(err)))
+        .catch((err) => store.dispatch(categoriesError(err)));
     }
 
     _loadProducts() {
@@ -57,7 +69,7 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(productsLoaded(json)))
         .catch((err) => store.dispatch(productsError(err)))
     }
@@ -69,7 +81,7 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(deliveryMethodsLoaded(json)))
         .catch((err) => store.dispatch(deliveryMethodsError(err)))
     }
@@ -81,7 +93,7 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(cartLoaded(json)))
         .catch((err) => store.dispatch(cartError(err)))
     }
@@ -94,7 +106,7 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify({id: id}),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(cartLoaded(json)))
         .catch((err) => store.dispatch(cartError(err)))
     }
@@ -108,7 +120,7 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify({id: id, amount: amount}),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(cartLoaded(json)))
         .catch((err) => store.dispatch(cartError(err)))
     }
@@ -122,7 +134,7 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify({id: id}),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(cartLoaded(json)))
         .catch((err) => store.dispatch(cartError(err)))
     }
@@ -134,7 +146,7 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(cartLoaded(json)))
         .catch((err) => store.dispatch(cartError(err)))
     }
@@ -147,7 +159,7 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify({code: code}),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(cartLoaded(json)))
         .catch((err) => store.dispatch(cartError(err)))
     }
@@ -159,7 +171,7 @@ class PsyPizza extends React.Component {
             method: 'DELETE',
             headers: this._requestHeaders(),
         })
-        .then((response) => response.json())
+        .then(this._processResponse)
         .then((json) => store.dispatch(cartLoaded(json)))
         .catch((err) => store.dispatch(cartError(err)))
     }
