@@ -47,7 +47,7 @@ class Cart extends React.Component {
                     return (
                         <Row key={product.product_id} className="mb-5">
                             <Col sm="3">
-                                <Figure.Image src="/images/pizza.jpg" alt={product.name} className="float-left" />
+                                {product.image && <Figure.Image src={'/storage/products/images/' + product.image} alt={product.name} className="float-left" />}
                             </Col>
                             <Col sm="6">
                                 <p className="h4">{product.name}</p>

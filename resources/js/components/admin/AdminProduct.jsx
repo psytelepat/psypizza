@@ -28,10 +28,12 @@ class AdminProduct extends React.Component {
             isLoading: false,
             isLoaded: false,
             isError: false,
-            product: {
+            categories: [],
+            model: {
                 category_id: 1,
                 name: "",
                 slug: "",
+                image: "",
                 description: "",
                 sku: "",
                 ean13: "",
@@ -42,11 +44,21 @@ class AdminProduct extends React.Component {
         };
     }
 
-    _fetchProduct() {
+    _fetchCategoriesList() {
+        fetch('/api/product_categories')
+        .then((response) => response.json())
+        .then((json) => {
+            this.setState({categories: json.data});
+        })
+        .catch((err) => {
+        });
+    }
+
+    _fetchModel() {
         fetch('/api/products/' + this.id)
         .then((response) => response.json())
         .then((json) => {
-            this.setState({isLoading: false, isLoaded: true, product: json.data});
+            this.setState({isLoading: false, isLoaded: true, model: json.data});
         })
         .catch((err) => {
             this.setState({isLoading: false, isError: err})
@@ -54,8 +66,9 @@ class AdminProduct extends React.Component {
     }
 
     componentDidMount() {
+        this._fetchCategoriesList();
         if (this.id) {
-            this.setState({isLoading: true}, this._fetchProduct);
+            this.setState({isLoading: true}, this._fetchModel);
         }
     }
 
@@ -75,7 +88,7 @@ class AdminProduct extends React.Component {
             })
             .then((response) => response.json())
             .then((json) => {
-                this.setState({isLoading: false, product: json.data});
+                this.setState({isLoading: false, model: json.data});
                 !this.id && this.props.history.push('/admin/products/' + json.data.id);
             })
             .catch((err) => {
@@ -93,29 +106,27 @@ class AdminProduct extends React.Component {
     }
 
     render() {
-        const categories = [
-            {id: 1, name: 'Pizza'},
-            {id: 2, name: 'Salads'},
-            {id: 3, name: 'Beverages'},
-        ];
+        const { categories } = this.state;
 
-        if (this.state.isLoading) {
-            return  <Container>
-                        <Spinner animation="border" role="status">
-                            <span className="sr-only">Loading...</span>
-                        </Spinner>
-                    </Container>
+        if (this.state.isLoading||!categories.length) {
+            return  (
+                <Container align="center">
+                    <Spinner animation="border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </Spinner>
+                </Container>
+            );
         }
 
         return (
             <Container>
-                <h2>{this.id ? this.state.product.name : 'Create new product'}</h2>
+                <h2>{this.id ? this.state.model.name : 'Create new product'}</h2>
                 <Formik
                         validateOnBlur={false}
                         validateOnChange={false}
                         validationSchema={this._formScheme()}
                         onSubmit={this.saveForm.bind(this)}
-                        initialValues={this.state.product}
+                        initialValues={this.state.model}
                     >
                 {({
                     handleSubmit,
@@ -128,92 +139,81 @@ class AdminProduct extends React.Component {
                     setFieldValue,
                   }) => (
                     <Form>
-                        <Form.Group>
-                            <Form.Label>Category</Form.Label>
-                            <Form.Control as="select" name="category_id" defaultValue={values.category_id} onChange={handleChange}>
-                                {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
-                            </Form.Control>
+                        <Form.Group as={Row}>
+                            <Col sm="4">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control type="text" name="name" placeholder="Name" value={values.name} onChange={handleChange} />
+                                <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+                            </Col>
+                            <Col sm="4">
+                                <Form.Label>URL Slug</Form.Label>
+                                <Form.Control type="text" name="slug" placeholder="URL slug" value={values.slug} onChange={handleChange} />
+                                <Form.Control.Feedback type="invalid">{errors.slug}</Form.Control.Feedback>
+                            </Col>
+                            <Col sm="4">
+                                <Form.Label>Category</Form.Label>
+                                <Form.Control as="select" name="category_id" defaultValue={values.category_id} onChange={handleChange}>
+                                    {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+                                </Form.Control>
+                            </Col>
                         </Form.Group>
-                        <Form.Group>
-                            <Row>
-                                <Col sm="6">
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control type="text" name="name" placeholder="Product name" value={values.name} onChange={handleChange} />
-                                    <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
-                                </Col>
-                                <Col sm="6">
-                                    <Form.Label>URL Slug</Form.Label>
-                                    <Form.Control type="text" name="slug" placeholder="Product slug" value={values.slug} onChange={handleChange} />
-                                    <Form.Control.Feedback type="invalid">{errors.slug}</Form.Control.Feedback>
-                                </Col>
-                            </Row>
+                        <Form.Group as={Row}>
+                            <Col sm="4">
+                                <Form.Label>SKU</Form.Label>
+                                <Form.Control type="text" name="sku" placeholder="SKU" value={values.sku} onChange={handleChange} />
+                                <Form.Control.Feedback type="invalid">{errors.sku}</Form.Control.Feedback>
+                            </Col>
+                            <Col sm="4">
+                                <Form.Label>EAN13</Form.Label>
+                                <Form.Control type="text" name="ean13" placeholder="EAN13" value={values.ean13} onChange={handleChange} />
+                                <Form.Control.Feedback type="invalid">{errors.eam13}</Form.Control.Feedback>
+                            </Col>
+                            <Col sm="4">
+                                <Form.Label>Price in EURO</Form.Label>
+                                <Form.Control type="text" name="price" placeholder="Price" value={values.price} onChange={handleChange} />
+                                <Form.Control.Feedback type="invalid">{errors.price}</Form.Control.Feedback>
+                            </Col>
                         </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" name="description" rows="3" value={values.description} onChange={handleChange} />
-                            <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
+                        <Form.Group as={Row}>
+                            <Col sm="8">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3" value={values.description} onChange={handleChange} />
+                                <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
+                            </Col>
+                            <Col sm="4" className="pt-5">
+                                <Form.Check 
+                                    id="is_published"
+                                    label="Published"
+                                    name="is_published"
+                                    onChange={event => setFieldValue('is_published', event.target.checked ? 1 : 0)}
+                                    checked={!!values.is_published}
+                                    isInvalid={!!errors.is_published}
+                                />
+                                <Form.Check
+                                    id="in_stock"
+                                    label="In stock"
+                                    name="in_stock"
+                                    onChange={event => setFieldValue('in_stock', event.target.checked ? 1 : 0)}
+                                    checked={!!values.in_stock}
+                                    isInvalid={!!errors.in_stock}
+                                />
+                            </Col>
                         </Form.Group>
-                        <Form.Group>
-                            <Row>
-                                <Col sm="6">
-                                    <Form.Label>SKU</Form.Label>
-                                    <Form.Control type="text" name="sku" placeholder="Product SKU" value={values.sku} onChange={handleChange} />
-                                    <Form.Control.Feedback type="invalid">{errors.sku}</Form.Control.Feedback>
-                                </Col>
-                                <Col sm="6">
-                                    <Form.Label>EAN13</Form.Label>
-                                    <Form.Control type="text" name="ean13" placeholder="Product EAN13" value={values.ean13} onChange={handleChange} />
-                                    <Form.Control.Feedback type="invalid">{errors.eam13}</Form.Control.Feedback>
-                                </Col>
-                            </Row>
+                        <Form.Group as={Row}>
+                            <Col sm="4">
+                                <Form.File label="Upload image" accept="image/jpeg,image/jpg,image/png,.jpg,.jpeg,.png" onChange={(event) => setFieldValue("upload_image", event.currentTarget.files[0])}/>
+                            </Col>
+                            <Col sm="4">
+                                {values.image && <Figure.Image src={'/storage/products/images/' + values.image} width="200" />}
+                            </Col>
                         </Form.Group>
-                        <Form.Group>
-                            <Row>
-                                <Col sm="4">
-                                    <Form.Control type="text" name="price" placeholder="Product price" value={values.price} onChange={handleChange} />
-                                    <Form.Control.Feedback type="invalid">{errors.price}</Form.Control.Feedback>
-                                </Col>
-                                <Col sm="4">
-                                    <Form.Check 
-                                        id="is_published"
-                                        label="Published"
-                                        name="is_published"
-                                        onChange={event => setFieldValue('is_published', event.target.checked ? 1 : 0)}
-                                        checked={!!values.is_published}
-                                        isInvalid={!!errors.is_published}
-                                    />
-                                </Col>
-                                <Col sm="4">
-                                    <Form.Check
-                                        id="in_stock"
-                                        label="In stock"
-                                        name="in_stock"
-                                        onChange={event => setFieldValue('in_stock', event.target.checked ? 1 : 0)}
-                                        checked={!!values.in_stock}
-                                        isInvalid={!!errors.in_stock}
-                                    />
-                                </Col>
-                            </Row>
-                        </Form.Group>
-                        <Form.Group>
-                            <Row>
-                                <Col sm="6">
-                                    {values.image && <Figure.Image src={'/storage/products/images/' + values.image} width="200" />}
-                                </Col>
-                                <Col sm="6">
-                                    <Form.File label="Upload image" accept="image/jpeg,image/jpg,image/png,.jpg,.jpeg,.png" onChange={(event) => setFieldValue("upload_image", event.currentTarget.files[0])}/>
-                                </Col>
-                            </Row>
-                        </Form.Group>
-                        <Form.Group>
-                            <Row>
-                                <Col sm="6" align="right">
-                                    <Button variant="secondary" as={Link} to='/admin/products'><ListIcon /> Return to list</Button>
-                                </Col>
-                                <Col sm="6">
-                                    <Button variant="primary" type="submit" onClick={handleSubmit}>Save</Button>
-                                </Col>
-                            </Row>
+                        <Form.Group as={Row} className="mt-5">
+                            <Col sm="6">
+                                <Button variant="secondary" as={Link} to='/admin/products'><ListIcon /> Return to list</Button>
+                            </Col>
+                            <Col sm="6" align="right">
+                                <Button variant="primary" type="submit" onClick={handleSubmit}>{values.id ? 'Save changes' : 'Create new product'}</Button>
+                            </Col>
                         </Form.Group>
                     </Form>
                 )}

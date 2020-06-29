@@ -22,6 +22,8 @@ Route::prefix('admin')->group(function () {
     Route::get('', $x);
     Route::get('products', $x);
     Route::get('products/{id}', $x);
+    Route::get('product_categories', $x);
+    Route::get('product_categories/{id}', $x);
 });
 
 Auth::routes();

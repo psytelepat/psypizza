@@ -5,14 +5,12 @@ namespace App\Psypizza;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use Illuminate\Support\Str;
-
-use App\Psypizza\ProductCategory;
-
-use File;
 use Image;
 use Storage;
+use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
+
+use App\Psypizza\ProductCategory;
 
 class Product extends Model
 {
@@ -52,7 +50,7 @@ class Product extends Model
     public function handleImageUpload(UploadedFile $file)
     {
         $image = Image::make($file);
-        $image->resize(300, 300);
+        $image->fit(400, 300);
         $filename = $this->generateFileName($file);
         $old_filename = $this->image;
         if (Storage::disk('public')->put(self::$imagePath.$filename, $image->encode('jpg'))) {

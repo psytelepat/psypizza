@@ -13,6 +13,8 @@ import Navbar from 'react-bootstrap/Navbar'
 import Dashboard from './Dashboard'
 import AdminProducts from './AdminProducts'
 import AdminProduct from './AdminProduct'
+import AdminCategory from './AdminCategory'
+import AdminCategories from './AdminCategories'
 
 class PsyPizzaAdmin extends React.Component {
     _requestHeaders() {
@@ -38,18 +40,20 @@ class PsyPizzaAdmin extends React.Component {
                             <Nav.Item>
                               <Nav.Link as={Link} to="/admin/products">Products</Nav.Link>
                             </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link as={Link} to="/admin/product_categories">Categories</Nav.Link>
+                            </Nav.Item>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
                 <Switch>
+                    <Route path="/admin/product_categories/create" component={AdminCategory} />
+                    <Route path="/admin/product_categories/:id" component={AdminCategory} />
+                    <Route path="/admin/product_categories" component={AdminCategories}></Route>
                     <Route path="/admin/products/create" component={AdminProduct} />
                     <Route path="/admin/products/:id" component={AdminProduct} />
-                    <Route path="/admin/products">
-                        <AdminProducts />
-                    </Route>
-                    <Route path="/admin">
-                        <Dashboard />
-                    </Route>
+                    <Route path="/admin/products" component={AdminProducts}></Route>
+                    <Route path="/admin" component={Dashboard}></Route>
                     <Route path="*">
                         404 Not found
                     </Route>

@@ -24,21 +24,32 @@ class ProductCategoriesController extends Controller
 
     public function store(ProductCategoryRequest $request) : object
     {
-        return ProductCategory::create($request->validated());
+        $model = ProductCategory::create($request->validated());
+
+        if ($image = $request->file('upload_image')) {
+            $model->handleImageUpload($image);
+        }
+
+        return new ModelResource($model);
     }
 
     public function update(ProductCategoryRequest $request, int $id) : object
     {
         $model = ProductCategory::findOrFail($id);
         $model->update($request->validated());
-        return $model;
+
+        if ($image = $request->file('upload_image')) {
+            $model->handleImageUpload($image);
+        }
+
+        return new ModelResource($model);
     }
 
     public function destroy(Request $request, int $id) : object
     {
         $model = ProductCategory::findOrFail($id);
         if ($model->delete()) {
-            return $model;
+            return new ModelResource($model);
         } else {
             return new HttpResponseException($model, 500);
         }

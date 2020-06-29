@@ -20,13 +20,12 @@ class Product extends React.Component {
     }
 
     render() {
-        const { id, name, description, price } = this.props.product;
-        const image = "/images/pizza.jpg";
+        const { id, name, image, description, price } = this.props.product;
 
         return (
             <Col lg={3} md={4} sm={6} xs={12} style={{paddingBottom: "30px"}}>
                 <Card className="product-card h-100" bg="dark">
-                    <Card.Img variant="top" src={image} />
+                    {image && <Card.Img variant="top" src={'/storage/products/images/' + image} />}
                     <Card.Body>
                         <Card.Title>{name}</Card.Title>
                         <Card.Text>{description}</Card.Text>

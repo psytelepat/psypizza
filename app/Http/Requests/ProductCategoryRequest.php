@@ -29,19 +29,19 @@ class ProductCategoryRequest extends FormRequest
                 return [
                     'slug' => 'required|string|unique:products,slug',
                     'name' => 'required|string|unique:products,name',
-                    'description' => 'string',
-                    'is_published' => 'boolean',
+                    'description' => '',
+                    'is_published' => '',
                 ];
             case 'PUT':
                 return [
                     'slug' => [
-                        Rule::unique('promocodes')->ignore($this->slug, 'slug'),
+                        Rule::unique('product_categories')->ignore($this->slug, 'slug'),
                     ],
                     'name' => [
-                        Rule::unique('promocodes')->ignore($this->name, 'name'),
+                        Rule::unique('product_categories')->ignore($this->name, 'name'),
                     ],
-                    'description' => 'string',
-                    'is_published' => 'boolean',
+                    'description' => '',
+                    'is_published' => '',
                 ];
         }
     }
