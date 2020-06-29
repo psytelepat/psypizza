@@ -22,7 +22,7 @@ class OrderForm extends React.Component {
             email: yup.string().email().required(),
             phone: yup.string().matches(/^(\+|)[0-9\s\-]+$/, 'Phone number is not valid'),
             address: yup.string().required(),
-            agreement: yup.bool().required(),
+            agreement: yup.bool().required().oneOf([true], 'The terms and conditions must be accepted'),
         });
     }
 
@@ -35,13 +35,13 @@ class OrderForm extends React.Component {
                     validateOnBlur={false}
                     validateOnChange={false}
                     validationSchema={this._formScheme()}
-                    onSubmit={this.props.submitOrderForm}
+                    onSubmit={this.props.placeOrder}
                     initialValues={{
-                        name: "",
-                        surname: "",
-                        email: "",
-                        phone: "",
-                        address: "",
+                        name: "Mikhail",
+                        surname: "Prokofyev",
+                        email: "me@telepat.cc",
+                        phone: "+79645228811",
+                        address: "Moscow",
                         agreement: false
                     }}
                 >

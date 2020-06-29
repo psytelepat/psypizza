@@ -4,6 +4,7 @@ namespace App\Psypizza;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -230,9 +231,55 @@ class Cart extends Model
         return self::recalc();
     }
 
+    public static function isValidForPlacingOrder(): bool
+    {
+        $cart = self::instance();
+
+        if ($cart->products()->count() < 1) {
+            throw new \Exception("Cart is empty");
+        }
+
+        if ($cart->cost <= 0) {
+            throw new \Exception("Cart is empty");
+        }
+
+        if (!in_array($cart->currency, Currency::$currencies)) {
+            throw new \Exception("Invalid currency");
+        }
+
+        if (!$cart->deliveryMethod) {
+            throw new \Exception("Delivery method not set");
+        }
+
+        return true;
+    }
+
     public static function hasProduct(int $id): ?CartProduct
     {
         $cart = static::instance();
         return $cartProduct = $cart->products()->where('product_id', $id)->first();
+    }
+
+    public static function placeOrder(array $userdata): bool
+    {
+        if (!self::isValidForPlacingOrder()) {
+            return false;
+        }
+
+        $order = new Order;
+
+        $order->user_id = auth()->user() ? auth()->user()->id : null;
+        $order->cart_id = self::instance()->id;
+        $order->name = Arr::get($userdata, 'name');
+        $order->surname = Arr::get($userdata, 'surname');
+        $order->email = Arr::get($userdata, 'email');
+        $order->phone = Arr::get($userdata, 'phone');
+        $order->address = Arr::get($userdata, 'address');
+        $order->status = Order::STATUS_CREATED;
+        $order->save();
+
+        self::instance(true);
+
+        return true;
     }
 }

@@ -11,6 +11,12 @@ use \App\Psypizza\Cart;
 
 class Order extends Model
 {
+    public const STATUS_CREATED = 1;
+    public const STATUS_ACCEPTED = 2;
+    public const STATUS_REJECTED = 988;
+    public const STATUS_CANCELED = 999;
+    public const STATUS_SUCCESS = 1000;
+
     use SoftDeletes;
 
     public $table = 'orders';
@@ -23,6 +29,8 @@ class Order extends Model
         'email',
         'phone',
         'address',
+
+        'status',
     ];
 
     public function cart(): Cart

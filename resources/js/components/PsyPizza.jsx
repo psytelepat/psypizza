@@ -190,6 +190,19 @@ class PsyPizza extends React.Component {
         .catch((err) => store.dispatch(cartError(err)))
     }
 
+    placeOrder(data) {
+        store.dispatch(cartLoading());
+
+        fetch('/cart/place_order.json', {
+            method: 'POST',
+            headers: this._requestHeaders(),
+            body: JSON.stringify(data),
+        })
+        .then(this._processResponse)
+        .then((json) => store.dispatch(cartLoaded(json)))
+        .catch((err) => store.dispatch(cartError(err)))
+    }
+
     render() {
         return (
             <div className="wrapper">
@@ -204,6 +217,7 @@ class PsyPizza extends React.Component {
                     setPromocode={this.setPromocode.bind(this)}
                     removePromocode={this.removePromocode.bind(this)}
                     setDeliveryMethod={this.setDeliveryMethod.bind(this)}
+                    placeOrder={this.placeOrder.bind(this)}
                 />
                 <Footer />
             </div>

@@ -79,4 +79,27 @@ class CartController extends Controller
     {
         return new CartResource(Cart::instance(true));
     }
+
+    public function placeOrder(Request $request): object
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'surname' => 'string',
+            'email' => 'required|string|email',
+            'phone' => ['required', 'string', 'regex:/^(\+|)[0-9\s\-]+$/'],
+            'address' => 'required|string',
+            'agreement' => 'required',
+        ]);
+
+        try {
+            Cart::placeOrder($validatedData);
+            return response()->json([
+                'message' => 'Order placed',
+            ], 201);
+        } catch (Eception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
 }

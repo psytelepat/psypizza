@@ -82,7 +82,7 @@ class Cart extends React.Component {
                             </Col>
                         </Row>
                     </Container>
-                    <OrderForm />
+                    <OrderForm placeOrder={this.props.placeOrder} />
                 </>
                 )}
             </Container>
