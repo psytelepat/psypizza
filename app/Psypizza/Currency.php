@@ -5,6 +5,8 @@ namespace App\Psypizza;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Arr;
 
+use \App\Psypizza\Cart;
+
 class Currency
 {
     public const BASE_CURRENCY = 'EUR';
@@ -44,5 +46,10 @@ class Currency
         } else {
             throw new \InvalidArgumentException('Invalid $currency');
         }
+    }
+
+    public static function exchange(float $price, string $currency): float
+    {
+        return round($price * self::getExchangeRateFor($currency), 2, PHP_ROUND_HALF_UP);
     }
 }

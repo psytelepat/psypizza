@@ -16,6 +16,8 @@ import PromocodeForm from './PromocodeForm'
 import OrderForm from './OrderForm'
 import DeliveryMethodsForm from './DeliveryMethodsForm'
 
+import PriceFormat from './PriceFormat'
+
 class Cart extends React.Component {
 
     renderEmpty() {
@@ -37,6 +39,7 @@ class Cart extends React.Component {
 
     renderFilled() {
         return (
+            <>
             <Container>
                 <h3>Your cart</h3>
                 <p>You have a brilliant taste! Did you forget something?</p>
@@ -44,22 +47,33 @@ class Cart extends React.Component {
                     return (
                         <Row key={product.product_id} className="mb-5">
                             <Col sm="3">
-                                <Figure.Image src="/images/pizza.jpg" width={100} alt={product.name} className="float-left" />
+                                <Figure.Image src="/images/pizza.jpg" alt={product.name} className="float-left" />
                             </Col>
-                            <Col sm="9">
-                                
+                            <Col sm="6">
                                 <p className="h4">{product.name}</p>
-
-                                <p className="h5">€{product.cost}</p>
-                                <p className="h6">€{product.price}</p>
-                                {product.discount > 0 && <p>Discount: €{product.discount}</p>}
-
-                                <AmountControl amount={product.amount} onChange={(amount) => this.onAmountChange(product.product_id, amount)} />
+                                <PriceFormat as="div" className="h6" price={product.price} />
+                                <p className="mt-3">{product.description}</p>
+                            </Col>
+                            <Col sm="3">
+                                <PriceFormat as="div" className="h5" price={product.cost} />
+                                {product.discount > 0 && <p>Discount: <PriceFormat price={product.discount} /></p>}
+                                <AmountControl className="mt-3" amount={product.amount} onChange={(amount) => this.onAmountChange(product.product_id, amount)} />
                             </Col>
                         </Row>
                     );
                 })}
             </Container>
+            <Container>
+                <Row>
+                    <Col>
+                        <PriceFormat as="div" price={this.props.original_products_cost} prepend="Goods: " />
+                        <PriceFormat as="div" price={this.props.delivery_price} prepend="Delivery: " />
+                        {this.props.discount > 0 &&<PriceFormat as="div" price={this.props.discount} prepend="Discount: " />}
+                        <PriceFormat as="div" className="h2" price={this.props.cost} prepend="Total: " />
+                    </Col>
+                </Row>
+            </Container>
+            </>
         );
     }
 
@@ -75,10 +89,10 @@ class Cart extends React.Component {
                     <Container className="mt-5">
                         <Row>
                             <Col sm={12} lg={6}>
-                                <PromocodeForm setPromocode={this.props.setPromocode} removePromocode={this.props.removePromocode} />
+                                <DeliveryMethodsForm setDeliveryMethod={this.props.setDeliveryMethod} />
                             </Col>
                             <Col sm={12} lg={6}>
-                                <DeliveryMethodsForm setDeliveryMethod={this.props.setDeliveryMethod} />
+                                <PromocodeForm setPromocode={this.props.setPromocode} removePromocode={this.props.removePromocode} />
                             </Col>
                         </Row>
                     </Container>
@@ -94,6 +108,9 @@ const mapStateToProps = (state, props) => {
     const { data } = state.cart;
     return {
         products: data.products,
+        original_products_cost: data.original_products_cost,
+        products_cost: data.products_cost,
+        delivery_price: data.delivery_price,
         original_cost: data.original_cost,
         discount: data.discount,
         cost: data.cost,

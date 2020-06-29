@@ -7,6 +7,8 @@ import Row from 'react-bootstrap/Row'
 import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
 
+import PriceFormat from './PriceFormat'
+
 class CartSummary extends React.Component {
 
     renderLoading() {
@@ -19,11 +21,13 @@ class CartSummary extends React.Component {
 
     renderFilled() {
         const itemsCount = this.props.data.products.reduce((x, y) => x + y.amount, 0);
-        const statusString = itemsCount + ' items for €' + this.props.data.cost;
+        const statusString = itemsCount + ' items for ';
         
         return (
             <>
-            {statusString}<br />
+            {statusString}
+            <PriceFormat price={this.props.data.cost} />
+            <br />
             <Button size="sm" onClick={this.flushCart.bind(this)}>Flush cart</Button>
             </>
         );
@@ -46,7 +50,6 @@ class CartSummary extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        connections: state.cart.connections,
         isLoading: state.cart.isLoading,
         isLoaded: state.cart.isLoaded,
         isError: state.cart.isError,

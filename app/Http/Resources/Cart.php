@@ -30,15 +30,16 @@ class Cart extends JsonResource
             'promocode' => new Promocode($this->promocode),
             
             'delivery_method_id' => $this->delivery_method_id,
+            'delivery_price' => $this->delivery_price,
             'delivery_method' => new DeliveryMethod($this->deliveryMethod),
 
-            'original_products_cost' => number_format($this->original_products_cost, 2, ",", " "),
-            'products_discount' => number_format($this->products_discount, 2, ",", " "),
-            'products_cost' => number_format($this->products_cost, 2, ",", " "),
+            'original_products_cost' => $this->original_products_cost,
+            'products_discount' => $this->products_discount,
+            'products_cost' => $this->products_cost,
 
-            'original_cost' => number_format($this->original_cost, 2, ",", " "),
-            'discount' => number_format($this->discount, 2, ",", " "),
-            'cost' => number_format($this->cost, 2, ",", " "),
+            'original_cost' => $this->original_cost,
+            'discount' => $this->discount,
+            'cost' => $this->cost,
             
             'products' => new CartProductCollection($this->products),
         ];
