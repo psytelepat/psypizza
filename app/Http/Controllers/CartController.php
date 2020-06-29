@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use \App\Psypizza\Cart;
 use \App\Psypizza\Promocode;
 use \App\Psypizza\DeliveryMethod;
+use \App\Psypizza\Currency;
 
 use \App\Http\Resources\Cart as CartResource;
 
@@ -40,6 +41,14 @@ class CartController extends Controller
         ]);
 
         return new CartResource(Cart::removeProduct(Arr::get($validatedData, 'id')));
+    }
+
+    public function currency(Request $request): object
+    {
+        $validatedData = $request->validate([
+            'currency' => 'required|string|in:' . implode(',', Currency::$currencies),
+        ]);
+        return new CartResource(Cart::setCurrency(Arr::get($validatedData, 'currency')));
     }
 
     public function promocode(Request $request): object

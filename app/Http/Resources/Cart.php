@@ -22,6 +22,9 @@ class Cart extends JsonResource
             'id' => $this->id,
             'order_id' => $this->order_id,
             'user_id' => $this->user_id,
+
+            'currency' => $this->currency,
+            'exchange_rate' => $this->exchange_rate,
             
             'promocode_id' => $this->promocode_id,
             'promocode' => new Promocode($this->promocode),

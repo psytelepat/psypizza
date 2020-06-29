@@ -10999,3 +10999,10 @@ section.page-footer {
   padding: 20px 0;
 }
 
+.currency-switcher {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+

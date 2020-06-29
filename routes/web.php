@@ -27,5 +27,6 @@ Route::get('cart/flush.json', 'CartController@flush');
 Route::post('cart/promocode.json', 'CartController@promocode');
 Route::delete('cart/promocode.json', 'CartController@promocode');
 Route::post('cart/delivery_method.json', 'CartController@deliveryMethod');
+Route::post('cart/currency.json', 'CartController@currency');
 
 // Route::get('/home', 'HomeController@index')->name('home');

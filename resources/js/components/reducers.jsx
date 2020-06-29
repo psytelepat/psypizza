@@ -101,6 +101,9 @@ function cart(state = {
     isError: null,
     connections: 0,
     data: {
+        currency: 'EUR',
+        exchange_rate: 1,
+        delivery_method_id: 1,
         products: [],
     },
 }, action) {

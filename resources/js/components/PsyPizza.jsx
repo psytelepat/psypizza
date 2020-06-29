@@ -16,6 +16,7 @@ import {
 } from './actions';
 
 import FirstScreen from './FirstScreen'
+import CurrencySwitcher from './CurrencySwitcher'
 import Cart from './Cart'
 import CartSummary from './CartSummary'
 import ProductCategories from './ProductCategories'
@@ -176,10 +177,24 @@ class PsyPizza extends React.Component {
         .catch((err) => store.dispatch(cartError(err)))
     }
 
+    setCurrency(currency) {
+        store.dispatch(cartLoading());
+
+        fetch('/cart/currency.json', {
+            method: 'POST',
+            headers: this._requestHeaders(),
+            body: JSON.stringify({currency: currency}),
+        })
+        .then(this._processResponse)
+        .then((json) => store.dispatch(cartLoaded(json)))
+        .catch((err) => store.dispatch(cartError(err)))
+    }
+
     render() {
         return (
             <div className="wrapper">
                 <FirstScreen />
+                <CurrencySwitcher setCurrency={this.setCurrency.bind(this)} />
                 <CartSummary flushCart={this.flushCart.bind(this)} />
                 <ProductCategories />
                 <Products setToCart={this.setToCart.bind(this)} removeFromCart={this.removeFromCart.bind(this)} />

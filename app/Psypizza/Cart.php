@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use \App\Psypizza\CartProduct;
 use \App\Psypizza\Promocode;
 use \App\Psypizza\Order;
+use \App\Psypizza\Currency;
 use \App\Psypizza\DeliveryMethod;
 
 class Cart extends Model
@@ -20,6 +21,9 @@ class Cart extends Model
     protected $fillable = [
         'order_id',
         'user_id',
+
+        'currency',
+        'exchange_rate',
 
         'promocode_id',
 
@@ -92,6 +96,9 @@ class Cart extends Model
     {
         $cart = new self;
 
+        $cart->currency = Currency::BASE_CURRENCY;
+        $cart->exchange_rate = 1;
+
         $cart->delivery_method_id = DeliveryMethod::first()->id;
         $cart->delivery_price = 0;
 
@@ -127,7 +134,7 @@ class Cart extends Model
         $cart->products_discount = $original_products_cost - $products_cost;
 
         $cart->original_cost = $cart->original_products_cost + $cart->delivery_price;
-        $cart->cost = $cart->products_cost + $cart->delivery_price;
+        $cart->cost = $cart->products_cost + round($cart->delivery_price * $cart->exchange_rate, 2, PHP_ROUND_HALF_UP);
         $cart->discount = $cart->original_cost - $cart->cost;
 
         $cart->save();
@@ -157,7 +164,7 @@ class Cart extends Model
 
     public static function recalcCartProduct(CartProduct &$cartProduct, Cart &$cart) : void
     {
-        $cartProduct->price = $cartProduct->original_price;
+        $cartProduct->price = round($cartProduct->original_price * $cart->exchange_rate, 2, PHP_ROUND_HALF_UP);
         if ($cart->promocode) {
             $cartProduct->price = round($cartProduct->price * ((100 - $cart->promocode->discount) / 100), 2, PHP_ROUND_HALF_UP);
         }
@@ -188,6 +195,20 @@ class Cart extends Model
         static::recalcCartProduct($cartProduct, $cart);
 
         return self::recalc();
+    }
+
+    public static function setCurrency(string $currency): self
+    {
+        if (in_array($currency, Currency::$currencies)) {
+            $exchange_rate = \App\Psypizza\Currency::getExchangeRateFor($currency);
+            $cart = self::instance();
+            $cart->currency = $currency;
+            $cart->exchange_rate = $exchange_rate;
+
+            return self::recalc();
+        } else {
+            throw new \InvalidArgumentException('Invalid currency');
+        }
     }
 
     public static function setDeliveryMethod(DeliveryMethod $deliveryMethod): self
