@@ -27,14 +27,14 @@ class DeliveryMethodRequest extends FormRequest
             case 'POST':
                 return [
                     'name' => 'required|string',
-                    'description' => 'string',
+                    'description' => '',
                     'price' => 'numeric',
                 ];
                 break;
             case 'PUT':
                 return [
                     'name' => 'string',
-                    'description' => 'string',
+                    'description' => '',
                     'price' => 'numeric',
                 ];
         }

@@ -18,7 +18,7 @@ import FormControl from 'react-bootstrap/FormControl'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
-class AdminCategory extends React.Component {
+class AdminPromocode extends React.Component {
     constructor(props) {
         super(props);
 
@@ -30,16 +30,16 @@ class AdminCategory extends React.Component {
             isError: false,
             model: {
                 name: "",
-                slug: "",
-                image: "",
+                code: "",
+                discount: 0,
                 description: "",
-                is_published: 0,
+                is_available: 0,
             },
         };
     }
 
     _fetchModel() {
-        fetch('/api/product_categories/' + this.id)
+        fetch('/api/promocodes/' + this.id)
         .then((response) => response.json())
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, model: json.data});
@@ -61,7 +61,7 @@ class AdminCategory extends React.Component {
         if (this.id) formData.append('_method', 'PUT');
 
         this.setState({isLoading: true,},
-            () => fetch('/api/product_categories/' + ( this.id ?? '' ), {
+            () => fetch('/api/promocodes/' + ( this.id ?? '' ), {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -72,7 +72,7 @@ class AdminCategory extends React.Component {
             .then((response) => response.json())
             .then((json) => {
                 this.setState({isLoading: false, model: json.data});
-                !this.id && this.props.history.push('/admin/product_categories/' + json.data.id);
+                !this.id && this.props.history.push('/admin/promocodes/' + json.data.id);
             })
             .catch((err) => {
                 this.setState({isLoading: false, isError: error})
@@ -83,7 +83,8 @@ class AdminCategory extends React.Component {
     _formScheme() {
         return yup.object({
             name: yup.string().required(),
-            slug: yup.string().required(),
+            code: yup.string().required(),
+            discount: yup.number().required(),
         });
     }
 
@@ -100,7 +101,7 @@ class AdminCategory extends React.Component {
 
         return (
             <Container>
-                <h2>{this.id ? this.state.model.name : 'Create new product'}</h2>
+                <h2>{this.id ? this.state.model.code : 'Create new product'}</h2>
                 <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
@@ -126,45 +127,41 @@ class AdminCategory extends React.Component {
                                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                             </Col>
                             <Col sm="4">
-                                <Form.Label>URL Slug</Form.Label>
-                                <Form.Control type="text" name="slug" placeholder="URL slug" value={values.slug} onChange={handleChange} />
-                                <Form.Control.Feedback type="invalid">{errors.slug}</Form.Control.Feedback>
+                                <Form.Label>Code</Form.Label>
+                                <Form.Control type="text" name="code" placeholder="Code" value={values.code} onChange={handleChange} />
+                                <Form.Control.Feedback type="invalid">{errors.code}</Form.Control.Feedback>
                             </Col>
                             <Col sm="4">
-                                <Form.Check 
-                                    id="is_published"
-                                    label="Published"
-                                    name="is_published"
-                                    onChange={event => setFieldValue('is_published', event.target.checked ? 1 : 0)}
-                                    checked={!!values.is_published}
-                                    isInvalid={!!errors.is_published}
-                                />
+                                <Form.Label>Discount</Form.Label>
+                                <Form.Control type="text" name="discount" placeholder="Discount" value={values.discount} onChange={handleChange} />
+                                <Form.Control.Feedback type="invalid">{errors.discount}</Form.Control.Feedback>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row}>
-                            <Col sm="8">
+                            <Col sm="12">
                                 <Form.Label>Description</Form.Label>
                                 <Form.Control as="textarea" name="description" placeholder="Description" rows="3" value={values.description} onChange={handleChange} />
                                 <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
                             </Col>
-                            <Col sm="4" className="pt-5">
-
-                            </Col>
                         </Form.Group>
                         <Form.Group as={Row}>
-                            <Col sm="4">
-                                <Form.File label="Upload image" accept="image/jpeg,image/jpg,image/png,.jpg,.jpeg,.png" onChange={(event) => setFieldValue("upload_image", event.currentTarget.files[0])}/>
-                            </Col>
-                            <Col sm="4">
-                                {values.image && <Figure.Image src={'/storage/product_categories/images/' + values.image} width="200" />}
+                            <Col sm="12">
+                                <Form.Check 
+                                    id="is_available"
+                                    label="Active"
+                                    name="is_available"
+                                    onChange={event => setFieldValue('is_available', event.target.checked ? 1 : 0)}
+                                    checked={!!values.is_available}
+                                    isInvalid={!!errors.is_available}
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mt-5">
                             <Col sm="6">
-                                <Button variant="secondary" as={Link} to='/admin/product_categories'><ListIcon /> Back to list</Button>
+                                <Button variant="secondary" as={Link} to='/admin/promocodes'><ListIcon /> Back to list</Button>
                             </Col>
                             <Col sm="6" align="right">
-                                <Button variant="primary" type="submit" onClick={handleSubmit}>{values.id ? 'Save changes' : 'Create new category'}</Button>
+                                <Button variant="primary" type="submit" onClick={handleSubmit}>{values.id ? 'Save changes' : 'Create new promocode'}</Button>
                             </Col>
                         </Form.Group>
                     </Form>
@@ -175,4 +172,4 @@ class AdminCategory extends React.Component {
     }
 }
 
-export default AdminCategory;
+export default AdminPromocode;

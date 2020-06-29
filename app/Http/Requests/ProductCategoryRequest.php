@@ -27,8 +27,8 @@ class ProductCategoryRequest extends FormRequest
         switch ($this->getMethod()) {
             case 'POST':
                 return [
-                    'slug' => 'required|string|unique:products,slug',
-                    'name' => 'required|string|unique:products,name',
+                    'slug' => 'required|string|unique:product_categories,slug',
+                    'name' => 'required|string|unique:product_categories,name',
                     'description' => '',
                     'is_published' => '',
                 ];

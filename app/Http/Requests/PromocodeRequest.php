@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PromocodeRequest extends FormRequest
 {
@@ -26,9 +27,9 @@ class PromocodeRequest extends FormRequest
         switch ($this->getMethod()) {
             case 'POST':
                 return [
-                    'name' => 'required|string|unique:products,name',
-                    'code' => 'required|string|unique:products,code',
-                    'description' => 'string',
+                    'name' => 'required|string|unique:promocodes,name',
+                    'code' => 'required|string|unique:promocodes,code',
+                    'description' => '',
                     'discount' => 'required|integer',
                 ];
             case 'PUT':
@@ -37,9 +38,9 @@ class PromocodeRequest extends FormRequest
                         Rule::unique('promocodes')->ignore($this->name, 'name'),
                     ],
                     'code' => [
-                        Rule::unique('promocodes')->ignore($this->slug, 'code'),
+                        Rule::unique('promocodes')->ignore($this->code, 'code'),
                     ],
-                    'description' => 'string',
+                    'description' => '',
                     'discount' => 'integer',
                 ];
         }

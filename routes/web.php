@@ -24,6 +24,10 @@ Route::prefix('admin')->group(function () {
     Route::get('products/{id}', $x);
     Route::get('product_categories', $x);
     Route::get('product_categories/{id}', $x);
+    Route::get('promocodes', $x);
+    Route::get('promocodes/{id}', $x);
+    Route::get('delivery_methods', $x);
+    Route::get('delivery_methods/{id}', $x);
 });
 
 Auth::routes();

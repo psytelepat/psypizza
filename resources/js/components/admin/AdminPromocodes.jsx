@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom'
 
 import Form from 'react-bootstrap/Form'
 
-class AdminCategories extends React.Component {
+class AdminPromocodes extends React.Component {
     constructor(props) {
         super(props);
 
@@ -30,7 +30,7 @@ class AdminCategories extends React.Component {
     }
 
     _fetchModelList() {
-        fetch('/api/product_categories')
+        fetch('/api/promocodes')
         .then((response) => response.json())
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, models: json.data});
@@ -47,8 +47,8 @@ class AdminCategories extends React.Component {
     deleteModel(id) {
         let product = this.state.products.reduce((x, y) => (y.id == id) ? y : x);
         if (product) {
-            if (confirm('Delete category "'+model.name+'"')) {
-                fetch('/api/product_categories/' + id, {
+            if (confirm('Delete promocode "'+model.name+'"')) {
+                fetch('/api/promocodes/' + id, {
                     method: 'DELETE',
                     headers: {
                         'Accept': 'application/json',
@@ -72,13 +72,12 @@ class AdminCategories extends React.Component {
     renderModel(model) {
         return (
             <Row key={model.id} className="mb-3">
-                <Col>{model.image && <Figure.Image src={'/storage/product_categories/images/' + model.image} />}</Col>
-                <Col>
-                    <div className="h3">{model.name}</div>
-                    <p>{model.description}</p>
-                </Col>
+                <Col>{model.name}</Col>
+                <Col>{model.code}</Col>
+                <Col>{model.discount}%</Col>
+                <Col>{model.description}</Col>
                 <Col align="right">
-                    <Button size="sm" as={Link} to={'/admin/product_categories/'+model.id}><EditIcon /></Button>
+                    <Button size="sm" as={Link} to={'/admin/promocodes/'+model.id}><EditIcon /></Button>
                     <Button size="sm" className="ml-2" variant="danger" onClick={() => this.deleteModel(model.id)}><DeleteIcon /></Button>
                 </Col>
             </Row>
@@ -102,7 +101,7 @@ class AdminCategories extends React.Component {
                     <Col sm="6" align="right">
                     </Col>
                     <Col sm="6" align="right">
-                        <Button variant="primary" as={Link} to='/admin/product_categories/create'><AddIcon /> Add category</Button>
+                        <Button variant="primary" as={Link} to='/admin/promocodes/create'><AddIcon /> Add promocode</Button>
                     </Col>
                 </Row>
                 {models.map(this.renderModel.bind(this))}
@@ -111,4 +110,4 @@ class AdminCategories extends React.Component {
     }
 }
 
-export default AdminCategories;
+export default AdminPromocodes;

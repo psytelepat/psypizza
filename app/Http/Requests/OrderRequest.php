@@ -26,26 +26,20 @@ class OrderRequest extends FormRequest
         switch ($request->getMethod()) {
             case 'POST':
                 return [
-                    'user_id' => 'exists:user,id',
+                    'name' => 'required|string',
+                    'surname' => 'string',
                     'email' => 'required|email',
                     'phone' => 'required|phone',
                     'address' => 'required|string',
-                    'promocode_id' => 'exists:promocodes,id',
-                    'original_cost' => 'numeric',
-                    'discount' => 'numeric',
-                    'cost' => 'numeric',
                 ];
                 break;
             case 'PUT':
                 return [
-                    'user_id' => 'exists:user,id',
-                    'email' => 'required|email',
-                    'phone' => 'required|phone',
-                    'address' => 'required|string',
-                    'promocode_id' => 'exists:promocodes,id',
-                    'original_cost' => 'numeric',
-                    'discount' => 'numeric',
-                    'cost' => 'numeric',
+                    'name' => 'string',
+                    'surname' => 'string',
+                    'email' => 'email',
+                    'phone' => 'phone',
+                    'address' => 'string',
                 ];
         }
     }

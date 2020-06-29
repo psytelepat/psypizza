@@ -209,7 +209,7 @@ class AdminProduct extends React.Component {
                         </Form.Group>
                         <Form.Group as={Row} className="mt-5">
                             <Col sm="6">
-                                <Button variant="secondary" as={Link} to='/admin/products'><ListIcon /> Return to list</Button>
+                                <Button variant="secondary" as={Link} to='/admin/products'><ListIcon /> Back to list</Button>
                             </Col>
                             <Col sm="6" align="right">
                                 <Button variant="primary" type="submit" onClick={handleSubmit}>{values.id ? 'Save changes' : 'Create new product'}</Button>

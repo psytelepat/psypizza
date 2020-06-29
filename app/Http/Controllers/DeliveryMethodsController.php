@@ -24,21 +24,22 @@ class DeliveryMethodsController extends Controller
 
     public function store(DeliveryMethodRequest $request) : object
     {
-        return DeliveryMethod::create($request->validated());
+        $model = DeliveryMethod::create($request->validated());
+        return new ModelResource($model);
     }
 
     public function update(DeliveryMethodRequest $request, int $id) : object
     {
         $model = DeliveryMethod::findOrFail($id);
         $model->update($request->validated());
-        return $model;
+        return new ModelResource($model);
     }
 
     public function destroy(Request $request, int $id) : object
     {
         $model = DeliveryMethod::findOrFail($id);
         if ($model->delete()) {
-            return $model;
+            return new ModelResource($model);
         } else {
             return new HttpResponseException($model, 500);
         }

@@ -24,21 +24,22 @@ class PromocodesController extends Controller
 
     public function store(PromocodeRequest $request) : object
     {
-        return Promocode::create($request->validated());
+        $model = Promocode::create($request->validated());
+        return new ModelResource($model);
     }
 
     public function update(PromocodeRequest $request, int $id) : object
     {
         $model = Promocode::findOrFail($id);
         $model->update($request->validated());
-        return $model;
+        return new ModelResource($model);
     }
 
     public function destroy(Request $request, int $id) : object
     {
         $model = Promocode::findOrFail($id);
         if ($model->delete()) {
-            return $model;
+            return new ModelResource($model);
         } else {
             return new HttpResponseException($model, 500);
         }
