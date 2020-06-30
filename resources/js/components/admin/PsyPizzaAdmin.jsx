@@ -9,7 +9,6 @@ import Col from 'react-bootstrap/Col'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
-
 import Dashboard from './Dashboard'
 import AdminProducts from './AdminProducts'
 import AdminProduct from './AdminProduct'
@@ -32,7 +31,6 @@ class PsyPizzaAdmin extends React.Component {
     render() {
         return (
             <Router>
-              <div>
                 <Navbar variant="dark" className="mb-3">
                     <Navbar.Brand href="#">psyPizza Admin Panel</Navbar.Brand>
                     <Navbar.Toggle aria-controls="nabvar" />
@@ -60,11 +58,8 @@ class PsyPizzaAdmin extends React.Component {
                     <Route path="/admin/products/:id" component={AdminProduct} />
                     <Route path="/admin/products" component={AdminProducts}></Route>
                     <Route path="/admin" component={Dashboard}></Route>
-                    <Route path="*">
-                        404 Not found
-                    </Route>
+                    <Route path="*">404 Not found</Route>
                 </Switch>
-              </div>
             </Router>
         );
     }
