@@ -5,15 +5,12 @@ import { Link, useParams } from 'react-router-dom'
 import { List as ListIcon } from 'react-bootstrap-icons'
 
 import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import Figure from 'react-bootstrap/Figure'
-
 import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -119,18 +116,20 @@ class AdminCategory extends React.Component {
                     setFieldValue,
                   }) => (
                     <Form>
-                        <Form.Group as={Row}>
-                            <Col sm="4">
+                        <Form.Row>
+                            <Form.Group as={Col} sm="4" controlId="name">
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" name="name" placeholder="Name" value={values.name} onChange={handleChange} />
+                                <Form.Control type="text" name="name" required placeholder="Name"
+                                    value={values.name} onChange={handleChange} isInvalid={!!errors.name} />
                                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="4">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4" controlId="slug">
                                 <Form.Label>URL Slug</Form.Label>
-                                <Form.Control type="text" name="slug" placeholder="URL slug" value={values.slug} onChange={handleChange} />
+                                <Form.Control type="text" name="slug" required placeholder="URL slug"
+                                    value={values.slug} onChange={handleChange} isInvalid={!!errors.slug} />
                                 <Form.Control.Feedback type="invalid">{errors.slug}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="4">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4">
                                 <Form.Check 
                                     id="is_published"
                                     label="Published"
@@ -139,34 +138,38 @@ class AdminCategory extends React.Component {
                                     checked={!!values.is_published}
                                     isInvalid={!!errors.is_published}
                                 />
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row}>
-                            <Col sm="8">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} sm="8" controlId="description">
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3" value={values.description} onChange={handleChange} />
+                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3"
+                                    value={values.description} onChange={handleChange} isInvalid={!!errors.description} />
                                 <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="4" className="pt-5">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4" className="pt-5">
 
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row}>
-                            <Col sm="4">
-                                <Form.File label="Upload image" accept="image/jpeg,image/jpg,image/png,.jpg,.jpeg,.png" onChange={(event) => setFieldValue("upload_image", event.currentTarget.files[0])}/>
-                            </Col>
-                            <Col sm="4">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} sm="4">
+                                <Form.File label="Upload image" accept="image/jpeg,image/jpg,image/png,.jpg,.jpeg,.png"
+                                    onChange={(event) => setFieldValue("upload_image", event.currentTarget.files[0])} />
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4">
                                 {values.image && <Figure.Image src={'/storage/product_categories/images/' + values.image} width="200" />}
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} className="mt-5">
-                            <Col sm="6">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row className="mt-5">
+                            <Form.Group as={Col} sm="6">
                                 <Button variant="secondary" as={Link} to='/admin/product_categories'><ListIcon /> Back to list</Button>
-                            </Col>
-                            <Col sm="6" align="right">
-                                <Button variant="primary" type="submit" onClick={handleSubmit}>{values.id ? 'Save changes' : 'Create new category'}</Button>
-                            </Col>
-                        </Form.Group>
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4" align="right">
+                                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                                    {values.id ? 'Save changes' : 'Create new category'}
+                                </Button>
+                            </Form.Group>
+                        </Form.Row>
                     </Form>
                 )}
                 </Formik>

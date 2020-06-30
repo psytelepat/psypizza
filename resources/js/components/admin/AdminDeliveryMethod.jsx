@@ -5,15 +5,10 @@ import { Link, useParams } from 'react-router-dom'
 import { List as ListIcon } from 'react-bootstrap-icons'
 
 import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
-import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
-import Figure from 'react-bootstrap/Figure'
-
 import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -119,33 +114,38 @@ class AdminDeliveryMethod extends React.Component {
                     setFieldValue,
                   }) => (
                     <Form>
-                        <Form.Group as={Row}>
-                            <Col sm="6">
+                        <Form.Row>
+                            <Form.Group as={Col} sm="6" controlId="name">
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" name="name" placeholder="Name" value={values.name} onChange={handleChange} />
+                                <Form.Control type="text" name="name" required placeholder="Name"
+                                    value={values.name} onChange={handleChange} isInvalid={!!errors.name} />
                                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="6">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="6" controlId="price">
                                 <Form.Label>Price</Form.Label>
-                                <Form.Control type="text" name="price" placeholder="Discount" value={values.price} onChange={handleChange} />
+                                <Form.Control type="text" name="price" required placeholder="Discount"
+                                    value={values.price} onChange={handleChange} isInvalid={!!errors.price} />
                                 <Form.Control.Feedback type="invalid">{errors.price}</Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row}>
-                            <Col sm="12">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} sm="12" controlId="description">
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3" value={values.description} onChange={handleChange} />
+                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3"
+                                    value={values.description} onChange={handleChange} isInvalid={!!errors.description} />
                                 <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} className="mt-5">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row className="mt-5">
                             <Col sm="6">
                                 <Button variant="secondary" as={Link} to='/admin/delivery_methods'><ListIcon /> Back to list</Button>
                             </Col>
                             <Col sm="6" align="right">
-                                <Button variant="primary" type="submit" onClick={handleSubmit}>{values.id ? 'Save changes' : 'Create new delivery method'}</Button>
+                                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                                    {values.id ? 'Save changes' : 'Create new delivery method'}
+                                </Button>
                             </Col>
-                        </Form.Group>
+                        </Form.Row>
                     </Form>
                 )}
                 </Formik>

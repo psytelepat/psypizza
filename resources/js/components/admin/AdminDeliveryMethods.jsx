@@ -7,9 +7,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
-import Figure from 'react-bootstrap/Figure'
-import Card from 'react-bootstrap/Card'
-import PriceFormat from '../PriceFormat'
 
 import { Link } from 'react-router-dom'
 
@@ -47,7 +44,7 @@ class AdminDeliveryMethods extends React.Component {
     deleteModel(id) {
         let product = this.state.products.reduce((x, y) => (y.id == id) ? y : x);
         if (product) {
-            if (confirm('Delete delivery method "'+model.name+'"')) {
+            if (confirm('Delete delivery method "' + model.name + '"')) {
                 fetch('/api/delivery_methods/' + id, {
                     method: 'DELETE',
                     headers: {
@@ -102,7 +99,9 @@ class AdminDeliveryMethods extends React.Component {
                     <Col sm="6" align="right">
                     </Col>
                     <Col sm="6" align="right">
-                        <Button variant="primary" as={Link} to='/admin/delivery_methods/create'><AddIcon /> Add delivery method</Button>
+                        <Button variant="primary" as={Link} to='/admin/delivery_methods/create'>
+                            <AddIcon /> Add delivery method
+                        </Button>
                     </Col>
                 </Row>
                 {models.map(this.renderModel.bind(this))}

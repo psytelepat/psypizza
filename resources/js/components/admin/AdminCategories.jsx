@@ -9,7 +9,6 @@ import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
 import Figure from 'react-bootstrap/Figure'
 import Card from 'react-bootstrap/Card'
-import PriceFormat from '../PriceFormat'
 
 import { Link } from 'react-router-dom'
 
@@ -47,7 +46,7 @@ class AdminCategories extends React.Component {
     deleteModel(id) {
         let product = this.state.products.reduce((x, y) => (y.id == id) ? y : x);
         if (product) {
-            if (confirm('Delete category "'+model.name+'"')) {
+            if (confirm('Delete category "' + model.name + '"')) {
                 fetch('/api/product_categories/' + id, {
                     method: 'DELETE',
                     headers: {
@@ -65,7 +64,7 @@ class AdminCategories extends React.Component {
                 });
             }
         } else {
-            console.log('product not found');
+            console.log('model not found');
         }
     }
 
@@ -102,7 +101,9 @@ class AdminCategories extends React.Component {
                     <Col sm="6" align="right">
                     </Col>
                     <Col sm="6" align="right">
-                        <Button variant="primary" as={Link} to='/admin/product_categories/create'><AddIcon /> Add category</Button>
+                        <Button variant="primary" as={Link} to='/admin/product_categories/create'>
+                            <AddIcon /> Add category
+                        </Button>
                     </Col>
                 </Row>
                 {models.map(this.renderModel.bind(this))}

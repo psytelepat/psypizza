@@ -7,9 +7,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
-import Figure from 'react-bootstrap/Figure'
-import Card from 'react-bootstrap/Card'
-import PriceFormat from '../PriceFormat'
 
 import { Link } from 'react-router-dom'
 
@@ -47,7 +44,7 @@ class AdminPromocodes extends React.Component {
     deleteModel(id) {
         let product = this.state.products.reduce((x, y) => (y.id == id) ? y : x);
         if (product) {
-            if (confirm('Delete promocode "'+model.name+'"')) {
+            if (confirm('Delete promocode "' + model.name + '"')) {
                 fetch('/api/promocodes/' + id, {
                     method: 'DELETE',
                     headers: {
@@ -65,7 +62,7 @@ class AdminPromocodes extends React.Component {
                 });
             }
         } else {
-            console.log('product not found');
+            console.log('model not found');
         }
     }
 
@@ -101,7 +98,9 @@ class AdminPromocodes extends React.Component {
                     <Col sm="6" align="right">
                     </Col>
                     <Col sm="6" align="right">
-                        <Button variant="primary" as={Link} to='/admin/promocodes/create'><AddIcon /> Add promocode</Button>
+                        <Button variant="primary" as={Link} to='/admin/promocodes/create'>
+                            <AddIcon /> Add promocode
+                        </Button>
                     </Col>
                 </Row>
                 {models.map(this.renderModel.bind(this))}

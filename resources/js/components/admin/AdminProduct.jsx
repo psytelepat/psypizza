@@ -5,15 +5,11 @@ import { Link, useParams } from 'react-router-dom'
 import { List as ListIcon } from 'react-bootstrap-icons'
 
 import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
-import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import Figure from 'react-bootstrap/Figure'
-
 import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -122,12 +118,12 @@ class AdminProduct extends React.Component {
             <Container>
                 <h2>{this.id ? this.state.model.name : 'Create new product'}</h2>
                 <Formik
-                        validateOnBlur={false}
-                        validateOnChange={false}
-                        validationSchema={this._formScheme()}
-                        onSubmit={this.saveForm.bind(this)}
-                        initialValues={this.state.model}
-                    >
+                    validateOnBlur={false}
+                    validateOnChange={false}
+                    validationSchema={this._formScheme()}
+                    onSubmit={this.saveForm.bind(this)}
+                    initialValues={this.state.model}
+                >
                 {({
                     handleSubmit,
                     handleChange,
@@ -139,47 +135,54 @@ class AdminProduct extends React.Component {
                     setFieldValue,
                   }) => (
                     <Form>
-                        <Form.Group as={Row}>
-                            <Col sm="4">
+                        <Form.Row>
+                            <Form.Group as={Col} sm="4" controlId="name">
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" name="name" placeholder="Name" value={values.name} onChange={handleChange} />
+                                <Form.Control type="text" name="name" required placeholder="Name"
+                                    value={values.name} onChange={handleChange} isInvalid={!!errors.name} />
                                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="4">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4" controlId="slug">
                                 <Form.Label>URL Slug</Form.Label>
-                                <Form.Control type="text" name="slug" placeholder="URL slug" value={values.slug} onChange={handleChange} />
+                                <Form.Control type="text" name="slug" required placeholder="URL slug"
+                                    value={values.slug} onChange={handleChange} isInvalid={!!errors.slug} />
                                 <Form.Control.Feedback type="invalid">{errors.slug}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="4">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4" controlId="category_id">
                                 <Form.Label>Category</Form.Label>
-                                <Form.Control as="select" name="category_id" defaultValue={values.category_id} onChange={handleChange}>
+                                <Form.Control as="select" name="category_id" required defaultValue={values.category_id}
+                                    onChange={handleChange} isInvalid={!!errors.category_id}>
                                     {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
                                 </Form.Control>
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row}>
-                            <Col sm="4">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} sm="4" controlId="sku">
                                 <Form.Label>SKU</Form.Label>
-                                <Form.Control type="text" name="sku" placeholder="SKU" value={values.sku} onChange={handleChange} />
+                                <Form.Control type="text" name="sku" placeholder="SKU"
+                                    value={values.sku} onChange={handleChange} isInvalid={!!errors.sku} />
                                 <Form.Control.Feedback type="invalid">{errors.sku}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="4">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4" controlId="ean13">
                                 <Form.Label>EAN13</Form.Label>
-                                <Form.Control type="text" name="ean13" placeholder="EAN13" value={values.ean13} onChange={handleChange} />
+                                <Form.Control type="text" name="ean13" placeholder="EAN13"
+                                    value={values.ean13} onChange={handleChange} isInvalid={!!errors.ean13} />
                                 <Form.Control.Feedback type="invalid">{errors.eam13}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="4">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4" controlId="price">
                                 <Form.Label>Price in EURO</Form.Label>
-                                <Form.Control type="text" name="price" placeholder="Price" value={values.price} onChange={handleChange} />
+                                <Form.Control type="text" name="price" required placeholder="Price"
+                                    value={values.price} onChange={handleChange} isInvalid={!!errors.price} />
                                 <Form.Control.Feedback type="invalid">{errors.price}</Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row}>
-                            <Col sm="8">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} sm="8" controlId="description">
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3" value={values.description} onChange={handleChange} />
+                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3"
+                                    value={values.description} onChange={handleChange} isInvalid={!!errors.description} />
                                 <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
-                            </Col>
+                            </Form.Group>
                             <Col sm="4" className="pt-5">
                                 <Form.Check 
                                     id="is_published"
@@ -198,23 +201,26 @@ class AdminProduct extends React.Component {
                                     isInvalid={!!errors.in_stock}
                                 />
                             </Col>
-                        </Form.Group>
-                        <Form.Group as={Row}>
+                        </Form.Row>
+                        <Form.Row>
                             <Col sm="4">
-                                <Form.File label="Upload image" accept="image/jpeg,image/jpg,image/png,.jpg,.jpeg,.png" onChange={(event) => setFieldValue("upload_image", event.currentTarget.files[0])}/>
+                                <Form.File label="Upload image" accept="image/jpeg,image/jpg,image/png,.jpg,.jpeg,.png"
+                                    onChange={(event) => setFieldValue("upload_image", event.currentTarget.files[0])}/>
                             </Col>
                             <Col sm="4">
                                 {values.image && <Figure.Image src={'/storage/products/images/' + values.image} width="200" />}
                             </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} className="mt-5">
+                        </Form.Row>
+                        <Form.Row className="mt-5">
                             <Col sm="6">
                                 <Button variant="secondary" as={Link} to='/admin/products'><ListIcon /> Back to list</Button>
                             </Col>
                             <Col sm="6" align="right">
-                                <Button variant="primary" type="submit" onClick={handleSubmit}>{values.id ? 'Save changes' : 'Create new product'}</Button>
+                                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                                    {values.id ? 'Save changes' : 'Create new product'}
+                                </Button>
                             </Col>
-                        </Form.Group>
+                        </Form.Row>
                     </Form>
                 )}
                 </Formik>

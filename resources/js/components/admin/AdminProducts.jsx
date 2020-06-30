@@ -7,9 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
-import Figure from 'react-bootstrap/Figure'
 import Card from 'react-bootstrap/Card'
-import PriceFormat from '../PriceFormat'
 
 import { Link } from 'react-router-dom'
 
@@ -35,10 +33,9 @@ class AdminProducts extends React.Component {
         fetch('/api/product_categories')
         .then((response) => response.json())
         .then((json) => {
-            this.setState({isLoading: false, isLoaded: true, categories: json.data, category_id: json.data[0].id}, this._fetchModelList());
+            this.setState({categories: json.data, category_id: json.data[0].id}, this._fetchModelList());
         })
         .catch((err) => {
-            this.setState({isLoading: false})
         });
     }
 
@@ -60,7 +57,7 @@ class AdminProducts extends React.Component {
     deleteModel(id) {
         let model = this.state.models.reduce((x, y) => (y.id == id) ? y : x);
         if (model) {
-            if (confirm('Delete product "'+model.name+'"')) {
+            if (confirm('Delete product "' + model.name + '"')) {
                 fetch('/api/products/' + id, {
                     method: 'DELETE',
                     headers: {
@@ -78,7 +75,7 @@ class AdminProducts extends React.Component {
                 });
             }
         } else {
-            console.log('product not found');
+            console.log('model not found');
         }
     }
 
@@ -122,12 +119,15 @@ class AdminProducts extends React.Component {
             <Container>
                 <Row className="mb-5">
                     <Col sm="6">
-                        <Form.Control as="select" name="category_id" defaultValue={this.state.category_id} onChange={this.handleCategoryChange.bind(this)}>
+                        <Form.Control as="select" name="category_id" defaultValue={this.state.category_id}
+                            onChange={this.handleCategoryChange.bind(this)}>
                             {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
                         </Form.Control>
                     </Col>
                     <Col sm="6" align="right">
-                        <Button variant="primary" as={Link} to='/admin/products/create'><AddIcon /> Add product</Button>
+                        <Button variant="primary" as={Link} to='/admin/products/create'>
+                            <AddIcon /> Add product
+                        </Button>
                     </Col>
                 </Row>
                 <Row>

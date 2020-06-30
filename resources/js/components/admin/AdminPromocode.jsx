@@ -5,15 +5,10 @@ import { Link, useParams } from 'react-router-dom'
 import { List as ListIcon } from 'react-bootstrap-icons'
 
 import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
-import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
-import Figure from 'react-bootstrap/Figure'
-
 import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -120,32 +115,36 @@ class AdminPromocode extends React.Component {
                     setFieldValue,
                   }) => (
                     <Form>
-                        <Form.Group as={Row}>
-                            <Col sm="4">
+                        <Form.Row>
+                            <Form.Group as={Col} sm="4" controlId="name">
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" name="name" placeholder="Name" value={values.name} onChange={handleChange} />
+                                <Form.Control type="text" name="name" placeholder="Name"
+                                    value={values.name} onChange={handleChange} isInvalid={!!errors.name} />
                                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="4">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4" controlId="code">
                                 <Form.Label>Code</Form.Label>
-                                <Form.Control type="text" name="code" placeholder="Code" value={values.code} onChange={handleChange} />
+                                <Form.Control type="text" name="code" placeholder="Code"
+                                    value={values.code} onChange={handleChange} isInvalid={!!errors.code} />
                                 <Form.Control.Feedback type="invalid">{errors.code}</Form.Control.Feedback>
-                            </Col>
-                            <Col sm="4">
+                            </Form.Group>
+                            <Form.Group as={Col} sm="4" controlId="discount">
                                 <Form.Label>Discount</Form.Label>
-                                <Form.Control type="text" name="discount" placeholder="Discount" value={values.discount} onChange={handleChange} />
+                                <Form.Control type="text" name="discount" placeholder="Discount"
+                                    value={values.discount} onChange={handleChange} isInvalid={!!errors.discount} />
                                 <Form.Control.Feedback type="invalid">{errors.discount}</Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row}>
-                            <Col sm="12">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} controlId="description">
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3" value={values.description} onChange={handleChange} />
+                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3"
+                                    value={values.description} onChange={handleChange} isInvalid={!!errors.description} />
                                 <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row}>
-                            <Col sm="12">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} sm="12">
                                 <Form.Check 
                                     id="is_available"
                                     label="Active"
@@ -154,16 +153,18 @@ class AdminPromocode extends React.Component {
                                     checked={!!values.is_available}
                                     isInvalid={!!errors.is_available}
                                 />
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} className="mt-5">
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row className="mt-5">
                             <Col sm="6">
                                 <Button variant="secondary" as={Link} to='/admin/promocodes'><ListIcon /> Back to list</Button>
                             </Col>
                             <Col sm="6" align="right">
-                                <Button variant="primary" type="submit" onClick={handleSubmit}>{values.id ? 'Save changes' : 'Create new promocode'}</Button>
+                                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                                    {values.id ? 'Save changes' : 'Create new promocode'}
+                                </Button>
                             </Col>
-                        </Form.Group>
+                        </Form.Row>
                     </Form>
                 )}
                 </Formik>
