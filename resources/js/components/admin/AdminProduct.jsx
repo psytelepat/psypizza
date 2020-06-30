@@ -4,6 +4,8 @@ import { Link, useParams } from 'react-router-dom'
 
 import { List as ListIcon } from 'react-bootstrap-icons'
 
+import { connect } from 'react-redux'
+
 import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
@@ -41,7 +43,9 @@ class AdminProduct extends React.Component {
     }
 
     _fetchCategoriesList() {
-        fetch('/api/product_categories')
+        fetch('/api/product_categories', {
+            headers: this.props.headers,
+        })
         .then((response) => response.json())
         .then((json) => {
             this.setState({categories: json.data});
@@ -51,7 +55,9 @@ class AdminProduct extends React.Component {
     }
 
     _fetchModel() {
-        fetch('/api/products/' + this.id)
+        fetch('/api/products/' + this.id, {
+            headers: this.props.headers,
+        })
         .then((response) => response.json())
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, model: json.data});
@@ -72,14 +78,12 @@ class AdminProduct extends React.Component {
         const formData = new FormData();
         for (let k in data) formData.append(k, data[k]);
         if (this.id) formData.append('_method', 'PUT');
+        formData.append('api_token', localStorage.getItem('api_token'));
 
         this.setState({isLoading: true,},
             () => fetch('/api/products/' + ( this.id ?? '' ), {
                 method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector("meta[name='csrf-token']").getAttribute('content'),
-                },
+                headers: this.props.headers,
                 body: formData
             })
             .then((response) => response.json())
@@ -229,4 +233,8 @@ class AdminProduct extends React.Component {
     }
 }
 
-export default AdminProduct;
+const mapStateToProps = (state) => {
+    return state;
+}
+
+export default connect(mapStateToProps, null)(AdminProduct);

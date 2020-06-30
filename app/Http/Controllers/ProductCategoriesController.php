@@ -12,12 +12,12 @@ use \App\Http\Resources\ProductCategoryCollection as ModelCollection;
 
 class ProductCategoriesController extends Controller
 {
-    public function index(Request $request) : object
+    public function index(ProductCategoryRequest $request) : object
     {
         return new ModelCollection(ProductCategory::all());
     }
 
-    public function show(Request $request, int $id) : object
+    public function show(ProductCategoryRequest $request, int $id) : object
     {
         return new ModelResource(ProductCategory::findOrFail($id));
     }
@@ -45,7 +45,7 @@ class ProductCategoriesController extends Controller
         return new ModelResource($model);
     }
 
-    public function destroy(Request $request, int $id) : object
+    public function destroy(ProductCategoryRequest $request, int $id) : object
     {
         $model = ProductCategory::findOrFail($id);
         if ($model->delete()) {

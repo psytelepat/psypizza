@@ -2,6 +2,8 @@ import React from 'react'
 
 import { Pencil as EditIcon, TrashFill as DeleteIcon, PlusCircleFill as AddIcon } from 'react-bootstrap-icons'
 
+import { connect } from 'react-redux'
+
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -30,7 +32,9 @@ class AdminProducts extends React.Component {
     }
 
     _fetchCategoriesList() {
-        fetch('/api/product_categories')
+        fetch('/api/product_categories', {
+            headers: this.props.headers,
+        })
         .then((response) => response.json())
         .then((json) => {
             this.setState({categories: json.data, category_id: json.data[0].id}, this._fetchModelList());
@@ -40,7 +44,9 @@ class AdminProducts extends React.Component {
     }
 
     _fetchModelList() {
-        fetch('/api/products?category_id='+this.state.category_id)
+        fetch('/api/products?category_id='+this.state.category_id, {
+            headers: this.props.headers,
+        })
         .then((response) => response.json())
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, models: json.data});
@@ -60,11 +66,7 @@ class AdminProducts extends React.Component {
             if (confirm('Delete product "' + model.name + '"')) {
                 fetch('/api/products/' + id, {
                     method: 'DELETE',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector("meta[name='csrf-token']").getAttribute('content'),
-                    }
+                    headers: this.props.headers,
                 })
                 .then((response) => response.json())
                 .then((json) => {
@@ -138,4 +140,8 @@ class AdminProducts extends React.Component {
     }
 }
 
-export default AdminProducts;
+const mapStateToProps = (state) => {
+    return state;
+}
+
+export default connect(mapStateToProps, null)(AdminProducts);

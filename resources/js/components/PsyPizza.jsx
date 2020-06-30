@@ -17,6 +17,7 @@ import {
     productsLoading, productsError, productsLoaded,
     deliveryMethodsLoading, deliveryMethodsLoaded, deliveryMethodsError, deliveryMethodsSelect,
     cartLoading, cartLoaded, cartError, cartSetProduct, cartRemoveProduct,
+    orderPlacing, orderPlaced, orderError,
 } from './actions';
 
 import FirstScreen from './FirstScreen'
@@ -49,8 +50,8 @@ class PsyPizza extends React.Component {
         } else {
             return new Promise((resolve, reject) => {
                 response.json()
-                .then((json) => {reject(json.message)})
-                .catch(() => {reject(response.statusText)});
+                .then((json) => reject(json))
+                .catch(() => reject(response.statusText));
             });
         }
     }
@@ -194,8 +195,8 @@ class PsyPizza extends React.Component {
         .catch((err) => store.dispatch(cartError(err)))
     }
 
-    placeOrder(data) {
-        store.dispatch(cartLoading());
+    placeOrder(data, { setErrors }) {
+        store.dispatch(orderPlacing());
 
         fetch('/cart/place_order.json', {
             method: 'POST',
@@ -203,8 +204,8 @@ class PsyPizza extends React.Component {
             body: JSON.stringify(data),
         })
         .then(this._processResponse)
-        .then((json) => store.dispatch(cartLoaded(json)))
-        .catch((err) => store.dispatch(cartError(err)))
+        .then((json) => store.dispatch(orderPlaced(json)))
+        .catch((err) => store.dispatch(orderError(err, setErrors)))
     }
 
     render() {

@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
+use Auth;
+use Hash;
+
+use \App\User;
 use \App\Psypizza\Cart;
 use \App\Psypizza\Promocode;
 use \App\Psypizza\DeliveryMethod;
@@ -91,9 +96,25 @@ class CartController extends Controller
             'agreement' => 'required',
         ]);
 
-        try {
-            Cart::placeOrder($validatedData);
+        $user_id = null;
+        $email = Arr::get($validatedData, 'email');
+        if (Auth::check() && Auth::user()->email == $email) {
+            $user_id = Auth::user()->id;
+        } elseif (User::where('email', $email)->exists()) {
             return response()->json([
+                'message' => 'Invalid e-mail address.',
+                'errors' => [
+                    'email' => 'User with such email already exists. Please login or use another e-mail address.',
+                ],
+            ], 422);
+        }
+
+        $validatedData['user_id'] = $user_id;
+
+        try {
+            $placed_order = Cart::placeOrder($validatedData);
+            return response()->json([
+                'order_id' => $placed_order->id,
                 'message' => 'Order placed',
             ], 201);
         } catch (Eception $e) {

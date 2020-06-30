@@ -2,6 +2,8 @@ import React from 'react'
 
 import { Pencil as EditIcon, TrashFill as DeleteIcon, PlusCircleFill as AddIcon } from 'react-bootstrap-icons'
 
+import { connect } from 'react-redux'
+
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -29,7 +31,9 @@ class AdminCategories extends React.Component {
     }
 
     _fetchModelList() {
-        fetch('/api/product_categories')
+        fetch('/api/product_categories', {
+            headers: this.props.headers,
+        })
         .then((response) => response.json())
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, models: json.data});
@@ -49,11 +53,7 @@ class AdminCategories extends React.Component {
             if (confirm('Delete category "' + model.name + '"')) {
                 fetch('/api/product_categories/' + id, {
                     method: 'DELETE',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector("meta[name='csrf-token']").getAttribute('content'),
-                    }
+                    headers: this.props.headers,
                 })
                 .then((response) => response.json())
                 .then((json) => {
@@ -112,4 +112,8 @@ class AdminCategories extends React.Component {
     }
 }
 
-export default AdminCategories;
+const mapStateToProps = (state) => {
+    return state;
+}
+
+export default connect(mapStateToProps, null)(AdminCategories);

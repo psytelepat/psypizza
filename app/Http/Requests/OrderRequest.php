@@ -13,7 +13,14 @@ class OrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check() && auth()->user()->is_admin;
+        switch ($this->getMethod()) {
+            case 'GET':
+                return auth('api')->check();
+                break;
+            default:
+                return auth('api')->check() && auth('api')->user()->is_admin;
+                break;
+        }
     }
 
     /**
@@ -23,7 +30,7 @@ class OrderRequest extends FormRequest
      */
     public function rules(): array
     {
-        switch ($request->getMethod()) {
+        switch ($this->getMethod()) {
             case 'POST':
                 return [
                     'name' => 'required|string',

@@ -27,6 +27,9 @@ class OrderForm extends React.Component {
     }
 
     render() {
+
+        const { isLoading, isError, errors } = this.props;
+
         return (
             <Container className="mt-5">
                 <h3>Order form</h3>
@@ -39,10 +42,10 @@ class OrderForm extends React.Component {
                     initialValues={{
                         name: "Mikhail",
                         surname: "Prokofyev",
-                        email: "me@telepat.cc",
+                        email: "reg@telepat.cc",
                         phone: "+79645228811",
                         address: "Moscow",
-                        agreement: false
+                        agreement: true
                     }}
                 >
             {({
@@ -83,12 +86,12 @@ class OrderForm extends React.Component {
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} sm="12" align="center" controlId="agreement_check">
-                            <Form.Check type="checkbox" label="Agree to terms and conditions" required name="agreement" onChange={handleChange} isInvalid={!!errors.agreement} feedback={errors.terms} />
+                            <Form.Check label="Agree to terms and conditions" required name="agreement" checked={values.agreement} onChange={handleChange} isInvalid={!!errors.agreement} feedback={errors.agreement} />
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} sm="12" align="center">
-                            <Button variant="primary" type="submit">Place order</Button>
+                            <Button variant="primary" type="submit" disabled={this.props.isLoading}>Place order</Button>
                         </Form.Group>
                     </Form.Row>
                 </Form>
@@ -99,4 +102,8 @@ class OrderForm extends React.Component {
     }
 }
 
-export default OrderForm;
+const mapStateToProps = state => {
+    return state.order;
+}
+
+export default connect(mapStateToProps, null)(OrderForm);

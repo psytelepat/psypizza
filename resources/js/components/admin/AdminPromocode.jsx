@@ -4,6 +4,8 @@ import { Link, useParams } from 'react-router-dom'
 
 import { List as ListIcon } from 'react-bootstrap-icons'
 
+import { connect } from 'react-redux'
+
 import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
@@ -34,7 +36,12 @@ class AdminPromocode extends React.Component {
     }
 
     _fetchModel() {
-        fetch('/api/promocodes/' + this.id)
+
+        console.log(this.props.headers);
+
+        fetch('/api/promocodes/' + this.id, {
+            headers: this.props.headers,
+        })
         .then((response) => response.json())
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, model: json.data});
@@ -58,10 +65,7 @@ class AdminPromocode extends React.Component {
         this.setState({isLoading: true,},
             () => fetch('/api/promocodes/' + ( this.id ?? '' ), {
                 method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector("meta[name='csrf-token']").getAttribute('content'),
-                },
+                headers: this.props.headers,
                 body: formData
             })
             .then((response) => response.json())
@@ -173,4 +177,8 @@ class AdminPromocode extends React.Component {
     }
 }
 
-export default AdminPromocode;
+const mapStateToProps = (state) => {
+    return state;
+}
+
+export default connect(mapStateToProps, null)(AdminPromocode);

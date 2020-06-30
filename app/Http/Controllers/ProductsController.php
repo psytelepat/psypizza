@@ -12,7 +12,7 @@ use \App\Http\Resources\ProductCollection as ModelCollection;
 
 class ProductsController extends Controller
 {
-    public function index(Request $request) : object
+    public function index(ProductRequest $request) : object
     {
         $query = Product::select();
 
@@ -45,7 +45,7 @@ class ProductsController extends Controller
         return new ModelCollection($collection);
     }
 
-    public function show(Request $request, int $id) : object
+    public function show(ProductRequest $request, int $id) : object
     {
         return new ModelResource(Product::findOrFail($id));
     }
@@ -73,7 +73,7 @@ class ProductsController extends Controller
         return new ModelResource($model);
     }
 
-    public function destroy(Request $request, int $id) : object
+    public function destroy(ProductRequest $request, int $id) : object
     {
         $model = Product::findOrFail($id);
         if ($model->delete()) {

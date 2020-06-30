@@ -50,3 +50,16 @@ export function deliveryMethodsLoading() {                  return { type: DELIV
 export function deliveryMethodsLoaded(deliveryMethods) {    return { type: DELIVERY_METHODS_LOADED, deliveryMethods }; }
 export function deliveryMethodsError(error) {               return { type: DELIVERY_METHODS_ERROR, error }; }
 export function deliveryMethodsSelect(id) {                 return { type: DELIVERY_METHODS_SELECT, id }; }
+
+
+
+// order
+export const ORDER_PLACING = 'ORDER_PLACING'
+export const ORDER_PLACED = 'ORDER_PLACED'
+export const ORDER_ERROR = 'ORDER_ERROR'
+
+export function orderPlacing() {                return { type: ORDER_PLACING }; }
+export function orderPlaced(order) {            return { type: ORDER_PLACED, order }; }
+export function orderError(error, setErrors) {  return { type: ORDER_ERROR, error, setErrors }; }
+
+

@@ -12,12 +12,12 @@ use \App\Http\Resources\DeliveryMethodCollection as ModelCollection;
 
 class DeliveryMethodsController extends Controller
 {
-    public function index(Request $request) : object
+    public function index(DeliveryMethodRequest $request) : object
     {
         return new ModelCollection(DeliveryMethod::all());
     }
 
-    public function show(Request $request, int $id) : object
+    public function show(DeliveryMethodRequest $request, int $id) : object
     {
         return new ModelResource(DeliveryMethod::findOrFail($id));
     }
@@ -35,7 +35,7 @@ class DeliveryMethodsController extends Controller
         return new ModelResource($model);
     }
 
-    public function destroy(Request $request, int $id) : object
+    public function destroy(DeliveryMethodRequest $request, int $id) : object
     {
         $model = DeliveryMethod::findOrFail($id);
         if ($model->delete()) {

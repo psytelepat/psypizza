@@ -268,15 +268,13 @@ class Cart extends Model
         return $cartProduct = $cart->products()->where('product_id', $id)->first();
     }
 
-    public static function placeOrder(array $userdata): bool
+    public static function placeOrder(array $userdata): Order
     {
-        if (!self::isValidForPlacingOrder()) {
-            return false;
-        }
+        self::isValidForPlacingOrder();
 
         $order = new Order;
 
-        $order->user_id = auth()->user() ? auth()->user()->id : null;
+        $order->user_id = Arr::get($userdata, 'user_id');
         $order->cart_id = self::instance()->id;
         $order->name = Arr::get($userdata, 'name');
         $order->surname = Arr::get($userdata, 'surname');
@@ -288,6 +286,6 @@ class Cart extends Model
 
         self::instance(true);
 
-        return true;
+        return $order;
     }
 }

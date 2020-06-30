@@ -14,7 +14,7 @@ class PromocodeRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check() && auth()->user()->is_admin;
+        return auth('api')->check() && auth('api')->user()->is_admin;
     }
 
     /**

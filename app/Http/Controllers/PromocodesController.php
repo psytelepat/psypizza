@@ -12,12 +12,12 @@ use \App\Http\Resources\PromocodeCollection as ModelCollection;
 
 class PromocodesController extends Controller
 {
-    public function index(Request $request) : object
+    public function index(PromocodeRequest $request) : object
     {
         return new ModelCollection(Promocode::all());
     }
 
-    public function show(Request $request, int $id) : object
+    public function show(PromocodeRequest $request, int $id) : object
     {
         return new ModelResource(Promocode::findOrFail($id));
     }
@@ -35,7 +35,7 @@ class PromocodesController extends Controller
         return new ModelResource($model);
     }
 
-    public function destroy(Request $request, int $id) : object
+    public function destroy(PromocodeRequest $request, int $id) : object
     {
         $model = Promocode::findOrFail($id);
         if ($model->delete()) {

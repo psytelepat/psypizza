@@ -18,6 +18,9 @@ import {
     CART_REMOVE_PRODUCT,
     CART_SET_PROMOCODE,
     CART_REMOVE_PROMOCODE,
+    ORDER_PLACING,
+    ORDER_PLACED,
+    ORDER_ERROR,
 } from './actions'
 
 
@@ -201,11 +204,51 @@ function deliveryMethods(state = {
 
 
 
+function order(state = {
+    isLoading: false,
+    isError: null,
+    order_id: null,
+}, action) {
+    switch (action.type) {
+        case ORDER_PLACING:
+            return {
+                ...state,
+                isLoading: true,
+            };
+        case ORDER_PLACED:
+            return {
+                ...state,
+                isLoading: false,
+                data: action.order.order_id,
+            };
+        case ORDER_ERROR:
+            let isError = null,
+                errors = null;
+
+            if (typeof action.error == 'string') {
+                isError = action.error;
+            } else {
+                isError = action.error.message;
+                ( typeof action.setErrors == 'function' ) && action.setErrors(action.error.errors);
+            }
+
+            return {
+                ...state,
+                isLoading: false,
+                isError: isError
+            };
+        default:
+            return state;
+    }
+}
+
+
 const psyPizzaReducer = combineReducers({
     categories,
     products,
     cart,
     deliveryMethods,
+    order,
 });
 
 export default psyPizzaReducer;

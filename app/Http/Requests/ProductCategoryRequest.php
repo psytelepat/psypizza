@@ -14,7 +14,14 @@ class ProductCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check() && auth()->user()->is_admin;
+        switch ($this->getMethod()) {
+            case 'GET':
+                return true;
+                break;
+            default:
+                return auth('api')->check() && auth('api')->user()->is_admin;
+                break;
+        }
     }
 
     /**

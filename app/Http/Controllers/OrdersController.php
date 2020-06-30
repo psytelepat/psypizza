@@ -12,30 +12,52 @@ use \App\Http\Resources\OrderCollection as ModelCollection;
 
 class OrdersController extends Controller
 {
-    public function index(Request $request) : object
+    public function index(OrderRequest $request) : object
     {
-        return new ModelCollection(Order::all());
+        if (auth('api')->user()->is_admin) {
+            $models = Order::all();
+        } else {
+            $models = Order::where('user_id', auth('api')->user()->id)->get();
+        }
+
+        return new ModelCollection($models);
     }
 
-    public function show(Request $request, int $id) : object
+    public function show(OrderRequest $request, int $id) : object
     {
-        return new ModelResource(Order::findOrFail($id));
+        $model = Order::findOrFail($id);
+        if (!auth()->user()->is_admin && $model->user_id != auth()->user()->id) {
+            abort('403');
+        }
+
+        return new ModelResource($model);
     }
 
     public function update(OrderRequest $request, int $id) : object
     {
         $model = Order::findOrFail($id);
+        if (!auth()->user()->is_admin && $model->user_id != auth()->user()->id) {
+            abort('403');
+        }
+
         $model->update($request->validated());
-        return $model;
+
+        return new ModelResource($model);
     }
 
-    public function destroy(Request $request, int $id) : object
+    public function destroy(OrderRequest $request, int $id) : object
     {
         $model = Order::findOrFail($id);
+        if (!auth('api')->user()->is_admin && $model->user_id != auth('api')->user()->id) {
+            abort('403');
+        }
+
         if ($model->delete()) {
-            return $model;
+            return new ModelResource($model);
         } else {
             return new HttpResponseException($model, 500);
         }
     }
 }
+
+// fsK9PLKsb1QHH2KlTjR0IdLhuEwyxpKzfkYCDwcWPLq55AFCwyvTXWZAnqs3
