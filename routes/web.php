@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Route;
 $x = 'MainController@index';
 Route::get('/', $x);
 Route::get('cart', $x);
-Route::get('login', $x);
-Route::get('register', $x);
 
 Route::prefix('admin')->group(function () {
     $x = 'AdminController@index';
@@ -32,8 +30,6 @@ Route::prefix('admin')->group(function () {
     Route::get('delivery_methods/{id}', $x);
 });
 
-Auth::routes();
-
 Route::get('cart.json', 'CartController@index');
 Route::get('cart/recalc.json', 'CartController@recalc');
 Route::post('cart/set.json', 'CartController@setProduct');
@@ -44,5 +40,7 @@ Route::delete('cart/promocode.json', 'CartController@promocode');
 Route::post('cart/delivery_method.json', 'CartController@deliveryMethod');
 Route::post('cart/currency.json', 'CartController@currency');
 Route::post('cart/place_order.json', 'CartController@placeOrder');
+
+Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');

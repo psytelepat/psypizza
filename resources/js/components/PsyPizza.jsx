@@ -218,10 +218,10 @@ class PsyPizza extends React.Component {
                     <Navbar.Toggle aria-controls="nabvar" />
                     <Navbar.Collapse id="navbar">
                         <Nav>
-                            <Nav.Item><Nav.Link as={Link} to="/">Main</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link as={Link} to="">Menu</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link as={Link} to="/cart">Cart</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link as={Link} to="/login">Login</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link as={Link} to="/register">Register</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link href="/login">Login</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link href="/register">Register</Nav.Link></Nav.Item>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>

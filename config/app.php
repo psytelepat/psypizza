@@ -41,6 +41,35 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+    'debug_blacklist' => [
+        '_ENV' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'REDIS_PASSWORD',
+            'MAIL_PASSWORD',
+            'PUSHER_APP_KEY',
+            'PUSHER_APP_SECRET',
+            'MAILGUN_DOMAIN',
+            'MAILGUN_SECRET',
+            'MAILGUN_ENDPOINT',
+            'MAIL_DRIVER',
+            'MAIL_FROM_ADDRESS',
+            'MAIL_FROM_NAME',
+            'MAIL_CALLBACK_RECIPIENTS',
+        ],
+        '_SERVER' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'REDIS_PASSWORD',
+            'MAIL_PASSWORD',
+            'PUSHER_APP_KEY',
+            'PUSHER_APP_SECRET',
+        ],
+        '_POST' => [
+            'password',
+        ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
