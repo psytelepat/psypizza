@@ -10976,13 +10976,12 @@ section.first-screen .welcome {
   transform: translate3d(0, -50%, 0);
 }
 
-.cart {
+.cart-summary {
   position: fixed;
-  background-color: #404040;
-  top: 0;
-  right: 0;
-  z-index: 20;
-  padding: 20px 40px;
+  top: 12px;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+  z-index: 1050;
 }
 
 section.products div.row .col {
@@ -11001,8 +11000,8 @@ section.page-footer {
 
 .currency-switcher {
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
+  top: 8px;
+  right: 15px;
+  z-index: 1050;
 }
 

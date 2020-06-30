@@ -1,9 +1,14 @@
 import React from 'react'
 import { render } from 'react-dom'
 
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+
 import { connect, Provider } from 'react-redux'
 import { createStore } from 'redux'
 import psyPizzaReducer from './reducers'
+
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
 
 const store = createStore(psyPizzaReducer)
 
@@ -204,22 +209,48 @@ class PsyPizza extends React.Component {
 
     render() {
         return (
-            <div className="wrapper">
-                <FirstScreen />
-                <CurrencySwitcher setCurrency={this.setCurrency.bind(this)} />
-                <CartSummary flushCart={this.flushCart.bind(this)} />
-                <ProductCategories />
-                <Products setToCart={this.setToCart.bind(this)} removeFromCart={this.removeFromCart.bind(this)} />
-                <Cart
-                    setToCart={this.setToCart.bind(this)}
-                    removeFromCart={this.removeFromCart.bind(this)}
-                    setPromocode={this.setPromocode.bind(this)}
-                    removePromocode={this.removePromocode.bind(this)}
-                    setDeliveryMethod={this.setDeliveryMethod.bind(this)}
-                    placeOrder={this.placeOrder.bind(this)}
-                />
-                <Footer />
-            </div>
+            <>
+            <CurrencySwitcher setCurrency={this.setCurrency.bind(this)} />
+            <CartSummary flushCart={this.flushCart.bind(this)} />
+            <Router>
+                <Navbar sticky="top" variant="dark" className="mb-3 bg-dark">
+                    <Navbar.Brand href="#">psyPizza</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="nabvar" />
+                    <Navbar.Collapse id="navbar">
+                        <Nav>
+                            <Nav.Item><Nav.Link as={Link} to="/">Main</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link as={Link} to="/cart">Cart</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link as={Link} to="/login">Login</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link as={Link} to="/register">Register</Nav.Link></Nav.Item>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+                <Switch>
+                    <Route path="/cart">
+                        <Cart
+                            setToCart={this.setToCart.bind(this)}
+                            removeFromCart={this.removeFromCart.bind(this)}
+                            setPromocode={this.setPromocode.bind(this)}
+                            removePromocode={this.removePromocode.bind(this)}
+                            setDeliveryMethod={this.setDeliveryMethod.bind(this)}
+                            placeOrder={this.placeOrder.bind(this)}
+                        />
+                    </Route>
+                    <Route path="/login">
+
+                    </Route>
+                    <Route path="/register">
+
+                    </Route>
+                    <Route path="/">
+                        <ProductCategories />
+                        <Products setToCart={this.setToCart.bind(this)} removeFromCart={this.removeFromCart.bind(this)} />
+                    </Route>
+                    <Route path="*">404 Not found</Route>
+                </Switch>
+            </Router>
+            <Footer />
+            </>
         );
     }
 }

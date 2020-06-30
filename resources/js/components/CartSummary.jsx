@@ -27,8 +27,7 @@ class CartSummary extends React.Component {
             <>
             {statusString}
             <PriceFormat price={this.props.data.cost} />
-            <br />
-            <Button size="sm" onClick={this.flushCart.bind(this)}>Flush cart</Button>
+            <Button size="sm" className="ml-3 d-inline-block" onClick={this.flushCart.bind(this)}>Flush cart</Button>
             </>
         );
     }
@@ -41,7 +40,7 @@ class CartSummary extends React.Component {
 
     render() {
         return (
-            <div className="cart">
+            <div className="cart-summary">
                 {this.props.isLoading ? this.renderLoading() : (this.props.data.products.length > 0 ? this.renderFilled() : this.renderEmpty())}
             </div>
         );

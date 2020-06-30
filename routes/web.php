@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+$x = 'MainController@index';
+Route::get('/', $x);
+Route::get('cart', $x);
+Route::get('login', $x);
+Route::get('register', $x);
 
 Route::prefix('admin')->group(function () {
     $x = 'AdminController@index';
