@@ -13,7 +13,7 @@ class OrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     /**
@@ -41,6 +41,8 @@ class OrderRequest extends FormRequest
                     'phone' => 'phone',
                     'address' => 'string',
                 ];
+            default:
+                return [];
         }
     }
 }

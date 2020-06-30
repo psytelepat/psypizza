@@ -14,7 +14,7 @@ class ProductRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     /**
@@ -55,6 +55,8 @@ class ProductRequest extends FormRequest
                     'in_stock' => 'integer',
                     'is_published' => 'integer',
                 ];
+            default:
+                return [];
         }
     }
 }

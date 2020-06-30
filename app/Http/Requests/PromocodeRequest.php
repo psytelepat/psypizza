@@ -14,7 +14,7 @@ class PromocodeRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     /**
@@ -43,6 +43,8 @@ class PromocodeRequest extends FormRequest
                     'description' => '',
                     'discount' => 'integer',
                 ];
+            default:
+                return [];
         }
     }
 }

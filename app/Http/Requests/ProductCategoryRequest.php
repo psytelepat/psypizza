@@ -14,7 +14,7 @@ class ProductCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     /**
@@ -43,6 +43,8 @@ class ProductCategoryRequest extends FormRequest
                     'description' => '',
                     'is_published' => '',
                 ];
+            default:
+                return [];
         }
     }
 }

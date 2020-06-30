@@ -16,8 +16,10 @@ use Illuminate\Support\Facades\Route;
 $x = 'MainController@index';
 Route::get('/', $x);
 Route::get('cart', $x);
+Route::get('orders', $x);
+Route::get('orders/{id}', $x);
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     $x = 'AdminController@index';
     Route::get('', $x);
     Route::get('products', $x);

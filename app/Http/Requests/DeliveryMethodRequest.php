@@ -13,7 +13,7 @@ class DeliveryMethodRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     /**
@@ -37,6 +37,8 @@ class DeliveryMethodRequest extends FormRequest
                     'description' => '',
                     'price' => 'numeric',
                 ];
+            default:
+                return [];
         }
     }
 }
