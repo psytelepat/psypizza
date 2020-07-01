@@ -35,10 +35,10 @@ class PromocodeRequest extends FormRequest
             case 'PUT':
                 return [
                     'name' => [
-                        Rule::unique('promocodes')->ignore($this->name, 'name'),
+                        Rule::unique('promocodes', 'name')->ignore($this->id),
                     ],
                     'code' => [
-                        Rule::unique('promocodes')->ignore($this->code, 'code'),
+                        Rule::unique('promocodes', 'code')->ignore($this->id),
                     ],
                     'description' => '',
                     'discount' => 'integer',

@@ -14,7 +14,7 @@ class ProductCategoriesController extends Controller
 {
     public function index(ProductCategoryRequest $request) : object
     {
-        $query = ProductCategory::select()
+        $query = ProductCategory::select();
 
         if (!auth('api')->check() || !auth('api')->user()->is_admin) {
             $query->where('is_published', true);

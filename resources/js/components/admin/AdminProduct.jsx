@@ -13,7 +13,7 @@ import Button from 'react-bootstrap/Button'
 import Figure from 'react-bootstrap/Figure'
 import Form from 'react-bootstrap/Form'
 
-import processResponse from '../processResponse'
+import { processResponse, processErrors } from '../processResponse'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -64,7 +64,7 @@ class AdminProduct extends React.Component {
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, model: json.data});
         })
-        .catch((err, json) => {
+        .catch(({err, json, response}) => {
             this.setState({isLoading: false, isError: err})
         });
     }
@@ -76,10 +76,13 @@ class AdminProduct extends React.Component {
         }
     }
 
-    saveForm(data) {
+    saveForm(data, { setErrors, setValues }) {
         const formData = new FormData();
         for (let k in data) formData.append(k, data[k]);
-        if (this.id) formData.append('_method', 'PUT');
+        if (this.id) {
+            formData.append('_method', 'PUT');
+            formData.append('id', this.id);
+        }
         formData.append('api_token', localStorage.getItem('api_token'));
 
         this.setState({isLoading: true,},
@@ -90,11 +93,16 @@ class AdminProduct extends React.Component {
             })
             .then(processResponse)
             .then((json) => {
-                this.setState({isLoading: false, model: json.data});
-                !this.id && this.props.history.push('/admin/products/' + json.data.id);
+                this.setState({isLoading: false, isLoaded: true, model: json.data});
+                if (!this.id){
+                    this.id = json.data.id;
+                    setValues && setValues(json.data);
+                    this.props.history.push('/admin/products/' + json.data.id);
+                }
             })
-            .catch((err, json) => {
-                this.setState({isLoading: false, isError: error})
+            .catch(({ message, json, response }) => {
+                this.setState({isLoading: false, isError: message})
+                processErrors(json, setErrors);
             })
         );
     }
@@ -110,7 +118,7 @@ class AdminProduct extends React.Component {
     render() {
         const { categories } = this.state;
 
-        if (this.state.isLoading||!categories.length) {
+        if ((this.id&&!this.state.isLoaded)||!categories.length) {
             return  (
                 <Container align="center">
                     <Spinner animation="border" role="status">

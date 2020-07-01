@@ -14,7 +14,7 @@ import Button from 'react-bootstrap/Button'
 import Figure from 'react-bootstrap/Figure'
 import Form from 'react-bootstrap/Form'
 
-import processResponse from '../processResponse'
+import { processResponse, processErrors } from '../processResponse'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -47,7 +47,7 @@ class AdminCategory extends React.Component {
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, model: json.data});
         })
-        .catch((err, json) => {
+        .catch(({message, json, response}) => {
             this.setState({isLoading: false, isError: err})
         });
     }
@@ -58,10 +58,13 @@ class AdminCategory extends React.Component {
         }
     }
 
-    saveForm(data) {
+    saveForm(data, { setErrors, setValues }) {
         const formData = new FormData();
         for (let k in data) formData.append(k, data[k]);
-        if (this.id) formData.append('_method', 'PUT');
+        if (this.id) {
+            formData.append('_method', 'PUT');
+            formData.append('id', this.id);
+        }
 
         this.setState({isLoading: true,},
             () => fetch('/api/product_categories/' + ( this.id ?? '' ), {
@@ -72,10 +75,15 @@ class AdminCategory extends React.Component {
             .then(processResponse)
             .then((json) => {
                 this.setState({isLoading: false, model: json.data});
-                !this.id && this.props.history.push('/admin/product_categories/' + json.data.id);
+                if (!this.id){
+                    this.id = json.data.id;
+                    setValues && setValues(json.data);
+                    this.props.history.push('/admin/product_categories/' + json.data.id);
+                }
             })
-            .catch((err, json) => {
-                this.setState({isLoading: false, isError: error})
+            .catch(({ message, json, response }) => {
+                this.setState({isLoading: false, isError: message})
+                processErrors(json, setErrors);
             })
         );
     }
@@ -120,19 +128,29 @@ class AdminCategory extends React.Component {
                   }) => (
                     <Form>
                         <Form.Row>
-                            <Form.Group as={Col} sm="4" controlId="name">
+                            <Form.Group as={Col} sm="6" controlId="name">
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control type="text" name="name" required placeholder="Name"
                                     value={values.name} onChange={handleChange} isInvalid={!!errors.name} />
                                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group as={Col} sm="4" controlId="slug">
+                            <Form.Group as={Col} sm="6" controlId="slug">
                                 <Form.Label>URL Slug</Form.Label>
                                 <Form.Control type="text" name="slug" required placeholder="URL slug"
                                     value={values.slug} onChange={handleChange} isInvalid={!!errors.slug} />
                                 <Form.Control.Feedback type="invalid">{errors.slug}</Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group as={Col} sm="4">
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} sm="12" controlId="description">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3"
+                                    value={values.description} onChange={handleChange} isInvalid={!!errors.description} />
+                                <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} sm="12">
                                 <Form.Check 
                                     id="is_published"
                                     label="Published"
@@ -141,17 +159,6 @@ class AdminCategory extends React.Component {
                                     checked={!!values.is_published}
                                     isInvalid={!!errors.is_published}
                                 />
-                            </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
-                            <Form.Group as={Col} sm="8" controlId="description">
-                                <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" name="description" placeholder="Description" rows="3"
-                                    value={values.description} onChange={handleChange} isInvalid={!!errors.description} />
-                                <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group as={Col} sm="4" className="pt-5">
-
                             </Form.Group>
                         </Form.Row>
                         <Form.Row>
@@ -167,7 +174,7 @@ class AdminCategory extends React.Component {
                             <Form.Group as={Col} sm="6">
                                 <Button variant="secondary" as={Link} to='/admin/product_categories'><ListIcon /> Back to list</Button>
                             </Form.Group>
-                            <Form.Group as={Col} sm="4" align="right">
+                            <Form.Group as={Col} sm="6" align="right">
                                 <Button variant="primary" type="submit" onClick={handleSubmit}>
                                     {values.id ? 'Save changes' : 'Create new category'}
                                 </Button>

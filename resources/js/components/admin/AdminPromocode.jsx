@@ -15,7 +15,7 @@ import Form from 'react-bootstrap/Form'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
-import processResponse from '../processResponse'
+import { processResponse, processErrors } from '../processResponse'
 
 class AdminPromocode extends React.Component {
     constructor(props) {
@@ -48,7 +48,7 @@ class AdminPromocode extends React.Component {
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, model: json.data});
         })
-        .catch((err, json) => {
+        .catch(({message, json, response}) => {
             this.setState({isLoading: false, isError: err})
         });
     }
@@ -59,10 +59,13 @@ class AdminPromocode extends React.Component {
         }
     }
 
-    saveForm(data) {
+    saveForm(data, { setErrors, setValues }) {
         const formData = new FormData();
         for (let k in data) formData.append(k, data[k]);
-        if (this.id) formData.append('_method', 'PUT');
+        if (this.id) {
+            formData.append('_method', 'PUT');
+            formData.append('id', this.id);
+        }
 
         this.setState({isLoading: true,},
             () => fetch('/api/promocodes/' + ( this.id ?? '' ), {
@@ -73,10 +76,15 @@ class AdminPromocode extends React.Component {
             .then(processResponse)
             .then((json) => {
                 this.setState({isLoading: false, model: json.data});
-                !this.id && this.props.history.push('/admin/promocodes/' + json.data.id);
+                if (!this.id){
+                    this.id = json.data.id;
+                    setValues && setValues(json.data);
+                    this.props.history.push('/admin/promocodes/' + json.data.id);
+                }
             })
-            .catch((err, json) => {
-                this.setState({isLoading: false, isError: error})
+            .catch(({ message, json, response }) => {
+                this.setState({isLoading: false, isError: message})
+                processErrors(json, setErrors);
             })
         );
     }

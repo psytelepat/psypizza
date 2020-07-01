@@ -40,7 +40,7 @@ class AdminProducts extends React.Component {
         .then((json) => {
             this.setState({categories: json.data, category_id: json.data[0].id}, this._fetchModelList());
         })
-        .catch((err, json) => {
+        .catch(({message, json, response }) => {
         });
     }
 
@@ -52,7 +52,7 @@ class AdminProducts extends React.Component {
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, models: json.data});
         })
-        .catch((err, json) => {
+        .catch(({message, json, response }) => {
             this.setState({isLoading: false})
         });
     }
@@ -63,22 +63,19 @@ class AdminProducts extends React.Component {
 
     deleteModel(id) {
         let model = this.state.models.reduce((x, y) => (y.id == id) ? y : x);
-        if (model) {
-            if (confirm('Delete product "' + model.name + '"')) {
-                fetch('/api/products/' + id, {
-                    method: 'DELETE',
-                    headers: this.props.headers,
-                })
-                .then(processResponse)
-                .then((json) => {
-                    this._fetchModelList()
-                })
-                .catch((err, json) => {
-                    this.setState({isLoading: false})
-                });
-            }
-        } else {
-            console.log('model not found');
+        if (!model) return;
+        if (confirm('Delete product "' + model.name + '"')) {
+            fetch('/api/products/' + id, {
+                method: 'DELETE',
+                headers: this.props.headers,
+            })
+            .then(processResponse)
+            .then((json) => {
+                this._fetchModelList()
+            })
+            .catch(({message, json, response }) => {
+                this.setState({isLoading: false})
+            });
         }
     }
 

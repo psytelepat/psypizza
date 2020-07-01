@@ -37,7 +37,7 @@ class AdminDeliveryMethods extends React.Component {
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, models: json.data});
         })
-        .catch((err, json) => {
+        .catch(({message, json, response }) => {
             this.setState({isLoading: false})
         });
     }
@@ -47,23 +47,20 @@ class AdminDeliveryMethods extends React.Component {
     }
 
     deleteModel(id) {
-        let product = this.state.products.reduce((x, y) => (y.id == id) ? y : x);
-        if (product) {
-            if (confirm('Delete delivery method "' + model.name + '"')) {
-                fetch('/api/delivery_methods/' + id, {
-                    method: 'DELETE',
-                    headers: this.props.headers,
-                })
-                .then(processResponse)
-                .then((json) => {
-                    this.setState({isLoading: false});
-                })
-                .catch((err, json) => {
-                    this.setState({isLoading: false})
-                });
-            }
-        } else {
-            console.log('model not found');
+        let model = this.state.models.reduce((x, y) => (y.id == id) ? y : x);
+        if (!model) return;
+        if(confirm('Delete delivery method "' + model.name + '"')) {
+            fetch('/api/delivery_methods/' + id, {
+                method: 'DELETE',
+                headers: this.props.headers,
+            })
+            .then(processResponse)
+            .then((json) => {
+                this.setState({isLoading: false});
+            })
+            .catch(({message, json, response }) => {
+                this.setState({isLoading: false})
+            });
         }
     }
 

@@ -68,6 +68,7 @@ class ProductsController extends Controller
     public function update(ProductRequest $request, int $id) : object
     {
         $model = Product::findOrFail($id);
+
         $model->update($request->validated());
 
         if ($image = $request->file('upload_image')) {

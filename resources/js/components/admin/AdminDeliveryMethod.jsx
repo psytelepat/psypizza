@@ -12,7 +12,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
-import processResponse from '../processResponse'
+import { processResponse, processErrors } from '../processResponse'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -45,7 +45,7 @@ class AdminDeliveryMethod extends React.Component {
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, model: json.data});
         })
-        .catch((err, json) => {
+        .catch(({message, json, response }) => {
             this.setState({isLoading: false, isError: err})
         });
     }
@@ -56,10 +56,13 @@ class AdminDeliveryMethod extends React.Component {
         }
     }
 
-    saveForm(data) {
+    saveForm(data, { setErrors, setValues }) {
         const formData = new FormData();
         for (let k in data) formData.append(k, data[k]);
-        if (this.id) formData.append('_method', 'PUT');
+        if (this.id) {
+            formData.append('_method', 'PUT');
+            formData.append('id', this.id);
+        }
 
         this.setState({isLoading: true,},
             () => fetch('/api/delivery_methods/' + ( this.id ?? '' ), {
@@ -69,11 +72,16 @@ class AdminDeliveryMethod extends React.Component {
             })
             .then((response) => response.json())
             .then((json) => {
-                this.setState({isLoading: false, model: json.data});
-                !this.id && this.props.history.push('/admin/delivery_methods/' + json.data.id);
+                this.setState({isLoading: false, isLoaded: true, model: json.data});
+                if (!this.id){
+                    this.id = json.data.id;
+                    setValues && setValues(json.data);
+                    this.props.history.push('/admin/delivery_methods/' + json.data.id);
+                }
             })
-            .catch((err) => {
-                this.setState({isLoading: false, isError: error})
+            .catch(({ message, json, response }) => {
+                this.setState({isLoading: false, isError: message})
+                processErrors(json, setErrors);
             })
         );
     }

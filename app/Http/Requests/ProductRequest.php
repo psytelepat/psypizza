@@ -49,12 +49,14 @@ class ProductRequest extends FormRequest
                 return [
                     'category_id' => 'integer|exists:product_categories,id',
                     'slug' => [
-                        Rule::unique('products')->ignore($this->slug, 'slug'),
+                        'string',
+                        Rule::unique('products', 'slug')->ignore($this->id),
                     ],
                     'sku' => '',
                     'ean13' => '',
                     'name' => [
-                        Rule::unique('products')->ignore($this->name, 'name'),
+                        'string',
+                        Rule::unique('products', 'name')->ignore($this->id),
                     ],
                     'upload_image' => 'file|image',
                     'description' => '',

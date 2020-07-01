@@ -42,10 +42,10 @@ class ProductCategoryRequest extends FormRequest
             case 'PUT':
                 return [
                     'slug' => [
-                        Rule::unique('product_categories')->ignore($this->slug, 'slug'),
+                        Rule::unique('product_categories', 'slug')->ignore($this->id),
                     ],
                     'name' => [
-                        Rule::unique('product_categories')->ignore($this->name, 'name'),
+                        Rule::unique('product_categories', 'name')->ignore($this->id),
                     ],
                     'description' => '',
                     'is_published' => '',
