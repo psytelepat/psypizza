@@ -13,6 +13,8 @@ import Button from 'react-bootstrap/Button'
 import Figure from 'react-bootstrap/Figure'
 import Form from 'react-bootstrap/Form'
 
+import processResponse from '../processResponse'
+
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
@@ -46,11 +48,11 @@ class AdminProduct extends React.Component {
         fetch('/api/product_categories', {
             headers: this.props.headers,
         })
-        .then((response) => response.json())
+        .then(processResponse)
         .then((json) => {
             this.setState({categories: json.data});
         })
-        .catch((err) => {
+        .catch((err, json) => {
         });
     }
 
@@ -58,11 +60,11 @@ class AdminProduct extends React.Component {
         fetch('/api/products/' + this.id, {
             headers: this.props.headers,
         })
-        .then((response) => response.json())
+        .then(processResponse)
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, model: json.data});
         })
-        .catch((err) => {
+        .catch((err, json) => {
             this.setState({isLoading: false, isError: err})
         });
     }
@@ -86,12 +88,12 @@ class AdminProduct extends React.Component {
                 headers: this.props.headers,
                 body: formData
             })
-            .then((response) => response.json())
+            .then(processResponse)
             .then((json) => {
                 this.setState({isLoading: false, model: json.data});
                 !this.id && this.props.history.push('/admin/products/' + json.data.id);
             })
-            .catch((err) => {
+            .catch((err, json) => {
                 this.setState({isLoading: false, isError: error})
             })
         );

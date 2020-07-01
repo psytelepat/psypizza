@@ -15,13 +15,13 @@ class OrdersController extends Controller
     public function index(OrderRequest $request) : object
     {
         if (!auth('api')->check()) {
-            abort('403');
+            abort('403', 'Access denied');
         }
 
         if (auth('api')->user()->is_admin) {
-            $models = Order::all();
+            $models = Order::orderBy('created_at', 'desc')->get();
         } else {
-            $models = Order::where('user_id', auth('api')->user()->id)->get();
+            $models = Order::orderBy('created_at', 'desc')->where('user_id', auth('api')->user()->id)->get();
         }
 
         return new ModelCollection($models);
@@ -32,10 +32,10 @@ class OrdersController extends Controller
         $model = Order::findOrFail($id);
         if (!auth('api')->check()) {
             if ($request->input('order_token') != $model->token) {
-                abort('403');
+                abort('403', 'Access denied');
             }
         } elseif (!auth('api')->user()->is_admin && $model->user_id != auth('api')->user()->id) {
-            abort('403');
+            abort('403', 'Access denied');
         }
 
         return new ModelResource($model);
@@ -45,7 +45,7 @@ class OrdersController extends Controller
     {
         $model = Order::findOrFail($id);
         if (!auth()->user()->is_admin && $model->user_id != auth()->user()->id) {
-            abort('403');
+            abort('403', 'Access denied');
         }
 
         $model->update($request->validated());
@@ -57,7 +57,7 @@ class OrdersController extends Controller
     {
         $model = Order::findOrFail($id);
         if (!auth('api')->user()->is_admin && $model->user_id != auth('api')->user()->id) {
-            abort('403');
+            abort('403', 'Access denied');
         }
 
         if ($model->delete()) {

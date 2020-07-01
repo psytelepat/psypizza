@@ -11,17 +11,13 @@ import * as yup from 'yup'
 
 class OrderForm extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     _formScheme() {
         return yup.object({
             name: yup.string().required().matches(/^[A-Za-z\s\-]+$/, 'Invalid characters'),
             surname: yup.string().matches(/^[A-Za-z\s\-]+$/, 'Invalid characters'),
             email: yup.string().email().required(),
-            phone: yup.string().matches(/^(\+|)[0-9\s\-]+$/, 'Phone number is not valid'),
-            address: yup.string().required(),
+            phone: yup.string().required().matches(/^(\+|)[0-9\s\-]+$/, 'Phone number is not valid'),
+            address: this.props.requires_address ? yup.string().required() : null,
             agreement: yup.bool().required().oneOf([true], 'The terms and conditions must be accepted'),
         });
     }
@@ -29,6 +25,15 @@ class OrderForm extends React.Component {
     render() {
 
         const { isLoading, isError, errors } = this.props;
+
+        const initialValues = {
+            name: this.props.user ? (this.props.user.name||"") : "",
+            surname: this.props.user ? (this.props.user.surname||"") : "",
+            email: this.props.user ? (this.props.user.email||"") : "",
+            phone: this.props.user ? (this.props.user.phone||"") : "",
+            address: this.props.user ? (this.props.user.address||"") : "",
+            agreement: false
+        };
 
         return (
             <Container className="mt-5">
@@ -39,14 +44,7 @@ class OrderForm extends React.Component {
                     validateOnChange={false}
                     validationSchema={this._formScheme()}
                     onSubmit={this.props.placeOrder}
-                    initialValues={{
-                        name: "Mikhail",
-                        surname: "Prokofyev",
-                        email: "reg@telepat.cc",
-                        phone: "+79645228811",
-                        address: "Moscow",
-                        agreement: true
-                    }}
+                    initialValues={initialValues}
                 >
             {({
                 handleSubmit,
@@ -78,12 +76,14 @@ class OrderForm extends React.Component {
                             <Form.Control.Feedback type="invalid">{errors.phone}</Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
-                    <Form.Row>
-                        <Form.Group as={Col} sm="12" controlId="address">
-                            <Form.Control type="text" name="address" required placeholder="Address" value={values.address} onChange={handleChange} isInvalid={!!errors.address} />
-                            <Form.Control.Feedback type="invalid">{errors.address}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Form.Row>
+                    {this.props.requires_address ?
+                        <Form.Row>
+                            <Form.Group as={Col} sm="12" controlId="address">
+                                <Form.Control type="text" name="address" required placeholder="Address" value={values.address} onChange={handleChange} isInvalid={!!errors.address} />
+                                <Form.Control.Feedback type="invalid">{errors.address}</Form.Control.Feedback>
+                            </Form.Group>
+                        </Form.Row> : null
+                    }
                     <Form.Row>
                         <Form.Group as={Col} sm="12" align="center" controlId="agreement_check">
                             <Form.Check label="Agree to terms and conditions" required name="agreement" checked={values.agreement} onChange={handleChange} isInvalid={!!errors.agreement} feedback={errors.agreement} />
@@ -91,7 +91,7 @@ class OrderForm extends React.Component {
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} sm="12" align="center">
-                            <Button variant="primary" type="submit" disabled={this.props.isLoading}>Place order</Button>
+                            <Button variant="primary" type="submit" disabled={this.props.isLoading||this.props.cartLoading}>Place order</Button>
                         </Form.Group>
                     </Form.Row>
                 </Form>
@@ -103,7 +103,12 @@ class OrderForm extends React.Component {
 }
 
 const mapStateToProps = state => {
-    return state.order;
+    return {
+        cartLoading: state.cart.isLoading,
+        order: state.order,
+        user: state.user.data,
+        requires_address: state.cart.data.delivery_method.requires_address,
+    };
 }
 
 export default connect(mapStateToProps, null)(OrderForm);

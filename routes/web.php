@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 $x = 'MainController@index';
 Route::get('/', $x);
 Route::get('cart', $x);
-Route::get('orders', $x);
+Route::get('orders', 'MainController@orders');
 Route::get('orders/{id}/{order_token?}', 'MainController@order');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
@@ -37,6 +37,8 @@ Route::get('mailable', function () {
     return new App\Mail\OrderPlaced($order);
 });
 
+Route::get('start.json', 'MainController@start');
+Route::get('user.json', 'MainController@user');
 Route::get('cart.json', 'CartController@index');
 Route::get('cart/recalc.json', 'CartController@recalc');
 Route::post('cart/set.json', 'CartController@setProduct');

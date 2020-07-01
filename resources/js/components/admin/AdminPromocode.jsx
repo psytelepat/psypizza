@@ -15,6 +15,8 @@ import Form from 'react-bootstrap/Form'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
+import processResponse from '../processResponse'
+
 class AdminPromocode extends React.Component {
     constructor(props) {
         super(props);
@@ -42,11 +44,11 @@ class AdminPromocode extends React.Component {
         fetch('/api/promocodes/' + this.id, {
             headers: this.props.headers,
         })
-        .then((response) => response.json())
+        .then(processResponse)
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, model: json.data});
         })
-        .catch((err) => {
+        .catch((err, json) => {
             this.setState({isLoading: false, isError: err})
         });
     }
@@ -68,12 +70,12 @@ class AdminPromocode extends React.Component {
                 headers: this.props.headers,
                 body: formData
             })
-            .then((response) => response.json())
+            .then(processResponse)
             .then((json) => {
                 this.setState({isLoading: false, model: json.data});
                 !this.id && this.props.history.push('/admin/promocodes/' + json.data.id);
             })
-            .catch((err) => {
+            .catch((err, json) => {
                 this.setState({isLoading: false, isError: error})
             })
         );

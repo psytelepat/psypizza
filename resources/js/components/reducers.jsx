@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux'
 
 import {
+    USER_LOADING,
+    USER_LOADED,
+    USER_ERROR,
     CATEGORIES_LOADING,
     CATEGORIES_LOADED,
     CATEGORIES_ERROR,
@@ -25,6 +28,37 @@ import {
 
 
 
+function user(state = {
+    isLoading: false,
+    isLoaded: false,
+    isError: null,
+    data: null,
+}, action) {
+    switch (action.type) {
+        case USER_LOADING:
+            return {
+                ...state,
+                isLoading: true,
+            };
+        case USER_LOADED:
+            return {
+                ...state,
+                isLoading: false,
+                isLoaded: true,
+                data: action.user,
+            };
+        case USER_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                isError: action.error,
+            };
+        default:
+            return state;
+    }
+}
+
+
 function categories(state = {
     isLoading: false,
     isLoaded: false,
@@ -39,13 +73,13 @@ function categories(state = {
                 isLoading: true,
             };
         case CATEGORIES_LOADED:
-            const { data } = action.categories;
+            const { categories } = action;
             return {
                 ...state,
                 isLoading: false,
                 isLoaded: true,
-                data: data,
-                selected: data.length && data[0].id
+                data: categories,
+                selected: categories.length && categories[0].id
             };
         case CATEGORIES_ERROR:
             return {
@@ -83,7 +117,7 @@ function products(state = {
                 ...state,
                 isLoading: false,
                 isLoaded: true,
-                data: action.products.data,
+                data: action.products,
             };
         case PRODUCTS_ERROR:
             return {
@@ -154,7 +188,7 @@ function cart(state = {
                 connections: connections,
                 isLoading: connections > 0,
                 isLoaded: true,
-                data: action.cart.data,
+                data: action.cart,
             };
         case CART_ERROR:
             console.log(action.error);
@@ -244,6 +278,7 @@ function order(state = {
 
 
 const psyPizzaReducer = combineReducers({
+    user,
     categories,
     products,
     cart,

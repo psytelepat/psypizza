@@ -22,11 +22,13 @@ class DeliveryMethods extends Seeder
                 'name' => 'Courier delivery',
                 'description' => 'Our courier will deliver your order in 30-40 minutes.',
                 'price' => 5,
+                'requires_address' => true,
             ],
             [
                 'name' => 'Pick up',
                 'description' => 'Order and pick up at the restaurant by yourself.',
                 'price' => 0,
+                'requires_address' => false,
             ],
         ];
 

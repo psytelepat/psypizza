@@ -12,7 +12,6 @@ import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
-import Dashboard from './Dashboard'
 import AdminProducts from './AdminProducts'
 import AdminProduct from './AdminProduct'
 import AdminCategory from './AdminCategory'
@@ -21,6 +20,9 @@ import AdminPromocode from './AdminPromocode'
 import AdminPromocodes from './AdminPromocodes'
 import AdminDeliveryMethod from './AdminDeliveryMethod'
 import AdminDeliveryMethods from './AdminDeliveryMethods'
+
+import Order from '../Order'
+import Orders from '../Orders'
 
 import { connect, Provider } from 'react-redux'
 import { createStore } from 'redux'
@@ -63,7 +65,7 @@ class PsyPizzaAdmin extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(loginLogged(api_token, json.user)))
-        .catch((err) => store.dispatch(loginFailed(err)));
+        .catch((err, json) => store.dispatch(loginFailed(err, json)));
     }
 
     attempLogin() {
@@ -82,7 +84,7 @@ class PsyPizzaAdmin extends React.Component {
             localStorage.setItem('api_token', json.token);
             store.dispatch(loginLogged(json.token, json.user));
         })
-        .catch((err) => store.dispatch(loginFailed(err)));
+        .catch((err, json) => store.dispatch(loginFailed(err, json)));
     }
 
     onChange(event) {
@@ -129,7 +131,7 @@ class PsyPizzaAdmin extends React.Component {
                     <Navbar.Toggle aria-controls="nabvar" />
                     <Navbar.Collapse id="navbar">
                         <Nav>
-                            <Nav.Item><Nav.Link as={Link} to="/admin">Dashboard</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link as={Link} to="/admin">Orders</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link as={Link} to="/admin/products">Products</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link as={Link} to="/admin/product_categories">Categories</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link as={Link} to="/admin/promocodes">Promocodes</Nav.Link></Nav.Item>
@@ -141,16 +143,23 @@ class PsyPizzaAdmin extends React.Component {
                     <Route path="/admin/delivery_methods/create" component={AdminDeliveryMethod} />
                     <Route path="/admin/delivery_methods/:id" component={AdminDeliveryMethod} />
                     <Route path="/admin/delivery_methods" component={AdminDeliveryMethods}></Route>
+                    
                     <Route path="/admin/promocodes/create" component={AdminPromocode} />
                     <Route path="/admin/promocodes/:id" component={AdminPromocode} />
                     <Route path="/admin/promocodes" component={AdminPromocodes}></Route>
+                    
                     <Route path="/admin/product_categories/create" component={AdminCategory} />
                     <Route path="/admin/product_categories/:id" component={AdminCategory} />
                     <Route path="/admin/product_categories" component={AdminCategories}></Route>
+                    
                     <Route path="/admin/products/create" component={AdminProduct} />
                     <Route path="/admin/products/:id" component={AdminProduct} />
                     <Route path="/admin/products" component={AdminProducts}></Route>
-                    <Route path="/admin" component={Dashboard}></Route>
+                    
+                    <Route path="/admin/orders/:id" component={(props) => <Order api_token={this.props.api_token} {...props} />} />
+                    <Route path="/admin/orders" component={(props) => <Orders api_token={this.props.api_token} {...props} />}></Route>
+                    <Route path="/admin" component={(props) => <Orders api_token={this.props.api_token} {...props} />}></Route>
+                    
                     <Route path="*">404 Not found</Route>
                 </Switch>
             </Router>

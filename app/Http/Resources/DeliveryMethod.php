@@ -19,6 +19,7 @@ class DeliveryMethod extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'price' => $this->price,
+            'requires_address' => $this->requires_address,
         ];
     }
 }

@@ -11,10 +11,11 @@ import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
 import Figure from 'react-bootstrap/Figure'
 import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
 
 import { Link } from 'react-router-dom'
 
-import Form from 'react-bootstrap/Form'
+import processResponse from '../processResponse'
 
 class AdminCategories extends React.Component {
     constructor(props) {
@@ -34,11 +35,11 @@ class AdminCategories extends React.Component {
         fetch('/api/product_categories', {
             headers: this.props.headers,
         })
-        .then((response) => response.json())
+        .then(processResponse)
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, models: json.data});
         })
-        .catch((err) => {
+        .catch((err, json) => {
             this.setState({isLoading: false})
         });
     }
@@ -55,11 +56,11 @@ class AdminCategories extends React.Component {
                     method: 'DELETE',
                     headers: this.props.headers,
                 })
-                .then((response) => response.json())
+                .then(processResponse)
                 .then((json) => {
                     this.setState({isLoading: false});
                 })
-                .catch((err) => {
+                .catch((err, json) => {
                     this.setState({isLoading: false})
                 });
             }

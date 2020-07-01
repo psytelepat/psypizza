@@ -22,7 +22,7 @@ class Cart extends React.Component {
 
     renderEmpty() {
         return (
-            <Container align="center">
+            <Container align="center" className="p-5">
                 <h3>Your shopping cart is empty right now</h3>
                 <p>Please put something into your cart by clicking <Button size="sm" variant="success"><CartIcon /></Button> button on the product card to proceed.</p>
             </Container>

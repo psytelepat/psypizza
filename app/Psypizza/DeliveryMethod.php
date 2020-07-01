@@ -12,7 +12,7 @@ class DeliveryMethod extends Model
     use SoftDeletes;
 
     public $table = 'delivery_methods';
-    protected $fillable = ['name', 'description', 'price'];
+    protected $fillable = ['name', 'description', 'price', 'requires_address'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
     public function order()

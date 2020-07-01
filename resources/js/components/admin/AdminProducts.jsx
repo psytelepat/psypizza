@@ -10,10 +10,11 @@ import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
 
 import { Link } from 'react-router-dom'
 
-import Form from 'react-bootstrap/Form'
+import processResponse from '../processResponse'
 
 class AdminProducts extends React.Component {
     constructor(props) {
@@ -35,11 +36,11 @@ class AdminProducts extends React.Component {
         fetch('/api/product_categories', {
             headers: this.props.headers,
         })
-        .then((response) => response.json())
+        .then(processResponse)
         .then((json) => {
             this.setState({categories: json.data, category_id: json.data[0].id}, this._fetchModelList());
         })
-        .catch((err) => {
+        .catch((err, json) => {
         });
     }
 
@@ -47,11 +48,11 @@ class AdminProducts extends React.Component {
         fetch('/api/products?category_id='+this.state.category_id, {
             headers: this.props.headers,
         })
-        .then((response) => response.json())
+        .then(processResponse)
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, models: json.data});
         })
-        .catch((err) => {
+        .catch((err, json) => {
             this.setState({isLoading: false})
         });
     }
@@ -68,11 +69,11 @@ class AdminProducts extends React.Component {
                     method: 'DELETE',
                     headers: this.props.headers,
                 })
-                .then((response) => response.json())
+                .then(processResponse)
                 .then((json) => {
                     this._fetchModelList()
                 })
-                .catch((err) => {
+                .catch((err, json) => {
                     this.setState({isLoading: false})
                 });
             }

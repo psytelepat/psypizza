@@ -9,10 +9,11 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 import { Link } from 'react-router-dom'
 
-import Form from 'react-bootstrap/Form'
+import processResponse from '../processResponse'
 
 class AdminDeliveryMethods extends React.Component {
     constructor(props) {
@@ -32,11 +33,11 @@ class AdminDeliveryMethods extends React.Component {
         fetch('/api/delivery_methods', {
             headers: this.props.headers,
         })
-        .then((response) => response.json())
+        .then(processResponse)
         .then((json) => {
             this.setState({isLoading: false, isLoaded: true, models: json.data});
         })
-        .catch((err) => {
+        .catch((err, json) => {
             this.setState({isLoading: false})
         });
     }
@@ -53,11 +54,11 @@ class AdminDeliveryMethods extends React.Component {
                     method: 'DELETE',
                     headers: this.props.headers,
                 })
-                .then((response) => response.json())
+                .then(processResponse)
                 .then((json) => {
                     this.setState({isLoading: false});
                 })
-                .catch((err) => {
+                .catch((err, json) => {
                     this.setState({isLoading: false})
                 });
             }

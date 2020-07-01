@@ -14,12 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 Route::get('login', 'AdminController@login');
 Route::post('login', 'AdminController@login');
+Route::get('start', 'ApiController@start');
 Route::apiResource('product_categories', 'ProductCategoriesController');
 Route::apiResource('products', 'ProductsController');
 Route::apiResource('orders', 'OrdersController');

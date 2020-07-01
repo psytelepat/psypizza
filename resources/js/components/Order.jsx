@@ -31,25 +31,25 @@ class Order extends React.Component {
 
     _loadOrder() {
         this.setState({isLoading: true});
-        fetch('/api/orders/' + this.id + '?order_token=' + this.order_token, {
+        fetch('/orders/' + this.id + '/' + this.order_token, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             }
         })
         .then(processResponse)
-        .then((json) => {this.setState({isLoading: false, isLoaded: true, data: json.data})})
-        .catch((err) => {this.setState({isLoading: false})})
+        .then((json) => {this.setState({isLoading: false, isLoaded: true, data: json})})
+        .catch((err, json) => {this.setState({isLoading: false})})
     }
 
     renderDetails(order) {
         return (
             <Container className="mb-5">
                 <h4>Details</h4>
-                <Row><Col>{order.name} {order.surname}</Col></Row>
-                <Row><Col>{order.email}</Col></Row>
-                <Row><Col>{order.phone}</Col></Row>
-                <Row><Col>{order.address}</Col></Row>
+                <Row><Col><strong>{order.name} {order.surname}</strong></Col></Row>
+                <Row><Col><strong>{order.email}</strong></Col></Row>
+                <Row><Col><strong>{order.phone}</strong></Col></Row>
+                <Row><Col>Address: <strong>{order.address}</strong></Col></Row>
             </Container>
         );
     }
@@ -58,11 +58,11 @@ class Order extends React.Component {
         const { currency, promocode, delivery_method } = cart;
         return (
             <Container className="mb-5">
-                <Row><Col>Promocode: {promocode.code} (-{promocode.discount}%)</Col></Row>
+                {!!promocode && <Row><Col>Promocode: {promocode.code} (-{promocode.discount}%)</Col></Row>}
                 <Row><Col>Goods: <PriceFormat price={cart.original_products_cost} forceCurrency={currency} /></Col></Row>
-                <Row><Col>Discount: <PriceFormat price={cart.discount} forceCurrency={currency} /></Col></Row>
+                {cart.discount > 0 && <Row><Col>Discount: <PriceFormat price={cart.discount} forceCurrency={currency} /></Col></Row>}
                 <Row><Col>Delivery: <PriceFormat price={cart.delivery_price} forceCurrency={currency} /> ({delivery_method.name})</Col></Row>
-                <Row><Col>Total: <PriceFormat price={cart.cost} forceCurrency={currency} /></Col></Row>
+                <Row><Col>Total: <strong><PriceFormat price={cart.cost} forceCurrency={currency} /></strong></Col></Row>
             </Container>
         );
     }

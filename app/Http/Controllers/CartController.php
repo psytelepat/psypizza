@@ -88,12 +88,14 @@ class CartController extends Controller
 
     public function placeOrder(Request $request): object
     {
+        $cart = Cart::instance();
+
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'surname' => 'string',
+            'surname' => '',
             'email' => 'required|string|email',
             'phone' => ['required', 'string', 'regex:/^(\+|)[0-9\s\-]+$/'],
-            'address' => 'required|string',
+            'address' => $cart->deliveryMethod->requires_address ? 'required|string' : '',
             'agreement' => 'required',
         ]);
 
@@ -117,6 +119,7 @@ class CartController extends Controller
             Mail::to($placed_order->email)->send(new \App\Mail\OrderPlaced($placed_order));
             return response()->json([
                 'order_id' => $placed_order->id,
+                'order_token' => $placed_order->token,
                 'message' => 'Order placed',
             ], 201);
         } catch (Eception $e) {

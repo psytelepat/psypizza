@@ -34,7 +34,7 @@ class OrderRequest extends FormRequest
             case 'POST':
                 return [
                     'name' => 'required|string',
-                    'surname' => 'string',
+                    'surname' => '',
                     'email' => 'required|email',
                     'phone' => 'required|phone',
                     'address' => 'required|string',
@@ -43,7 +43,7 @@ class OrderRequest extends FormRequest
             case 'PUT':
                 return [
                     'name' => 'string',
-                    'surname' => 'string',
+                    'surname' => '',
                     'email' => 'email',
                     'phone' => 'phone',
                     'address' => 'string',

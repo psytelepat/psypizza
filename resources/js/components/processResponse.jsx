@@ -4,7 +4,7 @@ export default (response) => {
     } else {
         return new Promise((resolve, reject) => {
             response.json()
-            .then((json) => reject(json))
+            .then((json) => reject(json.message||"", json))
             .catch(() => reject(response.statusText));
         });
     }

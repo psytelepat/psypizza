@@ -11,9 +11,12 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Toast from 'react-bootstrap/Toast'
 
+import processResponse from './processResponse'
+
 const store = createStore(psyPizzaReducer)
 
 import {
+    userLoading, userError, userLoaded,
     categoriesLoading, categoriesError, categoriesLoaded,
     productsLoading, productsError, productsLoaded,
     deliveryMethodsLoading, deliveryMethodsLoaded, deliveryMethodsError, deliveryMethodsSelect,
@@ -28,6 +31,7 @@ import CartSummary from './CartSummary'
 import ProductCategories from './ProductCategories'
 import Products from './Products'
 import Order from './Order'
+import Orders from './Orders'
 import Footer from './Footer'
 
 class PsyPizza extends React.Component {
@@ -38,24 +42,47 @@ class PsyPizza extends React.Component {
             'X-CSRF-TOKEN': document.querySelector("meta[name='csrf-token']").getAttribute('content'),
         };
     }
-    
+
     componentDidMount() {
-        this._loadCategories();
+        this._start();
         this._loadProducts();
-        this._loadCart();
-        this._loadDeliveryMethods();
     }
 
-    _processResponse(response){
-        if (response.ok) {
-            return response.json();
-        } else {
-            return new Promise((resolve, reject) => {
-                response.json()
-                .then((json) => reject(json))
-                .catch(() => reject(response.statusText));
-            });
-        }
+    _start() {
+        store.dispatch(categoriesLoading());
+        store.dispatch(deliveryMethodsLoading());
+        store.dispatch(cartLoading());
+        store.dispatch(userLoading());
+
+        fetch('/start.json', {
+            method: 'GET',
+            headers: this._requestHeaders(),
+        })
+        .then(processResponse)
+        .then((json) => {
+            store.dispatch(userLoaded(json.user));
+            store.dispatch(categoriesLoaded(json.categories));
+            store.dispatch(deliveryMethodsLoaded(json.delivery_methods));
+            store.dispatch(cartLoaded(json.cart));
+        })
+        .catch((err, json) => {
+            store.dispatch(userError(err, json));
+            store.dispatch(categoriesError(err, json));
+            store.dispatch(deliveryMethodsError(err, json));
+            store.dispatch(cartError(err, json));
+        });
+    }
+
+    _loadUser() {
+        store.dispatch(userLoading());
+
+        fetch('/user.json', {
+            method: 'GET',
+            headers: this._requestHeaders(),
+        })
+        .then(processResponse)
+        .then((json) => store.dispatch(userLoaded(json)))
+        .catch((err, json) => store.dispatch(userError(err, json)))
     }
 
     _loadCategories() {
@@ -65,9 +92,9 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(categoriesLoaded(json)))
-        .catch((err) => store.dispatch(categoriesError(err)));
+        .then(processResponse)
+        .then((json) => store.dispatch(categoriesLoaded(json.data)))
+        .catch((err, json) => store.dispatch(categoriesError(err, json)));
     }
 
     _loadProducts() {
@@ -77,9 +104,9 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(productsLoaded(json)))
-        .catch((err) => store.dispatch(productsError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(productsLoaded(json.data)))
+        .catch((err, json) => store.dispatch(productsError(err, json)))
     }
 
     _loadDeliveryMethods() {
@@ -89,9 +116,9 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(deliveryMethodsLoaded(json)))
-        .catch((err) => store.dispatch(deliveryMethodsError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(deliveryMethodsLoaded(json.data)))
+        .catch((err, json) => store.dispatch(deliveryMethodsError(err, json)))
     }
 
     _loadCart() {
@@ -101,9 +128,9 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(cartLoaded(json)))
-        .catch((err) => store.dispatch(cartError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(cartLoaded(json.data)))
+        .catch((err, json) => store.dispatch(cartError(err, json)))
     }
 
     setDeliveryMethod(id) {
@@ -114,9 +141,9 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify({id: id}),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(cartLoaded(json)))
-        .catch((err) => store.dispatch(cartError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(cartLoaded(json.data)))
+        .catch((err, json) => store.dispatch(cartError(err, json)))
     }
 
     setToCart(id, amount) {
@@ -128,9 +155,9 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify({id: id, amount: amount}),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(cartLoaded(json)))
-        .catch((err) => store.dispatch(cartError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(cartLoaded(json.data)))
+        .catch((err, json) => store.dispatch(cartError(err, json)))
     }
 
     removeFromCart(id) {
@@ -142,9 +169,9 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify({id: id}),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(cartLoaded(json)))
-        .catch((err) => store.dispatch(cartError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(cartLoaded(json.data)))
+        .catch((err, json) => store.dispatch(cartError(err, json)))
     }
 
     flushCart() {
@@ -154,9 +181,9 @@ class PsyPizza extends React.Component {
             method: 'GET',
             headers: this._requestHeaders(),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(cartLoaded(json)))
-        .catch((err) => store.dispatch(cartError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(cartLoaded(json.data)))
+        .catch((err, json) => store.dispatch(cartError(err, json)))
     }
 
     setPromocode(code) {
@@ -167,9 +194,9 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify({code: code}),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(cartLoaded(json)))
-        .catch((err) => store.dispatch(cartError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(cartLoaded(json.data)))
+        .catch((err, json) => store.dispatch(cartError(err, json)))
     }
 
     removePromocode() {
@@ -179,9 +206,9 @@ class PsyPizza extends React.Component {
             method: 'DELETE',
             headers: this._requestHeaders(),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(cartLoaded(json)))
-        .catch((err) => store.dispatch(cartError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(cartLoaded(json.data)))
+        .catch((err, json) => store.dispatch(cartError(err, json)))
     }
 
     setCurrency(currency) {
@@ -192,9 +219,9 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify({currency: currency}),
         })
-        .then(this._processResponse)
-        .then((json) => store.dispatch(cartLoaded(json)))
-        .catch((err) => store.dispatch(cartError(err)))
+        .then(processResponse)
+        .then((json) => store.dispatch(cartLoaded(json.data)))
+        .catch((err, json) => store.dispatch(cartError(err, json)))
     }
 
     placeOrder(data, { setErrors }) {
@@ -205,9 +232,21 @@ class PsyPizza extends React.Component {
             headers: this._requestHeaders(),
             body: JSON.stringify(data),
         })
-        .then(this._processResponse)
+        .then(processResponse)
         .then((json) => store.dispatch(orderPlaced(json)))
-        .catch((err) => store.dispatch(orderError(err, setErrors)))
+        .catch((err, json) => store.dispatch(orderError(err, json, setErrors)))
+    }
+
+    logout() {
+        fetch('/logout', {
+            method: 'POST',
+            headers: this._requestHeaders(),
+        })
+        .then((response) => {
+            if (response.ok) {
+                window.location = '/';
+            }
+        });
     }
 
     render() {
@@ -221,20 +260,34 @@ class PsyPizza extends React.Component {
                         <Nav>
                             <Nav.Item><Nav.Link as={Link} to="/">Menu</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link as={Link} to="/cart">Cart</Nav.Link></Nav.Item>
+                            { this.props.user.data ? (
+                                <>
+                                <Nav.Item><Nav.Link as={Link} to="/orders">Orders</Nav.Link></Nav.Item>
+                                <Nav.Item><Nav.Link onClick={this.logout.bind(this)}>Logout</Nav.Link></Nav.Item>
+                                </>
+                            ) : (
+                                <>
+                                <Nav.Item><Nav.Link href="/login">Login</Nav.Link></Nav.Item>
+                                <Nav.Item><Nav.Link href="/register">Register</Nav.Link></Nav.Item>
+                                </>
+                            )}
+
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
                 <Switch>
                     <Route path="/orders/:id/:order_token" component={Order} />
-                    <Route path="/cart">
-                        <Cart
+                    <Route path="/orders/:id" component={Order} />
+                    <Route path="/orders" component={Orders} />
+                    <Route path="/cart" component={(props) => <Cart
+                            {...props}
                             setToCart={this.setToCart.bind(this)}
                             removeFromCart={this.removeFromCart.bind(this)}
                             setPromocode={this.setPromocode.bind(this)}
                             removePromocode={this.removePromocode.bind(this)}
                             setDeliveryMethod={this.setDeliveryMethod.bind(this)}
                             placeOrder={this.placeOrder.bind(this)}
-                        />
+                        />}>
                     </Route>
                     <Route path="/">
                         <CartSummary flushCart={this.flushCart.bind(this)} />
@@ -249,6 +302,13 @@ class PsyPizza extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    };
+}
+
+PsyPizza = connect(mapStateToProps, null)(PsyPizza);
 export default PsyPizza;
 
 if (document.getElementById('psypizza')) {
