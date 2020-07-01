@@ -5,6 +5,7 @@ namespace App\Psypizza;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -282,6 +283,15 @@ class Cart extends Model
         $order->phone = Arr::get($userdata, 'phone');
         $order->address = Arr::get($userdata, 'address');
         $order->status = Order::STATUS_CREATED;
+
+        $order->token = Str::random(60);
+
+        $number = null;
+        do {
+            $number = Str::upper(Str::random(10));
+        } while (Order::where('number', $number)->exists());
+        $order->number = $number;
+
         $order->save();
 
         self::instance(true);

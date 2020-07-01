@@ -1,8 +1,10 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
+
+import { Link } from 'react-router-dom'
+
+import { Cart as CartIcon } from 'react-bootstrap-icons';
 
 import Spinner from 'react-bootstrap/Spinner'
 import Button from 'react-bootstrap/Button'
@@ -16,18 +18,22 @@ class CartSummary extends React.Component {
     }
 
     renderEmpty() {
-        return <>Empty cart.</>;
+        return <></>;
     }
 
     renderFilled() {
         const itemsCount = this.props.data.products.reduce((x, y) => x + y.amount, 0);
-        const statusString = itemsCount + ' items for ';
+        const statusString = itemsCount + ' item' + (itemsCount > 1 ? 's' : '') + ' for ';
         
         return (
             <>
+            <strong>
             {statusString}
-            <PriceFormat price={this.props.data.cost} />
-            <Button size="sm" className="ml-3 d-inline-block" onClick={this.flushCart.bind(this)}>Flush cart</Button>
+            <PriceFormat price={this.props.data.products_cost} />
+            </strong>
+            <Button as={Link} to="/cart" size="sm" variant="success" className="ml-3 d-inline-block">
+                <CartIcon /> Order
+            </Button>
             </>
         );
     }

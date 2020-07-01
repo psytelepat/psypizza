@@ -17,7 +17,7 @@ $x = 'MainController@index';
 Route::get('/', $x);
 Route::get('cart', $x);
 Route::get('orders', $x);
-Route::get('orders/{id}', $x);
+Route::get('orders/{id}/{token?}', 'MainController@order');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     $x = 'AdminController@index';

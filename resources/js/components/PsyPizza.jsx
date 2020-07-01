@@ -9,6 +9,7 @@ import psyPizzaReducer from './reducers'
 
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
+import Toast from 'react-bootstrap/Toast'
 
 const store = createStore(psyPizzaReducer)
 
@@ -210,16 +211,14 @@ class PsyPizza extends React.Component {
 
     render() {
         return (
-            <>
-            <CurrencySwitcher setCurrency={this.setCurrency.bind(this)} />
-            <CartSummary flushCart={this.flushCart.bind(this)} />
             <Router>
+                <CurrencySwitcher setCurrency={this.setCurrency.bind(this)} />
                 <Navbar sticky="top" variant="dark" className="mb-3 bg-dark">
-                    <Navbar.Brand href="#">psyPizza</Navbar.Brand>
+                    <Navbar.Brand as={Link} to="/">psyPizza</Navbar.Brand>
                     <Navbar.Toggle aria-controls="nabvar" />
                     <Navbar.Collapse id="navbar">
                         <Nav>
-                            <Nav.Item><Nav.Link as={Link} to="">Menu</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link as={Link} to="/">Menu</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link as={Link} to="/cart">Cart</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link href="/login">Login</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link href="/register">Register</Nav.Link></Nav.Item>
@@ -244,14 +243,14 @@ class PsyPizza extends React.Component {
 
                     </Route>
                     <Route path="/">
+                        <CartSummary flushCart={this.flushCart.bind(this)} />
                         <ProductCategories />
                         <Products setToCart={this.setToCart.bind(this)} removeFromCart={this.removeFromCart.bind(this)} />
                     </Route>
                     <Route path="*">404 Not found</Route>
                 </Switch>
+                <Footer />
             </Router>
-            <Footer />
-            </>
         );
     }
 }

@@ -10,4 +10,8 @@ class MainController extends Controller
     {
         return view('index');
     }
+
+    public function order(Request $request, int $id, string $token = null)
+    {
+    }
 }

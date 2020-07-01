@@ -21,6 +21,9 @@ class Order extends Model
 
     public $table = 'orders';
     protected $fillable = [
+        'number',
+        'token',
+
         'cart_id',
         
         'user_id',
