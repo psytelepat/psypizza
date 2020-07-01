@@ -20,6 +20,8 @@ import DeliveryMethodsForm from './DeliveryMethodsForm'
 
 import PriceFormat from './PriceFormat'
 
+import { orderClear } from './actions'
+
 class Cart extends React.Component {
 
     renderEmpty() {
@@ -88,8 +90,9 @@ class Cart extends React.Component {
             return (
                 <Container align="center" className="pt-5 pb-5">
                     <div className="h3 pb-3">Thank you for your purchase!</div>
+                    <p className="pb-3">Check your mailbox for a confirmation e-mail.</p>
                     <Figure.Image src='/images/purchase.gif' className="d-block" />
-                    <Button as={Link} className="mt-3" to={"/orders/" + order.id + "/" + order.token}>View order</Button>
+                    <Button as={Link} className="mt-3" to={"/orders/" + order.id + "/" + order.token} onClick={this.props.onClickViewOrder}>View order</Button>
                 </Container>
             );
         }
@@ -131,4 +134,12 @@ const mapStateToProps = (state, props) => {
     }
 }
 
-export default connect(mapStateToProps, null)(Cart);
+const mapDispatchToProps = dispatch => {
+    return {
+        onClickViewOrder: id => {
+            dispatch(orderClear())
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
