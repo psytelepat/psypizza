@@ -77,6 +77,24 @@ section.products {
     }
 }
 
+.categories {
+    margin-bottom: 40px;
+    a.nav-link {
+        text-align: left;
+        color: #ffffff;
+        font-size: 20px;
+        border: 1px transparent solid;
+        transition: border-color .5s ease, color .5s ease;
+        &:hover {
+            color: #999999;
+        }
+        &.active {
+            border: 1px #999999 solid;
+            color: #999999;
+        }
+    }
+}
+
 input.amountInput[type=number] {
     text-align: center; 
 }

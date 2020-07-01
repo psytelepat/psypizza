@@ -10996,6 +10996,27 @@ section.products div.row .col {
   padding-bottom: 40px;
 }
 
+.categories {
+  margin-bottom: 40px;
+}
+
+.categories a.nav-link {
+  text-align: left;
+  color: #ffffff;
+  font-size: 20px;
+  border: 1px transparent solid;
+  transition: border-color 0.5s ease, color 0.5s ease;
+}
+
+.categories a.nav-link:hover {
+  color: #999999;
+}
+
+.categories a.nav-link.active {
+  border: 1px #999999 solid;
+  color: #999999;
+}
+
 input.amountInput[type=number] {
   text-align: center;
 }

@@ -4,6 +4,8 @@ import { categoriesSelect } from './actions'
 
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
+import Col from 'react-bootstrap/Col'
+import Figure from 'react-bootstrap/Figure'
 
 class ProductCategories extends React.Component {
     render() {
@@ -14,16 +16,19 @@ class ProductCategories extends React.Component {
         }
 
         return (
-            <Container as="section" className="categories mb-5">
-                <Nav variant="pills" fill={true} defaultActiveKey={data[0].id} onSelect={(eventKey) => this.props.onSelect(eventKey)}>
+            <Container as="section" className="categories">
+                <Nav fill={true} defaultActiveKey={data[0].id} onSelect={(eventKey) => this.props.onSelect(eventKey)}>
                 {
-                data.map(category => <Nav.Item key={category.id}>
-                    <Nav.Link
-                        eventKey={category.id}
-                        className="p-3 h5"
-                        variant={category.id == selected ? 'primary' : 'secondary'}>
-                        {category.name}</Nav.Link>
-                    </Nav.Item>)
+                data.map(category => {
+                    return (
+                        <Nav.Item key={category.id}>
+                            <Nav.Link eventKey={category.id}>
+                                <Figure.Image src={'/storage/product_categories/images/' + category.image} width="100" className="mr-5" />
+                                <span>{category.name}</span>
+                            </Nav.Link>
+                        </Nav.Item>
+                    );
+                })
                 }
                 </Nav>
             </Container>
