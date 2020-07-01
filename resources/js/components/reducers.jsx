@@ -263,20 +263,10 @@ function order(state = {
                 created_at: action.order.created_at,
             };
         case ORDER_ERROR:
-            let isError = null,
-                errors = null;
-
-            if (typeof action.error == 'string') {
-                isError = action.error;
-            } else {
-                isError = action.error.message;
-                ( typeof action.setErrors == 'function' ) && action.setErrors(action.error.errors);
-            }
-
             return {
                 ...state,
                 isLoading: false,
-                isError: isError
+                isError: action.error
             };
         case ORDER_CLEAR:
             return {

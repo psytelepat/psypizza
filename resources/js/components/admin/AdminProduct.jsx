@@ -52,7 +52,7 @@ class AdminProduct extends React.Component {
         .then((json) => {
             this.setState({categories: json.data});
         })
-        .catch((err, json) => {
+        .catch(() => {
         });
     }
 

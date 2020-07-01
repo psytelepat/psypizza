@@ -91,7 +91,7 @@ class OrderForm extends React.Component {
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} sm="12" align="center">
-                            <Button variant="primary" type="submit" disabled={this.props.isLoading||this.props.cartLoading}>Place order</Button>
+                            <Button variant="primary" type="submit" disabled={this.props.isLoading||this.props.cartLoading||this.props.order.isLoading}>Place order</Button>
                         </Form.Group>
                     </Form.Row>
                 </Form>

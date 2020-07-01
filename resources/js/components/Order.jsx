@@ -34,7 +34,7 @@ class Order extends React.Component {
 
     _loadOrderWithToken() {
         this.setState({isLoading: true});
-        fetch('/api/orders/' + this.id + '?order_token=' + this.order_token, {
+        fetch('/api/orders/' + this.id + '?order_token=' + (this.order_token ?? ""), {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -43,12 +43,12 @@ class Order extends React.Component {
         })
         .then(processResponse)
         .then((json) => {this.setState({isLoading: false, isLoaded: true, data: json.data})})
-        .catch((message, json) => { this.setState({isLoading: false, isError: message}); })
+        .catch(({message, json, response}) => { this.setState({isLoading: false, isError: message}); })
     }
 
     _loadOrder() {
         this.setState({isLoading: true});
-        fetch('/orders/' + this.id + '/' + this.order_token, {
+        fetch('/orders/' + this.id + '/' + (this.order_token ?? ""), {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ class Order extends React.Component {
         })
         .then(processResponse)
         .then((json) => {this.setState({isLoading: false, isLoaded: true, data: json})})
-        .catch((err, json) => {this.setState({isLoading: false})})
+        .catch(() => {this.setState({isLoading: false})})
     }
 
     renderDetails(order) {

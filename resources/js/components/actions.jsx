@@ -70,7 +70,7 @@ export const ORDER_CLEAR = 'ORDER_CLEAR'
 
 export function orderPlacing() {                        return { type: ORDER_PLACING }; }
 export function orderPlaced(order) {                    return { type: ORDER_PLACED, order }; }
-export function orderError(error, json, setErrors) {    return { type: ORDER_ERROR, error, json, setErrors }; }
+export function orderError(error) {                     return { type: ORDER_ERROR, error }; }
 export function orderClear() {                          return { type: ORDER_CLEAR }; }
 
 

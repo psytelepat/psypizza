@@ -12,7 +12,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Toast from 'react-bootstrap/Toast'
 
-import processResponse from './processResponse'
+import { processResponse, processErrors } from './processResponse'
 
 const store = createStore(psyPizzaReducer)
 
@@ -66,11 +66,11 @@ class PsyPizza extends React.Component {
             store.dispatch(deliveryMethodsLoaded(json.delivery_methods));
             store.dispatch(cartLoaded(json.cart));
         })
-        .catch((err, json) => {
-            store.dispatch(userError(err, json));
-            store.dispatch(categoriesError(err, json));
-            store.dispatch(deliveryMethodsError(err, json));
-            store.dispatch(cartError(err, json));
+        .catch(({message, json, response}) => {
+            store.dispatch(userError(message, json));
+            store.dispatch(categoriesError(message, json));
+            store.dispatch(deliveryMethodsError(message, json));
+            store.dispatch(cartError(message, json));
         });
     }
 
@@ -83,7 +83,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(userLoaded(json)))
-        .catch((err, json) => store.dispatch(userError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(userError(message, json)))
     }
 
     _loadCategories() {
@@ -95,7 +95,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(categoriesLoaded(json.data)))
-        .catch((err, json) => store.dispatch(categoriesError(err, json)));
+        .catch(({message, json, response}) => store.dispatch(categoriesError(message, json)));
     }
 
     _loadProducts() {
@@ -107,7 +107,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(productsLoaded(json.data)))
-        .catch((err, json) => store.dispatch(productsError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(productsError(message, json)))
     }
 
     _loadDeliveryMethods() {
@@ -119,7 +119,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(deliveryMethodsLoaded(json.data)))
-        .catch((err, json) => store.dispatch(deliveryMethodsError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(deliveryMethodsError(message, json)))
     }
 
     _loadCart() {
@@ -131,7 +131,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(cartLoaded(json.data)))
-        .catch((err, json) => store.dispatch(cartError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(cartError(message, json)))
     }
 
     setDeliveryMethod(id) {
@@ -144,7 +144,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(cartLoaded(json.data)))
-        .catch((err, json) => store.dispatch(cartError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(cartError(message, json)))
     }
 
     setToCart(id, amount) {
@@ -158,7 +158,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(cartLoaded(json.data)))
-        .catch((err, json) => store.dispatch(cartError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(cartError(message, json)))
     }
 
     removeFromCart(id) {
@@ -172,7 +172,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(cartLoaded(json.data)))
-        .catch((err, json) => store.dispatch(cartError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(cartError(message, json)))
     }
 
     flushCart() {
@@ -184,7 +184,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(cartLoaded(json.data)))
-        .catch((err, json) => store.dispatch(cartError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(cartError(message, json)))
     }
 
     setPromocode(code) {
@@ -197,7 +197,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(cartLoaded(json.data)))
-        .catch((err, json) => store.dispatch(cartError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(cartError(message, json)))
     }
 
     removePromocode() {
@@ -209,7 +209,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(cartLoaded(json.data)))
-        .catch((err, json) => store.dispatch(cartError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(cartError(message, json)))
     }
 
     setCurrency(currency) {
@@ -222,7 +222,7 @@ class PsyPizza extends React.Component {
         })
         .then(processResponse)
         .then((json) => store.dispatch(cartLoaded(json.data)))
-        .catch((err, json) => store.dispatch(cartError(err, json)))
+        .catch(({message, json, response}) => store.dispatch(cartError(message, json)))
     }
 
     placeOrder(data, { setErrors }) {
@@ -238,7 +238,10 @@ class PsyPizza extends React.Component {
             store.dispatch(orderPlaced(json));
             this._loadCart();
         })
-        .catch((err, json) => store.dispatch(orderError(err, json, setErrors)))
+        .catch(({message, json, response}) => {
+            store.dispatch(orderError(message))
+            processErrors(json, setErrors)
+        })
     }
 
     logout() {

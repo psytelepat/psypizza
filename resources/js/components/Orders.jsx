@@ -41,7 +41,7 @@ class Orders extends React.Component {
         })
         .then(processResponse)
         .then((json) => {this.setState({isLoading: false, isLoaded: true, orders: json.data})})
-        .catch((message, json) => { this.setState({isLoading: false, isError: message}); })
+        .catch(({message, json, response}) => { this.setState({isLoading: false, isError: message}); })
     }
 
     _loadOrders() {
@@ -54,7 +54,7 @@ class Orders extends React.Component {
         })
         .then(processResponse)
         .then((json) => {this.setState({isLoading: false, isLoaded: true, orders: json})})
-        .catch((message, json) => { this.setState({isLoading: false, isError: message}); })
+        .catch(({message, json, response}) => { this.setState({isLoading: false, isError: message}); })
     }
 
     render() {

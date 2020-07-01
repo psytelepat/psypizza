@@ -68,10 +68,10 @@ class PsyPizzaAdmin extends React.Component {
             if (json.user.is_admin) {
                 store.dispatch(loginLogged(api_token, json.user));
             } else {
-                store.dispatch(loginFailed(err, json));
+                store.dispatch(loginFailed(json.message, json));
             }
         })
-        .catch((err, json) => store.dispatch(loginFailed(err, json)));
+        .catch(({message, json, response}) => store.dispatch(loginFailed(message, json)));
     }
 
     attempLogin() {
@@ -94,7 +94,7 @@ class PsyPizzaAdmin extends React.Component {
                 store.dispatch(loginFailed(err, json));
             }
         })
-        .catch((err, json) => store.dispatch(loginFailed(err, json)));
+        .catch(({message, json, response}) => store.dispatch(loginFailed(message, json)));
     }
 
     onChange(event) {
