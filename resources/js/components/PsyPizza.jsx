@@ -27,6 +27,7 @@ import Cart from './Cart'
 import CartSummary from './CartSummary'
 import ProductCategories from './ProductCategories'
 import Products from './Products'
+import Order from './Order'
 import Footer from './Footer'
 
 class PsyPizza extends React.Component {
@@ -220,12 +221,11 @@ class PsyPizza extends React.Component {
                         <Nav>
                             <Nav.Item><Nav.Link as={Link} to="/">Menu</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link as={Link} to="/cart">Cart</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link href="/login">Login</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link href="/register">Register</Nav.Link></Nav.Item>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
                 <Switch>
+                    <Route path="/orders/:id/:order_token" component={Order} />
                     <Route path="/cart">
                         <Cart
                             setToCart={this.setToCart.bind(this)}
@@ -235,12 +235,6 @@ class PsyPizza extends React.Component {
                             setDeliveryMethod={this.setDeliveryMethod.bind(this)}
                             placeOrder={this.placeOrder.bind(this)}
                         />
-                    </Route>
-                    <Route path="/login">
-
-                    </Route>
-                    <Route path="/register">
-
                     </Route>
                     <Route path="/">
                         <CartSummary flushCart={this.flushCart.bind(this)} />

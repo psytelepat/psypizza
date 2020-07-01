@@ -35,11 +35,12 @@ class PriceFormat extends React.Component {
     }
 
     currencySign(currency) {
-        return currencySigns[this.props.currency];
+        return currencySigns[this.props.forceCurrency||this.props.currency];
     }
 
     render() {
-        const { as, prepend, className, currency, calc, price, exchange_rate } = this.props;
+        const { as, prepend, className, calc, price, exchange_rate } = this.props;
+
         return React.createElement(
             as,
             {className}, 

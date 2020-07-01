@@ -14,6 +14,10 @@ class OrdersController extends Controller
 {
     public function index(OrderRequest $request) : object
     {
+        if (!auth('api')->check()) {
+            abort('403');
+        }
+
         if (auth('api')->user()->is_admin) {
             $models = Order::all();
         } else {
@@ -26,7 +30,11 @@ class OrdersController extends Controller
     public function show(OrderRequest $request, int $id) : object
     {
         $model = Order::findOrFail($id);
-        if (!auth()->user()->is_admin && $model->user_id != auth()->user()->id) {
+        if (!auth('api')->check()) {
+            if ($request->input('order_token') != $model->token) {
+                abort('403');
+            }
+        } elseif (!auth('api')->user()->is_admin && $model->user_id != auth('api')->user()->id) {
             abort('403');
         }
 

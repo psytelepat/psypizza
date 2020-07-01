@@ -11,7 +11,13 @@ class MainController extends Controller
         return view('index');
     }
 
-    public function order(Request $request, int $id, string $token = null)
+    public function order(Request $request, int $id, string $order_token = null)
     {
+        $model = \App\Psypizza\Order::findOrFail($id);
+        if ((!auth()->check() || (auth()->user()->id != $model->user_id) ) && ( $model->token != $order_token )) {
+            abort('403');
+        }
+
+        return view('index');
     }
 }

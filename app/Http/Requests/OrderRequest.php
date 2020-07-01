@@ -15,7 +15,7 @@ class OrderRequest extends FormRequest
     {
         switch ($this->getMethod()) {
             case 'GET':
-                return auth('api')->check();
+                return true;
                 break;
             default:
                 return auth('api')->check() && auth('api')->user()->is_admin;
