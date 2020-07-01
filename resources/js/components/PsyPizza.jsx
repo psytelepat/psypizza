@@ -1,12 +1,13 @@
 import React from 'react'
 import { render } from 'react-dom'
 
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom'
 
 import { connect, Provider } from 'react-redux'
 import { createStore } from 'redux'
 import psyPizzaReducer from './reducers'
 
+import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Toast from 'react-bootstrap/Toast'
@@ -233,7 +234,10 @@ class PsyPizza extends React.Component {
             body: JSON.stringify(data),
         })
         .then(processResponse)
-        .then((json) => store.dispatch(orderPlaced(json)))
+        .then((json) => {
+            store.dispatch(orderPlaced(json));
+            this._loadCart();
+        })
         .catch((err, json) => store.dispatch(orderError(err, json, setErrors)))
     }
 
@@ -254,26 +258,28 @@ class PsyPizza extends React.Component {
             <Router>
                 <CurrencySwitcher setCurrency={this.setCurrency.bind(this)} />
                 <Navbar sticky="top" variant="dark" className="mb-3 bg-dark">
-                    <Navbar.Brand as={Link} to="/">psyPizza</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="nabvar" />
-                    <Navbar.Collapse id="navbar">
-                        <Nav>
-                            <Nav.Item><Nav.Link as={Link} to="/">Menu</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link as={Link} to="/cart">Cart</Nav.Link></Nav.Item>
-                            { this.props.user.data ? (
-                                <>
-                                <Nav.Item><Nav.Link as={Link} to="/orders">Orders</Nav.Link></Nav.Item>
-                                <Nav.Item><Nav.Link onClick={this.logout.bind(this)}>Logout</Nav.Link></Nav.Item>
-                                </>
-                            ) : (
-                                <>
-                                <Nav.Item><Nav.Link href="/login">Login</Nav.Link></Nav.Item>
-                                <Nav.Item><Nav.Link href="/register">Register</Nav.Link></Nav.Item>
-                                </>
-                            )}
+                    <Container>
+                        <Navbar.Brand as={Link} to="/">psyPizza</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="nabvar" />
+                        <Navbar.Collapse id="navbar">
+                            <Nav>
+                                <Nav.Item><Nav.Link as={Link} to="/">Menu</Nav.Link></Nav.Item>
+                                <Nav.Item><Nav.Link as={Link} to="/cart">Cart</Nav.Link></Nav.Item>
+                                { this.props.user.data ? (
+                                    <>
+                                    <Nav.Item><Nav.Link as={Link} to="/orders">Orders</Nav.Link></Nav.Item>
+                                    <Nav.Item><Nav.Link onClick={this.logout.bind(this)}>Logout</Nav.Link></Nav.Item>
+                                    </>
+                                ) : (
+                                    <>
+                                    <Nav.Item><Nav.Link href="/login">Login</Nav.Link></Nav.Item>
+                                    <Nav.Item><Nav.Link href="/register">Register</Nav.Link></Nav.Item>
+                                    </>
+                                )}
 
-                        </Nav>
-                    </Navbar.Collapse>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Container>
                 </Navbar>
                 <Switch>
                     <Route path="/orders/:id/:order_token" component={Order} />

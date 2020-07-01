@@ -5,6 +5,8 @@ use Illuminate\Database\Seeder;
 use \App\Psypizza\Product;
 use \App\Psypizza\ProductCategory;
 
+use Illuminate\Http\UploadedFile;
+
 class Products extends Seeder
 {
     /**
@@ -18,20 +20,29 @@ class Products extends Seeder
         DB::table('products')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
+        Storage::disk('public')->deleteDirectory('products');
+
         $faker = \Faker\Factory::create();
 
         foreach (ProductCategory::all() as $category) {
-            for ($i = 0; $i < 10; $i++) {
-                $slug = $category->slug . str_pad($i + 1, 4, '0', STR_PAD_LEFT);
-                list ($name, $description) = explode('|', static::randomUniquePizza());
+            $numberOfProducts = 8;
+            switch ($category->slug) {
+                case 'pizza':
+                    $numberOfProducts = 24;
+                    break;
+            }
 
-                Product::create([
+            for ($i = 0; $i < $numberOfProducts; $i++) {
+                $slug = $category->slug . str_pad($i + 1, 4, '0', STR_PAD_LEFT);
+                list ($name, $description) = explode('|', static::randomUniqueForCategory($category->slug));
+
+                $product = Product::create([
                     'category_id' => $category->id,
 
                     'slug' => $slug,
                     'name' => $name,
                     'description' => $description,
-                    'price' => $faker->randomNumber(2),
+                    'price' => rand(2, 20),
                         
                     'in_stock' => true,
                     'is_published' => true,
@@ -39,9 +50,37 @@ class Products extends Seeder
                     'sku' => strtoupper($slug),
                     'ean13' => $faker->unique()->ean13,
                 ]);
+
+                $filename = self::randomUniqueSourceImageNumber() . '.jpg';
+                $tempFilePath = Storage::disk('public')->path('source/'.$filename);
+                $file = new UploadedFile($tempFilePath, '', null, filesize($tempFilePath), 0, false);
+
+                $product->handleImageUpload($file);
             }
         }
     }
+
+    public static $beverage = [
+        'Tea|Tea is the first widely consumed beverage in the world.',
+        'Coffee|Coffee is a brewed beverage made from roasted coffee beans, which are the seeds fro the coffee plant.',
+        'Beer|Beer the third most consumed beverage after water and tea and probably it is one of the oldest alcoholic beverage. ',
+        'Energy drink|Energy drink is a type of beverage, containing psychoactive drugs, mostly caffeine.',
+        'Vodka|Vodka is a type of beverage composed primarily of water and ethanol.',
+        'Orange Juice|Orange Juice is rich in vitamin-C and it is consumed by million in gallons and it is the worlds number one Vitamin-C provider.',
+        'Coca-Cola|Coca Cola offers hundreds of brands, including fruit juice, soft drinks, and other beverages.',
+        'Wine|Wine is an alcoholic beverage made from fermented grapes. Wine comes in two types and two colors.',
+    ];
+
+    public static $salad = [
+        'Caesar|The iconic Caesar salad was named after its creator Cesare Cardini.',
+        'Greek|Greek salad, also known as village salad or horiatiki is the national dish of Greece, consisting of quartered tomatoes, sliced red onions, and chunky slices of cucumber.',
+        'Som tam|Tam som is a versatile green papaya salad which is an incredibly popular dish in Thailand and Laos.',
+        'Tabbouleh|Tabbouleh is a colorful Lebanese national dish that is usually considered a salad, with a crunchy and chewy texture.',
+        'Olivier|Olivier salad is a Russian salad with variable ingredients, but it is typically made with chopped vegetables, meat, and mayonnaise. ',
+        'Caprese|Nothing embodies the essence of summer in southern Italy like vibrant colors of the flavorful insalata Caprese, a true classic of Neapolitan cuisine.',
+        'Karedok|Karedok is the traditional Indonesian version of a vegetable salad.',
+        'Shopska|Shopska salad is a traditional cold salad that is also one of the national dishes of Bulgaria.',
+    ];
 
     public static $pizza = [
         'Margherita|Tomato sauce, mozzarella, and oregano',
@@ -89,12 +128,44 @@ class Products extends Seeder
         'Pizza tartufata|Mozzarella, truffle cream, and porcini mushrooms',
         'Tricolore|Mozzarella, bresaola, and parmesan flakes',
         'Valdostana|Tomato sauce, mozzarella, fontina cheese and bacon',
-        'Caprese|Mozzarella and sliced ​​tomato',
         'Fiori di zucca|Mozzarella, courgette flower, anchovies and olive oil',
         'Bismarck|Tomato sauce, mozzarella, ham, and fried egg',
         'Funghi|Tomato sauce, mozzarella, mushrooms, parsley and olive oil',
         'Mimosa|Mozzarella, cream, ham and corn',
     ];
+
+    public static function randomUniqueSourceImageNumber() : int
+    {
+        static $stack;
+        $count = count(static::$pizza);
+
+        if (!$stack) {
+            for ($i = 0; $i < 48; $i++) {
+                $stack[$i] = $i+1;
+            }
+            shuffle($stack);
+        }
+
+        if (count($stack) <= 0) {
+            return null;
+        }
+
+        return array_pop($stack);
+    }
+
+    public static function randomUniqueForCategory(string $slug) : string
+    {
+        static $salad_pos = 0;
+        static $beverage_pos = 0;
+        switch ($slug) {
+            case 'pizza':
+                return static::randomUniquePizza();
+            case 'salad':
+                return static::$salad[$salad_pos++];
+            case 'beverage':
+                return static::$beverage[$beverage_pos++];
+        }
+    }
 
     public static function randomUniquePizza() : string
     {

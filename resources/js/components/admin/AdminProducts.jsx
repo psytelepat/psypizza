@@ -120,6 +120,7 @@ class AdminProducts extends React.Component {
 
         return (
             <Container>
+                <div className="h2 pb-3">Products</div>
                 <Row className="mb-5">
                     <Col sm="6">
                         <Form.Control as="select" name="category_id" defaultValue={this.state.category_id}

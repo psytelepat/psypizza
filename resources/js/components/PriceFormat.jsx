@@ -55,8 +55,8 @@ PriceFormat.defaultProps = {
 
 const mapStateToProps = (state, props) => {
     return {
-        currency: state.cart.data.currency,
-        exchange_rate: state.cart.data.exchange_rate,
+        currency: state.cart ? state.cart.data.currency : 'EUR',
+        exchange_rate: state.cart ? state.cart.data.exchange_rate : 1,
     }
 }
 

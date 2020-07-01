@@ -10949,8 +10949,16 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   color: #DCDCCC;
+}
+
+#psypizza {
+  padding-bottom: 80px;
 }
 
 section.first-screen {
@@ -10990,12 +10998,6 @@ section.products div.row .col {
 
 input.amountInput[type=number] {
   text-align: center;
-}
-
-section.page-footer {
-  background-color: #000;
-  color: #efefef;
-  padding: 20px 0;
 }
 
 .currency-switcher {

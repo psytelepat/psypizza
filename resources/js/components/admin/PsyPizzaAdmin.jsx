@@ -64,7 +64,13 @@ class PsyPizzaAdmin extends React.Component {
             },
         })
         .then(processResponse)
-        .then((json) => store.dispatch(loginLogged(api_token, json.user)))
+        .then((json) => {
+            if (json.user.is_admin) {
+                store.dispatch(loginLogged(api_token, json.user));
+            } else {
+                store.dispatch(loginFailed(err, json));
+            }
+        })
         .catch((err, json) => store.dispatch(loginFailed(err, json)));
     }
 
@@ -81,8 +87,12 @@ class PsyPizzaAdmin extends React.Component {
         })
         .then(processResponse)
         .then((json) => {
-            localStorage.setItem('api_token', json.token);
-            store.dispatch(loginLogged(json.token, json.user));
+            if (json.user.is_admin) {
+                localStorage.setItem('api_token', json.token);
+                store.dispatch(loginLogged(json.token, json.user));
+            } else {
+                store.dispatch(loginFailed(err, json));
+            }
         })
         .catch((err, json) => store.dispatch(loginFailed(err, json)));
     }
@@ -127,17 +137,19 @@ class PsyPizzaAdmin extends React.Component {
         return (
             <Router>
                 <Navbar variant="dark" className="mb-3">
-                    <Navbar.Brand href="#">psyPizza Admin Panel</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="nabvar" />
-                    <Navbar.Collapse id="navbar">
-                        <Nav>
-                            <Nav.Item><Nav.Link as={Link} to="/admin">Orders</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link as={Link} to="/admin/products">Products</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link as={Link} to="/admin/product_categories">Categories</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link as={Link} to="/admin/promocodes">Promocodes</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link as={Link} to="/admin/delivery_methods">Delivery Methods</Nav.Link></Nav.Item>
-                        </Nav>
-                    </Navbar.Collapse>
+                    <Container>
+                        <Navbar.Brand href="/admin">psyPizza Admin</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="nabvar" />
+                        <Navbar.Collapse id="navbar">
+                            <Nav>
+                                <Nav.Item><Nav.Link as={Link} to="/admin">Orders</Nav.Link></Nav.Item>
+                                <Nav.Item><Nav.Link as={Link} to="/admin/products">Products</Nav.Link></Nav.Item>
+                                <Nav.Item><Nav.Link as={Link} to="/admin/product_categories">Categories</Nav.Link></Nav.Item>
+                                <Nav.Item><Nav.Link as={Link} to="/admin/promocodes">Promocodes</Nav.Link></Nav.Item>
+                                <Nav.Item><Nav.Link as={Link} to="/admin/delivery_methods">Delivery methods</Nav.Link></Nav.Item>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Container>
                 </Navbar>
                 <Switch>
                     <Route path="/admin/delivery_methods/create" component={AdminDeliveryMethod} />
@@ -156,9 +168,9 @@ class PsyPizzaAdmin extends React.Component {
                     <Route path="/admin/products/:id" component={AdminProduct} />
                     <Route path="/admin/products" component={AdminProducts}></Route>
                     
-                    <Route path="/admin/orders/:id" component={(props) => <Order api_token={this.props.api_token} {...props} />} />
-                    <Route path="/admin/orders" component={(props) => <Orders api_token={this.props.api_token} {...props} />}></Route>
-                    <Route path="/admin" component={(props) => <Orders api_token={this.props.api_token} {...props} />}></Route>
+                    <Route path="/admin/orders/:id" component={(props) => <Order is_admin={true} user={this.props.user} api_token={this.props.api_token} {...props} />} />
+                    <Route path="/admin/orders" component={(props) => <Orders is_admin={true} user={this.props.user} api_token={this.props.api_token} {...props} />}></Route>
+                    <Route path="/admin" component={(props) => <Orders is_admin={true} user={this.props.user} api_token={this.props.api_token} {...props} />}></Route>
                     
                     <Route path="*">404 Not found</Route>
                 </Switch>

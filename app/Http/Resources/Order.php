@@ -27,6 +27,8 @@ class Order extends JsonResource
             'phone' => $this->phone,
             'address' => $this->address,
 
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+
             'cart' => new Cart($this->cart),
         ];
     }

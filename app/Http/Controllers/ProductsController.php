@@ -16,6 +16,10 @@ class ProductsController extends Controller
     {
         $query = Product::select();
 
+        if (!auth('api')->check() || !auth('api')->user()->is_admin) {
+            $query->where('is_published', true)->where('in_stock', true);
+        }
+
         $validatedData = $request->validate([
             'category_id' => 'integer|exists:product_categories,id',
             'search' => 'string',

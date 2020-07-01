@@ -19,7 +19,7 @@ Route::get('cart', $x);
 Route::get('orders', 'MainController@orders');
 Route::get('orders/{id}/{order_token?}', 'MainController@order');
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->group(function () {
     $x = 'AdminController@index';
     Route::get('', $x);
     Route::get('products', $x);

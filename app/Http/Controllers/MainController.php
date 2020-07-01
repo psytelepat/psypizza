@@ -16,7 +16,7 @@ class MainController extends Controller
     {
         $start = [
             'user' => auth()->check() ? auth()->user() : false,
-            'categories' => new \App\Http\Resources\ProductCategoryCollection(\App\Psypizza\ProductCategory::all()),
+            'categories' => new \App\Http\Resources\ProductCategoryCollection(\App\Psypizza\ProductCategory::where('is_published', true)->get()),
             'delivery_methods' => new \App\Http\Resources\DeliveryMethodCollection(\App\Psypizza\DeliveryMethod::all()),
             'cart' => new \App\Http\Resources\Cart(\App\Psypizza\Cart::instance()),
         ];

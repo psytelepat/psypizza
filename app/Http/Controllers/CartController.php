@@ -118,8 +118,10 @@ class CartController extends Controller
             $placed_order = Cart::placeOrder($validatedData);
             Mail::to($placed_order->email)->send(new \App\Mail\OrderPlaced($placed_order));
             return response()->json([
-                'order_id' => $placed_order->id,
-                'order_token' => $placed_order->token,
+                'id' => $placed_order->id,
+                'token' => $placed_order->token,
+                'number' => $placed_order->number,
+                'created_at' => $placed_order->created_at->format('Y-m-d H:i:s'),
                 'message' => 'Order placed',
             ], 201);
         } catch (Eception $e) {

@@ -14,7 +14,13 @@ class ProductCategoriesController extends Controller
 {
     public function index(ProductCategoryRequest $request) : object
     {
-        return new ModelCollection(ProductCategory::all());
+        $query = ProductCategory::select()
+
+        if (!auth('api')->check() || !auth('api')->user()->is_admin) {
+            $query->where('is_published', true);
+        }
+
+        return new ModelCollection($query->get());
     }
 
     public function show(ProductCategoryRequest $request, int $id) : object

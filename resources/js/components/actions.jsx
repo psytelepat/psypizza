@@ -66,9 +66,11 @@ export function deliveryMethodsSelect(id) {                 return { type: DELIV
 export const ORDER_PLACING = 'ORDER_PLACING'
 export const ORDER_PLACED = 'ORDER_PLACED'
 export const ORDER_ERROR = 'ORDER_ERROR'
+export const ORDER_CLEAR = 'ORDER_CLEAR'
 
 export function orderPlacing() {                        return { type: ORDER_PLACING }; }
 export function orderPlaced(order) {                    return { type: ORDER_PLACED, order }; }
 export function orderError(error, json, setErrors) {    return { type: ORDER_ERROR, error, json, setErrors }; }
+export function orderClear() {                          return { type: ORDER_CLEAR }; }
 
 

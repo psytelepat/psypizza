@@ -1,5 +1,8 @@
 import React from 'react'
 
+import { Link } from 'react-router-dom'
+import { List as ListIcon } from 'react-bootstrap-icons'
+
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -26,7 +29,21 @@ class Order extends React.Component {
     }
 
     componentDidMount() {
-        this._loadOrder();
+        this.props.api_token ? this._loadOrderWithToken() : this._loadOrder();
+    }
+
+    _loadOrderWithToken() {
+        this.setState({isLoading: true});
+        fetch('/api/orders/' + this.id + '?order_token=' + this.order_token, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.props.api_token,
+            }
+        })
+        .then(processResponse)
+        .then((json) => {this.setState({isLoading: false, isLoaded: true, data: json.data})})
+        .catch((message, json) => { this.setState({isLoading: false, isError: message}); })
     }
 
     _loadOrder() {
@@ -44,32 +61,31 @@ class Order extends React.Component {
 
     renderDetails(order) {
         return (
-            <Container className="mb-5">
-                <h4>Details</h4>
-                <Row><Col><strong>{order.name} {order.surname}</strong></Col></Row>
-                <Row><Col><strong>{order.email}</strong></Col></Row>
-                <Row><Col><strong>{order.phone}</strong></Col></Row>
-                <Row><Col>Address: <strong>{order.address}</strong></Col></Row>
-            </Container>
+            <>
+            <strong>{order.name} {order.surname}</strong><br/>
+            <strong>{order.email}</strong><br/>
+            <strong>{order.phone}</strong><br/>
+            Address: <strong>{order.address}</strong>
+            </>
         );
     }
 
     renderTotals(cart) {
         const { currency, promocode, delivery_method } = cart;
         return (
-            <Container className="mb-5">
-                {!!promocode && <Row><Col>Promocode: {promocode.code} (-{promocode.discount}%)</Col></Row>}
-                <Row><Col>Goods: <PriceFormat price={cart.original_products_cost} forceCurrency={currency} /></Col></Row>
-                {cart.discount > 0 && <Row><Col>Discount: <PriceFormat price={cart.discount} forceCurrency={currency} /></Col></Row>}
-                <Row><Col>Delivery: <PriceFormat price={cart.delivery_price} forceCurrency={currency} /> ({delivery_method.name})</Col></Row>
-                <Row><Col>Total: <strong><PriceFormat price={cart.cost} forceCurrency={currency} /></strong></Col></Row>
-            </Container>
+            <>
+            {!!promocode && <>Promocode: {promocode.code} (-{promocode.discount}%)<br/></>}
+            Goods: <PriceFormat price={cart.original_products_cost} forceCurrency={currency} /><br/>
+            {cart.discount > 0 && <>Discount: <PriceFormat price={cart.discount} forceCurrency={currency} /><br/></>}
+            Delivery: <PriceFormat price={cart.delivery_price} forceCurrency={currency} /> ({delivery_method.name})<br/>
+            Total: <strong><PriceFormat price={cart.cost} forceCurrency={currency} /></strong>
+            </>
         );
     }
 
     renderProducts(products, currency) {
         return <Container>
-                <h4>Shopping list</h4>
+                <div className="h4 mb-3">Shopping list</div>
             {products.map((product) => {
                     return (
                         <Row key={product.product_id} className="mb-5">
@@ -100,15 +116,28 @@ class Order extends React.Component {
             </Container>;
         }
 
+        const { is_admin } = this.props;
         const order = this.state.data;
         const { cart } = order;
         const { products } = cart;
 
         return(
             <>
-            {this.renderDetails(order)}
-            {this.renderTotals(cart)}
+            <Container align="center" className="pb-3">
+                <h1>Order {order.number}</h1>
+                <p>{order.created_at}</p>
+            </Container>
+            <Container className="mb-5">
+                <div className="h4 mb-3">Details</div>
+                <Row>
+                    <Col>{this.renderDetails(order)}</Col>
+                    <Col>{this.renderTotals(cart)}</Col>
+                </Row>
+            </Container>
             {this.renderProducts(products, cart.currency)}
+            {!this.order_token && <Container align="center" className="pb-5">
+                <Button as={Link} to={(is_admin ? '/admin' : '') + '/orders'}><ListIcon /> Back to list</Button>
+            </Container>}
             </>
         );
     }

@@ -95,6 +95,7 @@ class AdminPromocodes extends React.Component {
 
         return (
             <Container>
+                <div className="h2 pb-3">Promocodes</div>
                 <Row className="mb-5">
                     <Col sm="6" align="right">
                     </Col>

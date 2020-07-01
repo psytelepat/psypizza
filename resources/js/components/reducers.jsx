@@ -24,6 +24,7 @@ import {
     ORDER_PLACING,
     ORDER_PLACED,
     ORDER_ERROR,
+    ORDER_CLEAR,
 } from './actions'
 
 
@@ -241,7 +242,10 @@ function deliveryMethods(state = {
 function order(state = {
     isLoading: false,
     isError: null,
-    order_id: null,
+    id: null,
+    token: null,
+    number: null,
+    created_at: null,
 }, action) {
     switch (action.type) {
         case ORDER_PLACING:
@@ -253,7 +257,10 @@ function order(state = {
             return {
                 ...state,
                 isLoading: false,
-                data: action.order.order_id,
+                id: action.order.id,
+                token: action.order.token,
+                number: action.order.number,
+                created_at: action.order.created_at,
             };
         case ORDER_ERROR:
             let isError = null,
@@ -271,6 +278,14 @@ function order(state = {
                 isLoading: false,
                 isError: isError
             };
+        case ORDER_CLEAR:
+            return {
+                ...state,
+                id: null,
+                token: null,
+                number: null,
+                created_at: null,
+            }
         default:
             return state;
     }

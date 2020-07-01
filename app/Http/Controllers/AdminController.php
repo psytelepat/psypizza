@@ -36,7 +36,7 @@ class AdminController extends Controller
                     return [
                         'message' => 'Success!',
                         'token' => $token,
-                        'user' => auth('api')->user(),
+                        'user' => auth()->user(),
                     ];
                 } else {
                     return response()->json([

@@ -1,5 +1,8 @@
 import React from 'react'
 
+import { Link } from 'react-router-dom'
+import { EyeFill } from 'react-bootstrap-icons'
+
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -24,7 +27,21 @@ class Orders extends React.Component {
     }
 
     componentDidMount() {
-        this._loadOrders();
+        this.props.api_token ? this._loadOrdersWithToken() : this._loadOrders();
+    }
+
+    _loadOrdersWithToken() {
+        this.setState({isLoading: true});
+        fetch('/api/orders', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.props.api_token,
+            }
+        })
+        .then(processResponse)
+        .then((json) => {this.setState({isLoading: false, isLoaded: true, orders: json.data})})
+        .catch((message, json) => { this.setState({isLoading: false, isError: message}); })
     }
 
     _loadOrders() {
@@ -65,17 +82,18 @@ class Orders extends React.Component {
             );
         }
 
+        const { is_admin } = this.props;
+
         return (
             <Container>
+                <div className="h2 pb-3">Orders</div>
                 {this.state.orders.map((order) => {
                     return (
-                        <Row key={order.id}>
-                            <Col>{order.id}</Col>
-                            <Col>{order.number}</Col>
-                            <Col>{order.name} {order.surname}</Col>
-                            <Col>{order.email}</Col>
-                            <Col>{order.phone}</Col>
+                        <Row key={order.id} className="border-top pt-3 pb-3 border-secondary">
+                            <Col>{order.number}<br/>{order.created_at}</Col>
+                            <Col>{order.name} {order.surname}<br/>{order.email}<br/>{order.phone}</Col>
                             <Col><PriceFormat price={order.cart.cost} forceCurrency={order.cart.currency} /></Col>
+                            <Col align="right"><Button as={Link} to={(is_admin ? '/admin' : '') + '/orders/' + order.id}><EyeFill /></Button></Col>
                         </Row>
                     );
                 })}

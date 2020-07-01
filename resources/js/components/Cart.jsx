@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { Link } from 'react-router-dom'
+
 import { Cart as CartIcon, X as RemoveIcon } from 'react-bootstrap-icons'
 
 import Container from 'react-bootstrap/Container'
@@ -79,8 +81,18 @@ class Cart extends React.Component {
     }
 
     render() {
-        const { products } = this.props;
+        const { products, order } = this.props;
         const isEmpty = products.length < 1;
+        
+        if (order && order.id) {
+            return (
+                <Container align="center" className="pt-5 pb-5">
+                    <div className="h3 pb-3">Thank you for your purchase!</div>
+                    <Figure.Image src='/images/purchase.gif' className="d-block" />
+                    <Button as={Link} className="mt-3" to={"/orders/" + order.id + "/" + order.token}>View order</Button>
+                </Container>
+            );
+        }
 
         return (
             <Container fluid>
@@ -115,6 +127,7 @@ const mapStateToProps = (state, props) => {
         original_cost: data.original_cost,
         discount: data.discount,
         cost: data.cost,
+        order: state.order,
     }
 }
 
