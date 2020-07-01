@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 
 use Auth;
 use Hash;
+use Mail;
 
 use \App\User;
 use \App\Psypizza\Cart;
@@ -51,7 +52,7 @@ class CartController extends Controller
     public function currency(Request $request): object
     {
         $validatedData = $request->validate([
-            'currency' => 'required|string|in:' . implode(',', Currency::$currencies),
+            'currency' => 'required|string|in:' . implode(',', array_keys(Currency::$currencies)),
         ]);
         return new CartResource(Cart::setCurrency(Arr::get($validatedData, 'currency')));
     }
@@ -113,6 +114,7 @@ class CartController extends Controller
 
         try {
             $placed_order = Cart::placeOrder($validatedData);
+            Mail::to($placed_order->email)->send(new \App\Mail\OrderPlaced($placed_order));
             return response()->json([
                 'order_id' => $placed_order->id,
                 'message' => 'Order placed',

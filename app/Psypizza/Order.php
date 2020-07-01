@@ -36,13 +36,22 @@ class Order extends Model
         'status',
     ];
 
-    public function cart(): Cart
+    public function cart()
     {
-        return $this->hasOne(Cart::class);
+        return $this->hasOne(Cart::class, 'id', 'cart_id');
     }
 
-    public function user(): User
+    public function user()
     {
         return $this->hasOne(User::class);
+    }
+
+    public static function generate_number(): string
+    {
+        $s = '';
+        for ($i=4; $i>0; $i--) {
+            $s .= chr(rand(65, 65 + 25));
+        }
+        return rand(100000, 999999) . '-' . $s;
     }
 }

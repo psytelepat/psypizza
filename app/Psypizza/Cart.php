@@ -71,11 +71,6 @@ class Cart extends Model
                 $cart = self::find($cart_id);
             }
 
-            if ($cart) {
-                $cart->delete();
-                $cart = null;
-            }
-
             $cart = self::newCart();
             session(['cart_id' => $cart->id]);
             return $cart;
@@ -204,7 +199,7 @@ class Cart extends Model
 
     public static function setCurrency(string $currency): self
     {
-        if (in_array($currency, Currency::$currencies)) {
+        if (array_key_exists($currency, Currency::$currencies)) {
             $exchange_rate = \App\Psypizza\Currency::getExchangeRateFor($currency);
             $cart = self::instance();
             $cart->currency = $currency;
@@ -252,7 +247,7 @@ class Cart extends Model
             throw new \Exception("Cart is empty");
         }
 
-        if (!in_array($cart->currency, Currency::$currencies)) {
+        if (!array_key_exists($cart->currency, Currency::$currencies)) {
             throw new \Exception("Invalid currency");
         }
 
@@ -288,7 +283,7 @@ class Cart extends Model
 
         $number = null;
         do {
-            $number = Str::upper(Str::random(10));
+            $number = Order::generate_number();
         } while (Order::where('number', $number)->exists());
         $order->number = $number;
 

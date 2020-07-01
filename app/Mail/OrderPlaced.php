@@ -7,18 +7,23 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
+use \App\Psypizza\Order;
+use \App\Psypizza\Currency;
+
 class OrderPlaced extends Mailable
 {
     use Queueable, SerializesModels;
+
+    public $order;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Order $order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -28,6 +33,6 @@ class OrderPlaced extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->markdown('email.orders.placed');
     }
 }

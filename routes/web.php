@@ -32,6 +32,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('delivery_methods/{id}', $x);
 });
 
+Route::get('mailable', function () {
+    $order = App\Psypizza\Order::orderBy('id', 'desc')->first();
+    return new App\Mail\OrderPlaced($order);
+});
+
 Route::get('cart.json', 'CartController@index');
 Route::get('cart/recalc.json', 'CartController@recalc');
 Route::post('cart/set.json', 'CartController@setProduct');
@@ -43,6 +48,6 @@ Route::post('cart/delivery_method.json', 'CartController@deliveryMethod');
 Route::post('cart/currency.json', 'CartController@currency');
 Route::post('cart/place_order.json', 'CartController@placeOrder');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 // Route::get('/home', 'HomeController@index')->name('home');

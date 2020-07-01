@@ -11,9 +11,9 @@ class Currency
 {
     public const BASE_CURRENCY = 'EUR';
     public static $currencies = [
-        'EUR',
-        'USD',
-        'RUB',
+        'EUR' => '€',
+        'USD' => '$',
+        'RUB' => '₽',
     ];
 
     protected static function getExchangeRates(): array
@@ -29,7 +29,7 @@ class Currency
 
     public static function getExchangeRateFor(string $currency): float
     {
-        if (in_array($currency, self::$currencies)) {
+        if (array_key_exists($currency, self::$currencies)) {
             if ($currency == self::BASE_CURRENCY) {
                 return 1;
             }
@@ -51,5 +51,14 @@ class Currency
     public static function exchange(float $price, string $currency): float
     {
         return round($price * self::getExchangeRateFor($currency), 2, PHP_ROUND_HALF_UP);
+    }
+
+    public static function format(float $value, string $currency): string
+    {
+        if (!array_key_exists($currency, self::$currencies)) {
+            throw new \InvalidArgumentException('Invalid $currency');
+        }
+
+        return self::$currencies[$currency] . ' ' . number_format($value, 2, ',', ' ');
     }
 }
