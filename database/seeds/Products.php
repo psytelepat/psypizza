@@ -52,9 +52,8 @@ class Products extends Seeder
                 ]);
 
                 $filename = self::randomUniqueSourceImageNumber() . '.jpg';
-                $tempFilePath = Storage::disk('public')->path('source/'.$filename);
+                $tempFilePath = resource_path('images/' . $filename);
                 $file = new UploadedFile($tempFilePath, '', null, filesize($tempFilePath), 0, false);
-
                 $product->handleImageUpload($file);
             }
         }

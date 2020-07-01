@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 
 use \App\Psypizza\ProductCategory;
 
+use Illuminate\Http\UploadedFile;
+
 class ProductCategories extends Seeder
 {
     /**
@@ -30,7 +32,7 @@ class ProductCategories extends Seeder
             [
                 'slug' => 'salad',
                 'name' => 'Salads',
-                'description' => 'Fresh salads ready for order.',
+                'description' => 'Fresh salads ready to order.',
                 'is_published' => true,
             ],
             [
@@ -42,7 +44,12 @@ class ProductCategories extends Seeder
         ];
 
         foreach ($categories as $category) {
-            ProductCategory::create($category);
+            $model = ProductCategory::create($category);
+
+            $filename = $model->slug . '.jpg';
+            $tempFilePath = resource_path('images/' . $filename);
+            $file = new UploadedFile($tempFilePath, '', null, filesize($tempFilePath), 0, false);
+            $model->handleImageUpload($file);
         }
     }
 }
