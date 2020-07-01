@@ -33,6 +33,6 @@ class OrderPlaced extends Mailable
      */
     public function build()
     {
-        return $this->markdown('email.orders.placed');
+        return $this->markdown('email.orders.placed')->subject('psyPizza :: Your order #' . $this->order->number);
     }
 }

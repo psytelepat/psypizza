@@ -43,8 +43,8 @@ class PsyPizzaAdmin extends React.Component {
         super(props);
 
         this.state = {
-            email: "",
-            password: "",
+            email: "admin@psypizza.ru",
+            password: "123123123",
         };
     }
 
@@ -112,22 +112,21 @@ class PsyPizzaAdmin extends React.Component {
 
         if (!this.props.isLogged) {
             return (
-                <Form as={Container}>
+                <Form as={Container} style={{width: 300}} align="center" className="mt-5">
+                    <div className="h3 mb-3">psyPizza Admin</div>
                     <Form.Row>
                         <Form.Group as={Col} controlId="email">
-                            <Form.Label>E-mail</Form.Label>
                             <Form.Control type="email" placeholder="E-mail" required name="email" value={this.state.email} onChange={this.onChange.bind(this)} />
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} controlId="password">
-                            <Form.Label>Password</Form.Label>
                             <Form.Control type="password" placeholder="Password" required name="password" value={this.state.password} onChange={this.onChange.bind(this)} />
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col}>
-                            <Button type="submit" onClick={this.attempLogin.bind(this)}>Login</Button>
+                            <Button type="submit" block onClick={this.attempLogin.bind(this)}>Login</Button>
                         </Form.Group>
                     </Form.Row>
                 </Form>
@@ -147,6 +146,7 @@ class PsyPizzaAdmin extends React.Component {
                                 <Nav.Item><Nav.Link as={Link} to="/admin/product_categories">Categories</Nav.Link></Nav.Item>
                                 <Nav.Item><Nav.Link as={Link} to="/admin/promocodes">Promocodes</Nav.Link></Nav.Item>
                                 <Nav.Item><Nav.Link as={Link} to="/admin/delivery_methods">Delivery methods</Nav.Link></Nav.Item>
+                                <Nav.Item><Nav.Link onClick={() => { localStorage.removeItem('api_token');window.location = '/admin'; }}>Logout</Nav.Link></Nav.Item>
                             </Nav>
                         </Navbar.Collapse>
                     </Container>

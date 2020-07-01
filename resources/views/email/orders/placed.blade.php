@@ -40,7 +40,7 @@ Discount: {{Currency::format($product->discount, $cur)}}
 -- --
 Goods: {{Currency::format($cart->original_products_cost, $cur)}}  
 @if($cart->promocode)
-Promocode: {{$cart->promocode->code}} (-{{$cart->promocode->discout}}%)  
+Promocode: {{$cart->promocode->code}} (-{{$cart->promocode->discount}}%)  
 Goods (with discount): {{Currency::format($cart->products_cost, $cur)}}  
 @endif
 Delivery: {{Currency::format($cart->delivery_price, $cur)}} ({{$cart->deliveryMethod->name}})  
@@ -51,7 +51,7 @@ Discount: {{Currency::format($cart->discount, $cur)}}
 Total: **{{Currency::format($cart->cost, $cur)}}**
 
 
-@component('mail::button', ['url' => '/order/' . $order->id . '/' . $order->token, 'color' => 'success'])
+@component('mail::button', ['url' => url('/orders/' . $order->id . '/' . $order->token), 'color' => 'success'])
 View order
 @endcomponent
 

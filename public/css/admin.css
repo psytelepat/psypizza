@@ -10943,6 +10943,10 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 /* Firefox */
 
 input[type=number] {
