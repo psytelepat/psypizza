@@ -94,7 +94,7 @@ class CartController extends Controller
             'name' => 'required|string',
             'surname' => '',
             'email' => 'required|string|email',
-            'phone' => ['required', 'string', 'regex:/^(\+|)[0-9\s\-]+$/'],
+            'phone' => ['required', 'string', 'regex:/^(\+|)[0-9\s\-\(\)]+$/'],
             'address' => $cart->deliveryMethod->requires_address ? 'required|string' : '',
             'agreement' => 'required',
         ]);

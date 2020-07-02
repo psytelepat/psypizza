@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import Spinner from 'react-bootstrap/Spinner'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -16,7 +17,7 @@ class OrderForm extends React.Component {
             name: yup.string().required().matches(/^[A-Za-z\s\-]+$/, 'Invalid characters'),
             surname: yup.string().matches(/^[A-Za-z\s\-]+$/, 'Invalid characters'),
             email: yup.string().email().required(),
-            phone: yup.string().required().matches(/^(\+|)[0-9\s\-]+$/, 'Phone number is not valid'),
+            phone: yup.string().required().matches(/^(\+|)[0-9\s\-\(\)]+$/, 'Phone number is not valid'),
             address: this.props.requires_address ? yup.string().required() : null,
             agreement: yup.bool().required().oneOf([true], 'The terms and conditions must be accepted'),
         });
@@ -91,7 +92,9 @@ class OrderForm extends React.Component {
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} sm="12" align="center">
-                            <Button variant="primary" type="submit" disabled={this.props.isLoading||this.props.cartLoading||this.props.order.isLoading}>Place order</Button>
+                            <Button variant="primary" type="submit" disabled={this.props.isLoading||this.props.cartLoading||this.props.order.isLoading}>
+                                {this.props.isLoading||this.props.cartLoading||this.props.order.isLoading ? <Spinner animation="border" variant="secondary" size="sm" /> : "Place order"}
+                            </Button>
                         </Form.Group>
                     </Form.Row>
                 </Form>
