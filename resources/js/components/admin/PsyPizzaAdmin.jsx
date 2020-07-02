@@ -135,7 +135,7 @@ class PsyPizzaAdmin extends React.Component {
 
         return (
             <Router>
-                <Navbar variant="dark" className="mb-3">
+                <Navbar variant="dark" className="mb-3" expand="md">
                     <Container>
                         <Navbar.Brand href="/admin">psyPizza Admin</Navbar.Brand>
                         <Navbar.Toggle aria-controls="nabvar" />

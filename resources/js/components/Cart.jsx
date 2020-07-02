@@ -59,7 +59,7 @@ class Cart extends React.Component {
                                 <p className="mt-3">{product.description}</p>
                                 <Button variant="danger" size="sm" onClick={() => this.onAmountChange(product.product_id, 0)}><RemoveIcon size={16} /> Remove</Button>
                             </Col>
-                            <Col sm="3">
+                            <Col sm="3" className="cart-product-amount">
                                 <PriceFormat as="div" className="h5" price={product.cost} />
                                 {product.discount > 0 && <p>Discount: <PriceFormat price={product.discount} /></p>}
                                 <AmountControl className="mt-3" amount={product.amount} onChange={(amount) => this.onAmountChange(product.product_id, amount)} />
@@ -104,10 +104,10 @@ class Cart extends React.Component {
                 <>
                     <Container className="mt-5">
                         <Row>
-                            <Col sm={12} lg={6}>
+                            <Col sm={12} lg={6} className="delivery-methods-form">
                                 <DeliveryMethodsForm setDeliveryMethod={this.props.setDeliveryMethod} />
                             </Col>
-                            <Col sm={12} lg={6}>
+                            <Col sm={12} lg={6} className="promocode-form">
                                 <PromocodeForm setPromocode={this.props.setPromocode} removePromocode={this.props.removePromocode} />
                             </Col>
                         </Row>

@@ -261,11 +261,11 @@ class PsyPizza extends React.Component {
         return (
             <Router>
                 <CurrencySwitcher setCurrency={this.setCurrency.bind(this)} />
-                <Navbar sticky="top" variant="dark" className="mb-3 bg-dark">
+                <Navbar sticky="top" variant="dark" className="mb-3 bg-dark" expand="sm">
                     <Container>
                         <Navbar.Brand as={Link} to="/">psyPizza</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="nabvar" />
-                        <Navbar.Collapse id="navbar">
+                        <Navbar.Toggle aria-controls="basic-nabvar-auto" />
+                        <Navbar.Collapse id="basic-nabvar-auto">
                             <Nav>
                                 <Nav.Item><Nav.Link as={Link} to="/">Menu</Nav.Link></Nav.Item>
                                 <Nav.Item><Nav.Link as={Link} to="/cart">Cart</Nav.Link></Nav.Item>
