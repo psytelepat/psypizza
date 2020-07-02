@@ -44,7 +44,7 @@ class PriceFormat extends React.Component {
         return React.createElement(
             as,
             {className}, 
-            [ prepend, this.currencySign(), ' ', this.number_format(calc ? Math.round(price * 100 * exchange_rate, 2) / 100 : price, 2, ',', ' ') ],
+            [ prepend, this.currencySign(), ' ', this.number_format(calc ? Math.round(price * exchange_rate * 100) / 100 : price, 2, ',', ' ') ],
         );
     }
 }

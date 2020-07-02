@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Pencil as EditIcon, TrashFill as DeleteIcon, PlusCircleFill as AddIcon } from 'react-bootstrap-icons'
+import { Pencil as EditIcon, X as DeleteIcon, PlusCircleFill as AddIcon } from 'react-bootstrap-icons'
 
 import { connect } from 'react-redux'
 
@@ -91,8 +91,8 @@ class AdminProducts extends React.Component {
                     <Card.Footer>
                         € {model.price}
                         <div className="float-right">
-                            <Button size="sm" as={Link} to={'/admin/products/'+model.id}><EditIcon /></Button>
-                            <Button size="sm" className="ml-2" variant="danger" onClick={() => this.deleteModel(model.id)}><DeleteIcon /></Button>
+                            <Button size="sm" as={Link} to={'/admin/products/'+model.id} title="Edit"><EditIcon /></Button>
+                            <Button size="sm" className="ml-2" variant="danger" onClick={() => this.deleteModel(model.id)} title="Delete"><DeleteIcon /></Button>
                         </div>
                     </Card.Footer>
                 </Card>

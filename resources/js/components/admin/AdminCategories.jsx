@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Pencil as EditIcon, TrashFill as DeleteIcon, PlusCircleFill as AddIcon } from 'react-bootstrap-icons'
+import { Pencil as EditIcon, X as DeleteIcon, PlusCircleFill as AddIcon } from 'react-bootstrap-icons'
 
 import { connect } from 'react-redux'
 
@@ -75,8 +75,8 @@ class AdminCategories extends React.Component {
                     <p>{model.description}</p>
                 </Col>
                 <Col align="right">
-                    <Button size="sm" as={Link} to={'/admin/product_categories/'+model.id}><EditIcon /></Button>
-                    <Button size="sm" className="ml-2" variant="danger" onClick={() => this.deleteModel(model.id)}><DeleteIcon /></Button>
+                    <Button size="sm" as={Link} to={'/admin/product_categories/'+model.id} title="Edit"><EditIcon /></Button>
+                    <Button size="sm" className="ml-2" variant="danger" onClick={() => this.deleteModel(model.id)} title="Delete"><DeleteIcon /></Button>
                 </Col>
             </Row>
         );

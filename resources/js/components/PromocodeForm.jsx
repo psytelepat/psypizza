@@ -30,7 +30,9 @@ class PromocodeForm extends React.Component {
         this.setState({promocode: event.target.value});
     }
 
-    setPromocode() {
+    setPromocode(event) {
+        event.stopPropagation();
+        event.preventDefault();
         this.props.setPromocode(this.state.promocode);
     }
 
@@ -45,7 +47,7 @@ class PromocodeForm extends React.Component {
             <>
             <h3>Add promo code</h3>
             <p>You could apply a promo code here if you have one<br/> to get a sweet discount.</p>
-            <Form>
+            <Form onSubmit={this.setPromocode.bind(this)}>
                 <Form.Row>
                 {this.props.promocode_id ?
                     <Form.Group>
@@ -58,7 +60,7 @@ class PromocodeForm extends React.Component {
                         <Form.Control type="text" placeholder="Promo code" value={this.state.promocode} onChange={this.onPromocodeChange.bind(this)} />
                     </Form.Group>
                     <Form.Group>
-                        <Button variant="primary" onClick={this.setPromocode.bind(this)} disabled={this.props.isLoading}>Apply promocode</Button>
+                        <Button variant="primary" type="submit" disabled={this.props.isLoading}>Apply promocode</Button>
                     </Form.Group>
                     </>
                 }

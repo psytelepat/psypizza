@@ -17,14 +17,12 @@ class Promocodes extends Seeder
         DB::table('promocodes')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
-        $faker = \Faker\Factory::create();
-
-        for ($i = 0; $i < 10; $i++) {
-            $code = implode('', $faker->randomElements(['a','b','c','d','e','r',], 4)) . $faker->randomNumber(4);
+        foreach ([10, 15, 20, 25, 30] as $discount) {
             Promocode::create([
-                'name' => $code,
-                'code' => strtoupper($code),
-                'discount' => rand(3, 10) * 5,
+                'name' => $discount.'% DISCOUNT',
+                'code' => 'PROMO'.$discount,
+                'discount' => $discount,
+                'description' => 'Gives '.$discount.'% discount',
                 'is_available' => true,
             ]);
         }

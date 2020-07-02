@@ -14,6 +14,7 @@ import {
     DELIVERY_METHODS_LOADING,
     DELIVERY_METHODS_LOADED,
     DELIVERY_METHODS_ERROR,
+    DELIVERY_METHODS_SELECT,
     CART_LOADING,
     CART_LOADED,
     CART_ERROR,
@@ -224,7 +225,8 @@ function deliveryMethods(state = {
                 ...state,
                 isLoading: false,
                 isLoaded: true,
-                data: action.deliveryMethods.data,
+                data: action.deliveryMethods,
+                selected: action.deliveryMethods[0].id,
             };
         case DELIVERY_METHODS_ERROR:
             return {
@@ -232,6 +234,11 @@ function deliveryMethods(state = {
                 isLoading: false,
                 isError: action.error,
             };
+        case DELIVERY_METHODS_SELECT:
+            return {
+                ...state,
+                selected: action.id,
+            }
         default:
             return state;
     }

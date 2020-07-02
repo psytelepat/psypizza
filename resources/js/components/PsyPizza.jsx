@@ -136,6 +136,7 @@ class PsyPizza extends React.Component {
 
     setDeliveryMethod(id) {
         store.dispatch(cartLoading());
+        store.dispatch(deliveryMethodsSelect(id));
 
         fetch('/cart/delivery_method.json', {
             method: 'POST',
